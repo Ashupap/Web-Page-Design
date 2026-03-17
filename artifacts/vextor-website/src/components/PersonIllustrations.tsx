@@ -1,102 +1,169 @@
 /* Professional flat-style character illustrations — transparent backgrounds */
 
-/* ── PRIYA — Professional woman focused on laptop ── */
+/* ── PRIYA — Professional woman, large glowing laptop front and center ── */
 export function PersonRetailer({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 200 230" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg viewBox="0 0 240 260" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       <defs>
-        <linearGradient id="pr2-top" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#FF6B35" />
-          <stop offset="100%" stopColor="#E8500A" />
+        <linearGradient id="pr3-jacket" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#0891B2" />
+          <stop offset="100%" stopColor="#0E7490" />
         </linearGradient>
-        <linearGradient id="pr2-lap" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#1A2540" />
-          <stop offset="100%" stopColor="#0D1528" />
+        <linearGradient id="pr3-screen" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#050D1E" />
+          <stop offset="100%" stopColor="#081525" />
         </linearGradient>
+        <linearGradient id="pr3-screenglow" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stopColor="#FF6B35" stopOpacity="0.08" />
+          <stop offset="100%" stopColor="#00C8FF" stopOpacity="0.06" />
+        </linearGradient>
+        <filter id="pr3-glow">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
       </defs>
 
       {/* Ground shadow */}
-      <ellipse cx="100" cy="224" rx="60" ry="6" fill="rgba(0,0,0,0.12)" />
+      <ellipse cx="120" cy="254" rx="80" ry="6" fill="rgba(0,0,0,0.13)" />
 
-      {/* ── Crossed legs ── */}
-      <path d="M55 168 Q32 172 24 188 Q20 198 38 200 Q58 202 68 186 Q74 176 70 166Z" fill="url(#pr2-top)" />
-      <path d="M108 168 Q130 172 140 188 Q144 198 126 200 Q106 202 94 186 Q88 176 92 166Z" fill="url(#pr2-top)" />
+      {/* ── Legs / Lower body ── */}
+      {/* Left leg forward */}
+      <path d="M78 210 Q56 214 44 228 Q38 238 56 240 Q76 242 88 226 Q94 216 88 208Z" fill="url(#pr3-jacket)" />
+      {/* Right leg */}
+      <path d="M145 210 Q166 214 178 228 Q184 238 166 240 Q146 242 134 226 Q128 216 134 208Z" fill="url(#pr3-jacket)" />
       {/* Feet */}
-      <ellipse cx="32" cy="200" rx="14" ry="7" fill="#D4896A" />
-      <ellipse cx="130" cy="200" rx="14" ry="7" fill="#D4896A" />
+      <ellipse cx="50" cy="240" rx="16" ry="7" fill="#E8A870" />
+      <ellipse cx="172" cy="240" rx="16" ry="7" fill="#E8A870" />
 
-      {/* ── Laptop ── */}
-      {/* Base */}
-      <rect x="30" y="158" width="108" height="14" rx="4" fill="#1A2540" />
-      {/* Keyboard row */}
-      <rect x="34" y="153" width="100" height="8" rx="2" fill="#243050" />
-      {/* Screen */}
-      <path d="M36 153 L44 100 L128 100 L122 153Z" fill="url(#pr2-lap)" stroke="rgba(0,200,255,0.3)" strokeWidth="1" />
-      <path d="M40 151 L47 103 L125 103 L119 151Z" fill="#060E20" />
-      {/* Screen glow content */}
-      <rect x="49" y="105" width="68" height="44" fill="rgba(255,107,53,0.04)" />
-      {/* Code lines */}
-      <rect x="51" y="108" width="30" height="2.5" rx="1.2" fill="rgba(255,107,53,0.5)" />
-      <rect x="51" y="113" width="22" height="2.5" rx="1.2" fill="rgba(0,200,255,0.35)" />
-      <rect x="55" y="118" width="38" height="2.5" rx="1.2" fill="rgba(255,255,255,0.2)" />
-      <rect x="55" y="123" width="28" height="2.5" rx="1.2" fill="rgba(255,255,255,0.15)" />
-      <rect x="51" y="128" width="18" height="2.5" rx="1.2" fill="rgba(255,107,53,0.4)" />
-      <rect x="51" y="133" width="34" height="2.5" rx="1.2" fill="rgba(0,200,255,0.25)" />
-      <rect x="55" y="138" width="24" height="2.5" rx="1.2" fill="rgba(255,255,255,0.15)" />
-      {/* Chart in corner */}
-      <rect x="97" y="109" width="5" height="20" rx="1.5" fill="rgba(255,107,53,0.4)" />
-      <rect x="104" y="115" width="5" height="14" rx="1.5" fill="rgba(255,107,53,0.6)" />
-      <rect x="111" y="112" width="5" height="17" rx="1.5" fill="rgba(255,107,53,0.8)" />
-      {/* Screen cursor glow */}
-      <circle cx="79" cy="152" r="2.5" fill="rgba(0,200,255,0.6)" />
+      {/* ── LAPTOP — the star of the show ── */}
 
-      {/* ── Torso — kurta style ── */}
-      <path d="M58 108 Q60 90 100 88 Q140 90 142 108 L144 160 H56Z" fill="url(#pr2-top)" />
-      {/* Dupatta/scarf across shoulder */}
-      <path d="M142 108 Q158 115 162 130 Q164 145 152 148" stroke="#FFB347" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.7" />
-      {/* Neckline */}
-      <path d="M100 88 L93 102 L100 112 L107 102Z" fill="rgba(255,255,255,0.12)" />
+      {/* Keyboard base with perspective */}
+      <path d="M22 210 L218 210 L225 235 L15 235Z" fill="#1E2D45" />
+      {/* Keyboard surface */}
+      <path d="M26 208 L214 208 L218 210 L22 210Z" fill="#243652" />
+      {/* Key rows (subtle) */}
+      <rect x="30" y="212" width="180" height="3" rx="1.5" fill="rgba(255,255,255,0.06)" />
+      <rect x="30" y="217" width="180" height="3" rx="1.5" fill="rgba(255,255,255,0.05)" />
+      <rect x="30" y="222" width="180" height="3" rx="1.5" fill="rgba(255,255,255,0.04)" />
+      {/* Trackpad */}
+      <rect x="90" y="214" width="60" height="14" rx="3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" />
+      {/* Hinge */}
+      <rect x="22" y="205" width="196" height="6" rx="2" fill="#162030" />
 
-      {/* ── Left arm — elbow resting on laptop ── */}
-      <path d="M58 108 Q40 118 36 140 Q34 155 48 158 L60 156 L64 136Z" fill="url(#pr2-top)" />
+      {/* Screen back (lid) */}
+      <rect x="24" y="95" width="192" height="114" rx="8" fill="#162030" />
+      {/* Screen bezel */}
+      <rect x="28" y="99" width="184" height="106" rx="6" fill="#1A2540" />
+      {/* Screen display area */}
+      <rect x="32" y="103" width="176" height="98" rx="4" fill="url(#pr3-screen)" />
+      {/* Screen background glow */}
+      <rect x="32" y="103" width="176" height="98" rx="4" fill="url(#pr3-screenglow)" />
+
+      {/* ── Screen content — dashboard ── */}
+      {/* Top bar */}
+      <rect x="34" y="105" width="172" height="12" rx="2" fill="rgba(0,180,255,0.07)" />
+      <rect x="38" y="108" width="40" height="5" rx="2.5" fill="#00C8FF" opacity="0.8" />
+      <rect x="82" y="109" width="24" height="3" rx="1.5" fill="rgba(255,255,255,0.2)" />
+      <rect x="110" y="109" width="20" height="3" rx="1.5" fill="rgba(255,255,255,0.15)" />
+      {/* User avatar icon top-right */}
+      <circle cx="196" cy="111" r="5" fill="rgba(0,200,255,0.2)" stroke="rgba(0,200,255,0.4)" strokeWidth="0.8" />
+
+      {/* Metric cards row */}
+      <rect x="34" y="121" width="52" height="28" rx="4" fill="rgba(255,107,53,0.1)" stroke="rgba(255,107,53,0.3)" strokeWidth="0.8" />
+      <rect x="38" y="124" width="18" height="3" rx="1.5" fill="rgba(255,107,53,0.6)" />
+      <rect x="38" y="130" width="30" height="7" rx="2" fill="rgba(255,107,53,0)" />
+      <text x="38" y="138" fontSize="9" fill="#FF9933" fontFamily="sans-serif" fontWeight="bold">₹2.4L</text>
+
+      <rect x="92" y="121" width="52" height="28" rx="4" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.25)" strokeWidth="0.8" />
+      <rect x="96" y="124" width="22" height="3" rx="1.5" fill="rgba(0,200,255,0.5)" />
+      <text x="96" y="138" fontSize="9" fill="#00C8FF" fontFamily="sans-serif" fontWeight="bold">+18%</text>
+
+      <rect x="150" y="121" width="52" height="28" rx="4" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.25)" strokeWidth="0.8" />
+      <rect x="154" y="124" width="20" height="3" rx="1.5" fill="rgba(52,211,153,0.5)" />
+      <text x="154" y="138" fontSize="9" fill="#34D399" fontFamily="sans-serif" fontWeight="bold">142</text>
+
+      {/* Bar chart */}
+      <line x1="36" y1="154" x2="36" y2="193" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+      <line x1="36" y1="193" x2="200" y2="193" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+      {/* Bars — tall and vibrant */}
+      <rect x="40" y="176" width="14" height="17" rx="2.5" fill="#FF9933" opacity="0.75" />
+      <rect x="58" y="165" width="14" height="28" rx="2.5" fill="#FF9933" opacity="0.9" />
+      <rect x="76" y="157" width="14" height="36" rx="2.5" fill="#FF6B35" />
+      <rect x="94" y="168" width="14" height="25" rx="2.5" fill="#FF9933" opacity="0.8" />
+      <rect x="112" y="160" width="14" height="33" rx="2.5" fill="#FF9933" />
+      <rect x="130" y="154" width="14" height="39" rx="2.5" fill="#FF6B35" />
+      <rect x="148" y="163" width="14" height="30" rx="2.5" fill="#FF9933" opacity="0.85" />
+      <rect x="166" y="159" width="14" height="34" rx="2.5" fill="#FF9933" />
+      <rect x="184" y="155" width="14" height="38" rx="2.5" fill="#FF6B35" />
+      {/* Chart line overlay */}
+      <path d="M47 184 L65 173 L83 161 L101 175 L119 164 L137 158 L155 170 L173 163 L191 159" stroke="rgba(0,200,255,0.6)" strokeWidth="1.5" fill="none" strokeDasharray="3,2" />
+      {/* Cursor glow */}
+      <circle cx="137" cy="158" r="3.5" fill="#00C8FF" opacity="0.9" />
+      <circle cx="137" cy="158" r="7" fill="rgba(0,200,255,0.2)" />
+
+      {/* Screen edge glow */}
+      <rect x="32" y="103" width="176" height="98" rx="4" fill="none" stroke="rgba(0,200,255,0.18)" strokeWidth="1" />
+      {/* Screen glare highlight */}
+      <path d="M34 105 L120 105 L100 115 L34 115Z" fill="rgba(255,255,255,0.025)" />
+
+      {/* Notch (webcam) */}
+      <circle cx="120" cy="101" r="2.5" fill="rgba(255,255,255,0.15)" />
+
+      {/* ── Character — visible above screen ── */}
+
+      {/* Left arm reaching to keyboard */}
+      <path d="M44 175 Q28 178 22 195 L30 200 L50 185Z" fill="url(#pr3-jacket)" />
+      <ellipse cx="22" cy="198" rx="10" ry="6" fill="#E8A870" />
       {/* Right arm */}
-      <path d="M142 108 Q160 118 164 140 Q166 155 152 158 L140 156 L136 136Z" fill="url(#pr2-top)" />
-      {/* Hands */}
-      <ellipse cx="40" cy="162" rx="11" ry="7" fill="#D4896A" />
-      <ellipse cx="160" cy="162" rx="11" ry="7" fill="#D4896A" />
+      <path d="M196 175 Q212 178 218 195 L210 200 L190 185Z" fill="url(#pr3-jacket)" />
+      <ellipse cx="218" cy="198" rx="10" ry="6" fill="#E8A870" />
 
-      {/* ── Neck ── */}
-      <rect x="92" y="76" width="16" height="18" rx="8" fill="#D4896A" />
+      {/* Torso — visible at sides and above laptop */}
+      <path d="M58 120 Q60 100 120 98 Q180 100 182 120 L184 212 H56Z" fill="url(#pr3-jacket)" />
+      {/* White collar */}
+      <path d="M120 98 L112 112 L120 122 L128 112Z" fill="rgba(255,255,255,0.9)" />
+      {/* Jacket lapels */}
+      <path d="M112 112 L68 130 L60 180" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" fill="none" />
+      <path d="M128 112 L172 130 L180 180" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" fill="none" />
 
-      {/* ── Head ── */}
-      <ellipse cx="100" cy="58" rx="26" ry="27" fill="#D4896A" />
+      {/* Neck */}
+      <rect x="112" y="84" width="16" height="18" rx="8" fill="#E8A870" />
 
-      {/* Hair */}
-      <path d="M75 52 Q74 28 100 26 Q126 28 126 52 Q124 32 100 30 Q76 32 75 52Z" fill="#1A0800" />
-      {/* Bun / ponytail */}
-      <path d="M124 44 Q136 38 138 52 Q140 64 130 68 Q120 72 116 60 Q112 50 120 44Z" fill="#1A0800" />
+      {/* ── Head — new character ── */}
+      <ellipse cx="120" cy="68" rx="28" ry="29" fill="#E8A870" />
 
-      {/* Eyes — looking at screen */}
-      <ellipse cx="88" cy="58" rx="5" ry="5" fill="white" />
-      <ellipse cx="112" cy="58" rx="5" ry="5" fill="white" />
-      <ellipse cx="89" cy="61" rx="3" ry="3" fill="#1A0800" />
-      <ellipse cx="113" cy="61" rx="3" ry="3" fill="#1A0800" />
-      <circle cx="89.8" cy="60" r="1.1" fill="white" />
-      <circle cx="113.8" cy="60" r="1.1" fill="white" />
+      {/* Hair — straight black bob with fringe */}
+      {/* Top and sides */}
+      <path d="M93 62 Q92 36 120 34 Q148 36 148 62 Q146 40 120 38 Q94 40 93 62Z" fill="#1A0800" />
+      {/* Bob cut sides — straight */}
+      <path d="M93 62 L90 82 Q92 90 96 88 L96 62Z" fill="#1A0800" />
+      <path d="M148 62 L150 82 Q148 90 144 88 L144 62Z" fill="#1A0800" />
+      {/* Fringe/bangs across forehead */}
+      <path d="M95 52 Q120 46 145 52 Q140 60 120 58 Q100 60 95 52Z" fill="#1A0800" />
 
-      {/* Eyebrows */}
-      <path d="M82 50 Q88 47.5 94 49.5" stroke="#1A0800" strokeWidth="2" strokeLinecap="round" fill="none" />
-      <path d="M106 49.5 Q112 47.5 118 50" stroke="#1A0800" strokeWidth="2" strokeLinecap="round" fill="none" />
+      {/* Eyes — wide, almond shaped */}
+      <ellipse cx="106" cy="66" rx="6" ry="5.5" fill="white" />
+      <ellipse cx="134" cy="66" rx="6" ry="5.5" fill="white" />
+      {/* Pupils */}
+      <ellipse cx="107" cy="67.5" rx="3.2" ry="3.2" fill="#1A0800" />
+      <ellipse cx="135" cy="67.5" rx="3.2" ry="3.2" fill="#1A0800" />
+      <circle cx="108" cy="66.5" r="1.2" fill="white" />
+      <circle cx="136" cy="66.5" r="1.2" fill="white" />
+
+      {/* Eyebrows — neat, arched */}
+      <path d="M99 57 Q106 54 113 56" stroke="#1A0800" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      <path d="M127 56 Q134 54 141 57" stroke="#1A0800" strokeWidth="2.2" strokeLinecap="round" fill="none" />
 
       {/* Nose */}
-      <path d="M99 66 Q97 70 99 72 Q101 72 103 70 Q101 70 99 66Z" fill="rgba(0,0,0,0.08)" />
+      <path d="M119 75 Q117 79 119 81 Q121 81 123 79 Q121 79 119 75Z" fill="rgba(0,0,0,0.08)" />
 
-      {/* Smile — focused/slight */}
-      <path d="M92 76 Q100 80 108 76" stroke="#B06030" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      {/* Smile — warm and focused */}
+      <path d="M110 87 Q120 93 130 87" stroke="#B56030" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M110 87 Q115 91 120 92 Q125 91 130 87" fill="rgba(181,96,48,0.15)" />
 
-      {/* Small gold earrings */}
-      <circle cx="74" cy="62" r="3" fill="#FF9933" />
-      <circle cx="126" cy="62" r="3" fill="#FF9933" />
+      {/* Stud earrings — teal */}
+      <circle cx="92" cy="71" r="3.5" fill="#0891B2" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" />
+      <circle cx="148" cy="71" r="3.5" fill="#0891B2" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" />
     </svg>
   );
 }
