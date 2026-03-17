@@ -194,13 +194,12 @@ function PersonCard({ popupIndex, floatDelay = 0, position = "center", size = "m
   const popup = POPUP_CARDS[popupIndex];
   const Icon = popup.icon;
 
-  const illuSizeMap = { sm: "w-28", md: "w-32", lg: "w-40" };
-  const phoneSizeMap = { sm: "w-14 h-24", md: "w-16 h-28", lg: "w-20 h-32" };
+  const illuSizeMap = { sm: "w-36", md: "w-44", lg: "w-52" };
   const popupPos =
     position === "left"
-      ? "left-full ml-4 top-0"
+      ? "left-full ml-4 top-4"
       : position === "right"
-      ? "right-full mr-4 top-0"
+      ? "right-full mr-4 top-4"
       : "left-1/2 -translate-x-1/2 bottom-[calc(100%+12px)]";
 
   return (
@@ -211,70 +210,19 @@ function PersonCard({ popupIndex, floatDelay = 0, position = "center", size = "m
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
     >
-      {/* Floating phone above the person */}
-      <motion.div
-        className={`${phoneSizeMap[size]} rounded-2xl border-2 relative overflow-hidden shadow-xl mb-[-18px] z-10`}
-        style={{
-          borderColor: hovered ? popup.color : "rgba(255,255,255,0.18)",
-          background: "linear-gradient(145deg, rgba(10,25,47,0.97) 0%, rgba(4,12,28,0.99) 100%)",
-          boxShadow: hovered
-            ? `0 0 24px ${popup.color}60, 0 12px 40px rgba(0,0,0,0.6)`
-            : "0 8px 32px rgba(0,0,0,0.5)",
-          transition: "border-color 0.3s, box-shadow 0.3s",
-        }}
-        animate={{ y: [0, -5, 0] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: floatDelay * 0.5 }}
-      >
-        {/* Notch */}
-        <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-7 h-1.5 rounded-full bg-black/70 z-10" />
-        {/* Screen */}
-        <div className="mt-4 px-1.5 pb-1.5 space-y-1 h-full overflow-hidden">
-          <div className="flex items-center gap-1 px-1 py-0.5 rounded-md" style={{ background: `${popup.color}18` }}>
-            <div className="w-3 h-3 rounded-sm flex items-center justify-center" style={{ background: popup.color }}>
-              <Icon size={7} className="text-[#0A192F]" />
-            </div>
-            <span className="text-[7px] font-bold" style={{ color: popup.color }}>Vextor</span>
-          </div>
-          <div className="grid grid-cols-2 gap-0.5">
-            {[popup.color, "#FF9933"].map((c, i) => (
-              <div key={i} className="rounded-md p-1" style={{ background: `${c}12`, border: `1px solid ${c}20` }}>
-                <div className="text-[6px] font-bold" style={{ color: c }}>{i === 0 ? "₹48K" : "142"}</div>
-              </div>
-            ))}
-          </div>
-          <div className="rounded-md overflow-hidden" style={{ height: "32px", background: `${popup.color}06` }}>
-            <div className="flex items-end gap-px h-full px-0.5 pb-0.5">
-              {[3, 5, 4, 7, 6, 8, 6].map((v, i) => (
-                <div key={i} className="flex-1 rounded-sm" style={{ height: `${v * 10}%`, background: i === 5 ? popup.color : `${popup.color}30` }} />
-              ))}
-            </div>
-          </div>
-        </div>
-        {/* Notification badge */}
-        <motion.div
-          className="absolute top-1 right-1 w-3 h-3 rounded-full flex items-center justify-center text-[6px] font-bold"
-          style={{ background: popup.color, color: "#0A192F" }}
-          animate={{ scale: [1, 1.3, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity, delay: floatDelay }}
-        >
-          !
-        </motion.div>
-      </motion.div>
-
       {/* Person illustration */}
       <motion.div
         className={`relative ${illuSizeMap[size]}`}
-        whileHover={{ scale: 1.04 }}
+        whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
       >
-        {/* Glow ring on hover */}
         <motion.div
-          className="absolute inset-0 rounded-full blur-xl"
+          className="absolute inset-x-0 bottom-0 h-8 rounded-full blur-2xl"
           style={{ background: popup.color }}
-          animate={{ opacity: hovered ? 0.12 : 0 }}
+          animate={{ opacity: hovered ? 0.18 : 0.07 }}
           transition={{ duration: 0.3 }}
         />
-        <Illustration className="w-full h-auto relative z-10 drop-shadow-2xl" />
+        <Illustration className="w-full h-auto relative z-10" />
       </motion.div>
 
       {/* Label */}
