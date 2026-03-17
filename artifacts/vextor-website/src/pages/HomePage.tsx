@@ -1,10 +1,16 @@
-import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useRef, useState, useCallback } from "react";
 import {
   Zap, FileX, Activity, Settings, Smartphone, Globe, Server,
   ArrowRight, ChevronRight, TrendingUp, Package, Receipt, Bell
 } from "lucide-react";
 import { ScrollReveal } from "../components/ScrollReveal";
+import {
+  PersonRetailer,
+  PersonDistributor,
+  PersonManufacturer,
+} from "../components/PersonIllustrations";
 
 /* ─────────────────────────────────────────────────────────
    Tech logos as inline SVGs / emoji for zero network cost
@@ -180,124 +186,130 @@ interface PersonCardProps {
   position?: "left" | "center" | "right";
   size?: "sm" | "md" | "lg";
   label: string;
-  emoji: string;
+  Illustration: React.ComponentType<{ className?: string }>;
 }
 
-function PersonCard({ popupIndex, floatDelay = 0, position = "center", size = "md", label, emoji }: PersonCardProps) {
+function PersonCard({ popupIndex, floatDelay = 0, position = "center", size = "md", label, Illustration }: PersonCardProps) {
   const [hovered, setHovered] = useState(false);
   const popup = POPUP_CARDS[popupIndex];
   const Icon = popup.icon;
 
-  const sizeMap = { sm: "w-28 h-48", md: "w-32 h-56", lg: "w-36 h-64" };
-  const popupPos = position === "left" ? "left-full ml-3" : position === "right" ? "right-full mr-3" : "-translate-x-1/2 left-1/2 -top-[200px]";
+  const illuSizeMap = { sm: "w-28", md: "w-32", lg: "w-40" };
+  const phoneSizeMap = { sm: "w-14 h-24", md: "w-16 h-28", lg: "w-20 h-32" };
+  const popupPos =
+    position === "left"
+      ? "left-full ml-4 top-0"
+      : position === "right"
+      ? "right-full mr-4 top-0"
+      : "left-1/2 -translate-x-1/2 bottom-[calc(100%+12px)]";
 
   return (
     <motion.div
-      className="relative cursor-pointer"
-      animate={{ y: [0, -10, 0] }}
+      className="relative cursor-pointer flex flex-col items-center"
+      animate={{ y: [0, -8, 0] }}
       transition={{ duration: 3.5 + floatDelay, repeat: Infinity, ease: "easeInOut", delay: floatDelay }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
     >
-      {/* Phone frame */}
+      {/* Floating phone above the person */}
       <motion.div
-        className={`${sizeMap[size]} rounded-3xl border-4 relative overflow-hidden shadow-2xl`}
+        className={`${phoneSizeMap[size]} rounded-2xl border-2 relative overflow-hidden shadow-xl mb-[-18px] z-10`}
         style={{
-          borderColor: hovered ? popup.color : "rgba(255,255,255,0.15)",
-          background: "linear-gradient(145deg, rgba(10,25,47,0.95) 0%, rgba(5,15,35,0.98) 100%)",
+          borderColor: hovered ? popup.color : "rgba(255,255,255,0.18)",
+          background: "linear-gradient(145deg, rgba(10,25,47,0.97) 0%, rgba(4,12,28,0.99) 100%)",
           boxShadow: hovered
-            ? `0 0 30px ${popup.color}50, 0 20px 60px rgba(0,0,0,0.5)`
-            : "0 20px 60px rgba(0,0,0,0.4)",
+            ? `0 0 24px ${popup.color}60, 0 12px 40px rgba(0,0,0,0.6)`
+            : "0 8px 32px rgba(0,0,0,0.5)",
           transition: "border-color 0.3s, box-shadow 0.3s",
         }}
-        whileHover={{ scale: 1.04, y: -4 }}
-        transition={{ duration: 0.3 }}
+        animate={{ y: [0, -5, 0] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: floatDelay * 0.5 }}
       >
         {/* Notch */}
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-2.5 rounded-full bg-black/70 z-10" />
-        {/* Screen content */}
-        <div className="mt-6 p-2 space-y-2 h-full overflow-hidden">
-          {/* App header */}
-          <div
-            className="flex items-center gap-1.5 px-1 py-0.5 rounded-lg"
-            style={{ background: `${popup.color}15` }}
-          >
-            <div className="w-4 h-4 rounded-md flex items-center justify-center" style={{ background: popup.color }}>
-              <Icon size={9} className="text-[#0A192F]" />
+        <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-7 h-1.5 rounded-full bg-black/70 z-10" />
+        {/* Screen */}
+        <div className="mt-4 px-1.5 pb-1.5 space-y-1 h-full overflow-hidden">
+          <div className="flex items-center gap-1 px-1 py-0.5 rounded-md" style={{ background: `${popup.color}18` }}>
+            <div className="w-3 h-3 rounded-sm flex items-center justify-center" style={{ background: popup.color }}>
+              <Icon size={7} className="text-[#0A192F]" />
             </div>
-            <span className="text-[9px] font-bold" style={{ color: popup.color }}>
-              Vextor
-            </span>
+            <span className="text-[7px] font-bold" style={{ color: popup.color }}>Vextor</span>
           </div>
-          {/* Mini screen UI */}
-          <div className="space-y-1.5">
-            <div className="h-1.5 rounded-full bg-white/10 w-3/4" />
-            <div className="h-1.5 rounded-full bg-white/10 w-1/2" />
-          </div>
-          <div className="grid grid-cols-2 gap-1">
+          <div className="grid grid-cols-2 gap-0.5">
             {[popup.color, "#FF9933"].map((c, i) => (
-              <div key={i} className="rounded-lg p-1.5" style={{ background: `${c}15`, border: `1px solid ${c}25` }}>
-                <div className="h-1 rounded bg-white/10 mb-1 w-4/5" />
-                <div className="h-2.5 rounded font-bold text-[8px]" style={{ color: c }}>
-                  {i === 0 ? "₹48K" : "142"}
-                </div>
+              <div key={i} className="rounded-md p-1" style={{ background: `${c}12`, border: `1px solid ${c}20` }}>
+                <div className="text-[6px] font-bold" style={{ color: c }}>{i === 0 ? "₹48K" : "142"}</div>
               </div>
             ))}
           </div>
-          <div className="h-12 rounded-lg overflow-hidden" style={{ background: `${popup.color}08`, border: `1px solid ${popup.color}15` }}>
-            <div className="flex items-end gap-0.5 h-full p-1">
-              {[3, 5, 4, 7, 6, 8, 7].map((v, i) => (
+          <div className="rounded-md overflow-hidden" style={{ height: "32px", background: `${popup.color}06` }}>
+            <div className="flex items-end gap-px h-full px-0.5 pb-0.5">
+              {[3, 5, 4, 7, 6, 8, 6].map((v, i) => (
                 <div key={i} className="flex-1 rounded-sm" style={{ height: `${v * 10}%`, background: i === 5 ? popup.color : `${popup.color}30` }} />
               ))}
             </div>
           </div>
-          {/* Person emoji at bottom */}
-          <div className="absolute bottom-2 left-0 right-0 flex justify-center">
-            <span className="text-xl">{emoji}</span>
-          </div>
         </div>
+        {/* Notification badge */}
+        <motion.div
+          className="absolute top-1 right-1 w-3 h-3 rounded-full flex items-center justify-center text-[6px] font-bold"
+          style={{ background: popup.color, color: "#0A192F" }}
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity, delay: floatDelay }}
+        >
+          !
+        </motion.div>
+      </motion.div>
+
+      {/* Person illustration */}
+      <motion.div
+        className={`relative ${illuSizeMap[size]}`}
+        whileHover={{ scale: 1.04 }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Glow ring on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-full blur-xl"
+          style={{ background: popup.color }}
+          animate={{ opacity: hovered ? 0.12 : 0 }}
+          transition={{ duration: 0.3 }}
+        />
+        <Illustration className="w-full h-auto relative z-10 drop-shadow-2xl" />
       </motion.div>
 
       {/* Label */}
-      <div className="text-center mt-2">
-        <span className="text-[10px] text-muted-foreground font-medium">{label}</span>
+      <div className="text-center mt-1.5">
+        <span
+          className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+          style={{
+            background: `${popup.color}12`,
+            color: hovered ? popup.color : "var(--muted-foreground)",
+            border: `1px solid ${hovered ? popup.color + "40" : "transparent"}`,
+            transition: "all 0.3s",
+          }}
+        >
+          {label}
+        </span>
       </div>
 
       {/* Hover Popup */}
       <AnimatePresence>
         {hovered && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.85, y: 8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: 8 }}
+            initial={{ opacity: 0, scale: 0.88, y: position === "center" ? 8 : 0, x: position === "left" ? -8 : position === "right" ? 8 : 0 }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, scale: 0.88 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
             className={`absolute z-50 w-48 p-3 rounded-2xl ${popupPos}`}
             style={{
-              background: "rgba(8,20,42,0.97)",
-              border: `1px solid ${popup.color}40`,
-              boxShadow: `0 0 24px ${popup.color}25, 0 16px 48px rgba(0,0,0,0.6)`,
-              backdropFilter: "blur(16px)",
-              ...(position === "center" ? { bottom: "calc(100% + 12px)", top: "auto" } : {}),
+              background: "rgba(6,16,36,0.97)",
+              border: `1px solid ${popup.color}45`,
+              boxShadow: `0 0 28px ${popup.color}20, 0 20px 60px rgba(0,0,0,0.7)`,
+              backdropFilter: "blur(20px)",
             }}
           >
-            {/* Arrow */}
-            <div
-              className="absolute w-2.5 h-2.5 rotate-45"
-              style={{
-                background: "rgba(8,20,42,0.97)",
-                border: `1px solid ${popup.color}40`,
-                ...(position === "center"
-                  ? { bottom: -6, left: "50%", transform: "translateX(-50%) rotate(45deg)", borderTop: "none", borderLeft: "none" }
-                  : position === "left"
-                  ? { left: -6, top: "50%", transform: "translateY(-50%) rotate(45deg)", borderTop: "none", borderRight: "none" }
-                  : { right: -6, top: "50%", transform: "translateY(-50%) rotate(45deg)", borderBottom: "none", borderLeft: "none" }),
-              }}
-            />
-            <div className="flex items-center gap-2 mb-2">
-              <div
-                className="w-6 h-6 rounded-lg flex items-center justify-center"
-                style={{ background: `${popup.color}20`, border: `1px solid ${popup.color}40` }}
-              >
+            <div className="flex items-center gap-2 mb-2.5">
+              <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: `${popup.color}20`, border: `1px solid ${popup.color}40` }}>
                 <Icon size={12} style={{ color: popup.color }} />
               </div>
               <span className="text-xs font-bold text-white">{popup.title}</span>
@@ -487,7 +499,7 @@ function HeroSection() {
                 position="left"
                 size="sm"
                 label="Priya — Retailer"
-                emoji="👩‍💼"
+                Illustration={PersonRetailer}
               />
             </motion.div>
 
@@ -504,7 +516,7 @@ function HeroSection() {
                 position="center"
                 size="lg"
                 label="Rahul — Distributor"
-                emoji="👨‍💻"
+                Illustration={PersonDistributor}
               />
             </motion.div>
 
@@ -520,7 +532,7 @@ function HeroSection() {
                 position="right"
                 size="md"
                 label="Meera — Manufacturer"
-                emoji="👩‍🏭"
+                Illustration={PersonManufacturer}
               />
             </motion.div>
 
