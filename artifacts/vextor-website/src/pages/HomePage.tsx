@@ -1,299 +1,606 @@
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useRef, useState, useCallback } from "react";
 import {
   Zap, FileX, Activity, Settings, Smartphone, Globe, Server,
-  ArrowRight, ChevronRight
+  ArrowRight, ChevronRight, TrendingUp, Package, Receipt, Bell
 } from "lucide-react";
 import { ScrollReveal } from "../components/ScrollReveal";
 
+/* ─────────────────────────────────────────────────────────
+   Tech logos as inline SVGs / emoji for zero network cost
+───────────────────────────────────────────────────────── */
+const TECH_LOGOS = [
+  { label: "Python", color: "#3776AB", symbol: "Py" },
+  { label: "React", color: "#61DAFB", symbol: "⚛" },
+  { label: "Next.js", color: "#00F2FF", symbol: "N" },
+  { label: "Docker", color: "#2496ED", symbol: "🐳" },
+  { label: "Node.js", color: "#68A063", symbol: "⬡" },
+  { label: "N8N", color: "#FF9933", symbol: "n8n" },
+  { label: "AWS", color: "#FF9900", symbol: "☁" },
+  { label: "Flutter", color: "#54C5F8", symbol: "Fl" },
+  { label: "PostgreSQL", color: "#336791", symbol: "🐘" },
+  { label: "Redis", color: "#DC382D", symbol: "R" },
+  { label: "TypeScript", color: "#3178C6", symbol: "TS" },
+  { label: "Kubernetes", color: "#326CE5", symbol: "☸" },
+  { label: "FastAPI", color: "#009688", symbol: "🚀" },
+  { label: "Oracle", color: "#F80000", symbol: "O" },
+];
+
+/* positions in % across a wide area so they don't cluster */
+const LOGO_POSITIONS = [
+  { x: 2, y: 8 }, { x: 88, y: 5 }, { x: 5, y: 55 },
+  { x: 91, y: 62 }, { x: 48, y: 3 }, { x: 75, y: 15 },
+  { x: 18, y: 28 }, { x: 82, y: 35 }, { x: 60, y: 78 },
+  { x: 25, y: 80 }, { x: 50, y: 88 }, { x: 8, y: 88 },
+  { x: 70, y: 48 }, { x: 38, y: 18 },
+];
+
+function FloatingTechLogos() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {TECH_LOGOS.map((tech, i) => {
+        const pos = LOGO_POSITIONS[i];
+        return (
+          <motion.div
+            key={tech.label}
+            className="absolute flex flex-col items-center gap-1"
+            style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+            animate={{
+              y: [0, -14, 0, 8, 0],
+              x: [0, 4, 0, -4, 0],
+              rotate: [0, 3, 0, -3, 0],
+              opacity: [0.25, 0.55, 0.25],
+            }}
+            transition={{
+              duration: 6 + (i % 5),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.4,
+            }}
+          >
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold shadow-lg"
+              style={{
+                background: `${tech.color}18`,
+                border: `1px solid ${tech.color}35`,
+                color: tech.color,
+                backdropFilter: "blur(4px)",
+              }}
+            >
+              {tech.symbol}
+            </div>
+            <span className="text-[9px] font-medium" style={{ color: `${tech.color}80` }}>
+              {tech.label}
+            </span>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   Popup cards for each person
+───────────────────────────────────────────────────────── */
+const POPUP_CARDS = [
+  {
+    id: "dashboard",
+    title: "Sales Dashboard",
+    icon: TrendingUp,
+    color: "#00F2FF",
+    content: (
+      <div className="space-y-2">
+        <div className="flex justify-between text-xs">
+          <span className="text-white/60">Today Revenue</span>
+          <span className="font-bold text-[#00F2FF]">₹48,200</span>
+        </div>
+        <div className="flex items-end gap-1 h-10">
+          {[40, 65, 45, 80, 60, 90, 72].map((h, i) => (
+            <div
+              key={i}
+              className="flex-1 rounded-sm"
+              style={{
+                height: `${h}%`,
+                background: i === 5 ? "#00F2FF" : "rgba(0,242,255,0.25)",
+              }}
+            />
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5 text-[10px] text-green-400">
+          <TrendingUp size={10} /> Revenue up 32% this week
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: "invoice",
+    title: "Invoice Sent",
+    icon: Receipt,
+    color: "#FF9933",
+    content: (
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <div>
+            <div className="text-xs font-semibold">INV-2024-0142</div>
+            <div className="text-[10px] text-white/50">Sharma Textiles</div>
+          </div>
+          <div className="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-[9px] font-medium">
+            Sent ✓
+          </div>
+        </div>
+        <div className="text-lg font-bold text-[#FF9933]">₹1,24,500</div>
+        <div className="text-[10px] text-white/50">Due: Mar 25, 2026</div>
+        <div className="w-full bg-white/10 rounded-full h-1">
+          <div className="bg-[#FF9933] h-full rounded-full" style={{ width: "70%" }} />
+        </div>
+        <div className="text-[10px] text-white/50">Payment: 70% expected</div>
+      </div>
+    ),
+  },
+  {
+    id: "inventory",
+    title: "Inventory Alert",
+    icon: Package,
+    color: "#a855f7",
+    content: (
+      <div className="space-y-2">
+        <div className="flex items-center gap-2 p-1.5 rounded-lg bg-red-500/10 border border-red-500/20">
+          <Bell size={10} className="text-red-400" />
+          <span className="text-[10px] text-red-300">3 items low stock</span>
+        </div>
+        {[
+          { name: "Cotton Fabric", qty: 12, max: 200 },
+          { name: "Silk Thread", qty: 5, max: 100 },
+        ].map((item) => (
+          <div key={item.name} className="space-y-1">
+            <div className="flex justify-between text-[10px]">
+              <span className="text-white/70">{item.name}</span>
+              <span className="text-red-400 font-medium">{item.qty} left</span>
+            </div>
+            <div className="w-full bg-white/10 rounded-full h-1">
+              <div
+                className="bg-red-400 h-full rounded-full"
+                style={{ width: `${(item.qty / item.max) * 100}%` }}
+              />
+            </div>
+          </div>
+        ))}
+        <div className="text-[10px] text-[#a855f7]">Auto-reorder triggered →</div>
+      </div>
+    ),
+  },
+];
+
+/* ─────────────────────────────────────────────────────────
+   Single person card with hoverable popup
+───────────────────────────────────────────────────────── */
+interface PersonCardProps {
+  popupIndex: number;
+  floatDelay?: number;
+  position?: "left" | "center" | "right";
+  size?: "sm" | "md" | "lg";
+  label: string;
+  emoji: string;
+}
+
+function PersonCard({ popupIndex, floatDelay = 0, position = "center", size = "md", label, emoji }: PersonCardProps) {
+  const [hovered, setHovered] = useState(false);
+  const popup = POPUP_CARDS[popupIndex];
+  const Icon = popup.icon;
+
+  const sizeMap = { sm: "w-28 h-48", md: "w-32 h-56", lg: "w-36 h-64" };
+  const popupPos = position === "left" ? "left-full ml-3" : position === "right" ? "right-full mr-3" : "-translate-x-1/2 left-1/2 -top-[200px]";
+
+  return (
+    <motion.div
+      className="relative cursor-pointer"
+      animate={{ y: [0, -10, 0] }}
+      transition={{ duration: 3.5 + floatDelay, repeat: Infinity, ease: "easeInOut", delay: floatDelay }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+    >
+      {/* Phone frame */}
+      <motion.div
+        className={`${sizeMap[size]} rounded-3xl border-4 relative overflow-hidden shadow-2xl`}
+        style={{
+          borderColor: hovered ? popup.color : "rgba(255,255,255,0.15)",
+          background: "linear-gradient(145deg, rgba(10,25,47,0.95) 0%, rgba(5,15,35,0.98) 100%)",
+          boxShadow: hovered
+            ? `0 0 30px ${popup.color}50, 0 20px 60px rgba(0,0,0,0.5)`
+            : "0 20px 60px rgba(0,0,0,0.4)",
+          transition: "border-color 0.3s, box-shadow 0.3s",
+        }}
+        whileHover={{ scale: 1.04, y: -4 }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Notch */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-2.5 rounded-full bg-black/70 z-10" />
+        {/* Screen content */}
+        <div className="mt-6 p-2 space-y-2 h-full overflow-hidden">
+          {/* App header */}
+          <div
+            className="flex items-center gap-1.5 px-1 py-0.5 rounded-lg"
+            style={{ background: `${popup.color}15` }}
+          >
+            <div className="w-4 h-4 rounded-md flex items-center justify-center" style={{ background: popup.color }}>
+              <Icon size={9} className="text-[#0A192F]" />
+            </div>
+            <span className="text-[9px] font-bold" style={{ color: popup.color }}>
+              Vextor
+            </span>
+          </div>
+          {/* Mini screen UI */}
+          <div className="space-y-1.5">
+            <div className="h-1.5 rounded-full bg-white/10 w-3/4" />
+            <div className="h-1.5 rounded-full bg-white/10 w-1/2" />
+          </div>
+          <div className="grid grid-cols-2 gap-1">
+            {[popup.color, "#FF9933"].map((c, i) => (
+              <div key={i} className="rounded-lg p-1.5" style={{ background: `${c}15`, border: `1px solid ${c}25` }}>
+                <div className="h-1 rounded bg-white/10 mb-1 w-4/5" />
+                <div className="h-2.5 rounded font-bold text-[8px]" style={{ color: c }}>
+                  {i === 0 ? "₹48K" : "142"}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="h-12 rounded-lg overflow-hidden" style={{ background: `${popup.color}08`, border: `1px solid ${popup.color}15` }}>
+            <div className="flex items-end gap-0.5 h-full p-1">
+              {[3, 5, 4, 7, 6, 8, 7].map((v, i) => (
+                <div key={i} className="flex-1 rounded-sm" style={{ height: `${v * 10}%`, background: i === 5 ? popup.color : `${popup.color}30` }} />
+              ))}
+            </div>
+          </div>
+          {/* Person emoji at bottom */}
+          <div className="absolute bottom-2 left-0 right-0 flex justify-center">
+            <span className="text-xl">{emoji}</span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Label */}
+      <div className="text-center mt-2">
+        <span className="text-[10px] text-muted-foreground font-medium">{label}</span>
+      </div>
+
+      {/* Hover Popup */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 8 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className={`absolute z-50 w-48 p-3 rounded-2xl ${popupPos}`}
+            style={{
+              background: "rgba(8,20,42,0.97)",
+              border: `1px solid ${popup.color}40`,
+              boxShadow: `0 0 24px ${popup.color}25, 0 16px 48px rgba(0,0,0,0.6)`,
+              backdropFilter: "blur(16px)",
+              ...(position === "center" ? { bottom: "calc(100% + 12px)", top: "auto" } : {}),
+            }}
+          >
+            {/* Arrow */}
+            <div
+              className="absolute w-2.5 h-2.5 rotate-45"
+              style={{
+                background: "rgba(8,20,42,0.97)",
+                border: `1px solid ${popup.color}40`,
+                ...(position === "center"
+                  ? { bottom: -6, left: "50%", transform: "translateX(-50%) rotate(45deg)", borderTop: "none", borderLeft: "none" }
+                  : position === "left"
+                  ? { left: -6, top: "50%", transform: "translateY(-50%) rotate(45deg)", borderTop: "none", borderRight: "none" }
+                  : { right: -6, top: "50%", transform: "translateY(-50%) rotate(45deg)", borderBottom: "none", borderLeft: "none" }),
+              }}
+            />
+            <div className="flex items-center gap-2 mb-2">
+              <div
+                className="w-6 h-6 rounded-lg flex items-center justify-center"
+                style={{ background: `${popup.color}20`, border: `1px solid ${popup.color}40` }}
+              >
+                <Icon size={12} style={{ color: popup.color }} />
+              </div>
+              <span className="text-xs font-bold text-white">{popup.title}</span>
+            </div>
+            {popup.content}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   Hero Section — 2-column
+───────────────────────────────────────────────────────── */
 function HeroSection() {
-  const letters = "The Tech Direction of a Developed India.".split("");
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const phoneY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.03, delayChildren: 0.3 },
-    },
+  const wordVariants = {
+    hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+    visible: (i: number) => ({
+      opacity: 1, y: 0, filter: "blur(0px)",
+      transition: { duration: 0.55, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] },
+    }),
   };
 
-  const letterVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
+  const words = ["The", "Tech", "Direction", "of", "a", "Developed", "India."];
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center overflow-hidden"
     >
-      {/* Animated SVG Grid Background */}
-      <div className="svg-grid opacity-60" />
+      {/* Animated SVG Grid */}
+      <div className="svg-grid opacity-40" />
 
-      {/* Gradient overlays */}
+      {/* Radial glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,242,255,0.12) 0%, transparent 60%)",
+          background: "radial-gradient(ellipse 60% 60% at 30% 50%, rgba(0,242,255,0.07) 0%, transparent 70%), radial-gradient(ellipse 50% 50% at 80% 30%, rgba(255,153,51,0.05) 0%, transparent 60%)",
         }}
       />
+
+      {/* Bottom fade */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
-        style={{
-          background: "linear-gradient(to bottom, transparent, hsl(var(--background)))",
-        }}
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--background)))" }}
       />
 
-      {/* Floating glowing dots */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: Math.random() * 6 + 3 + "px",
-            height: Math.random() * 6 + 3 + "px",
-            background: i % 2 === 0 ? "#00F2FF" : "#FF9933",
-            left: `${10 + i * 11}%`,
-            top: `${20 + (i % 3) * 20}%`,
-            filter: "blur(1px)",
-          }}
-          animate={{
-            y: [-10, 10, -10],
-            opacity: [0.4, 1, 0.4],
-          }}
-          transition={{
-            duration: 3 + i * 0.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.3,
-          }}
-        />
-      ))}
+      {/* Floating tech logos */}
+      <FloatingTechLogos />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-[#00F2FF]/30 text-[#00F2FF] text-sm font-medium mb-8"
-        >
-          <Zap size={14} className="fill-[#00F2FF]" />
-          Powering Vikshit Bharat 2047
-          <ChevronRight size={14} />
-        </motion.div>
-
-        {/* H1 with letter stagger */}
-        <motion.h1
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
-          style={{ fontFamily: "'Sora', sans-serif" }}
-        >
-          {letters.map((letter, i) => (
-            <motion.span
-              key={i}
-              variants={letterVariants}
-              className={letter === " " ? "inline-block w-3" : "inline-block"}
-              style={{
-                background:
-                  i < 4
-                    ? "linear-gradient(135deg, #00F2FF, #00a8ff)"
-                    : "linear-gradient(135deg, hsl(var(--foreground)), hsl(var(--foreground)/0.8))",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
+      <motion.div
+        style={{ opacity }}
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 w-full"
+      >
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center min-h-[85vh]">
+          {/* ── LEFT: Text content ── */}
+          <motion.div style={{ y: textY }} className="flex flex-col justify-center">
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-[#00F2FF]/30 text-[#00F2FF] text-xs font-medium mb-6 w-fit"
             >
-              {letter === " " ? "\u00A0" : letter}
-            </motion.span>
-          ))}
-        </motion.h1>
-
-        {/* Subtext */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 0.7 }}
-          className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          Enterprise-grade software at SME-friendly prices. Powering your growth to achieve{" "}
-          <span className="text-[#FF9933] font-semibold">Vikshit Bharat by 2047</span>.
-        </motion.p>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.9, duration: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
-            className="flex items-center gap-3 px-8 py-4 rounded-full bg-[#00F2FF] text-[#0A192F] font-bold text-base cyan-glow transition-all duration-300"
-          >
-            <Zap size={18} className="fill-[#0A192F]" />
-            Grow My Business
-            <ArrowRight size={18} />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.03, borderColor: "rgba(0,242,255,0.5)" }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => document.querySelector("#services")?.scrollIntoView({ behavior: "smooth" })}
-            className="flex items-center gap-2 px-8 py-4 rounded-full border border-[#00F2FF]/30 text-foreground font-medium glass transition-all"
-          >
-            Explore Services
-            <ChevronRight size={16} />
-          </motion.button>
-        </motion.div>
-
-        {/* 3D Abstract Vector Arrow */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 2.2, duration: 1, type: "spring" }}
-          className="mt-16 relative flex justify-center"
-        >
-          <div className="relative w-64 h-64">
-            <svg viewBox="0 0 200 200" className="w-full h-full float-anim">
-              <defs>
-                <radialGradient id="dotGrad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#00F2FF" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#0088ff" stopOpacity="0.3" />
-                </radialGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              {/* Glowing dot field forming a V/arrow shape */}
-              {[...Array(60)].map((_, i) => {
-                const row = Math.floor(i / 8);
-                const col = i % 8;
-                const x = 20 + col * 23;
-                const y = 20 + row * 23;
-                const opacity = Math.random() * 0.5 + 0.3;
-                const size = Math.random() * 3 + 2;
-                return (
-                  <motion.circle
-                    key={i}
-                    cx={x}
-                    cy={y}
-                    r={size}
-                    fill="#00F2FF"
-                    opacity={opacity}
-                    filter="url(#glow)"
-                    animate={{
-                      opacity: [opacity, opacity * 1.5, opacity],
-                      r: [size, size * 1.3, size],
-                    }}
-                    transition={{
-                      duration: 2 + Math.random() * 2,
-                      repeat: Infinity,
-                      delay: Math.random() * 2,
-                    }}
-                  />
-                );
-              })}
-              {/* Arrow shape */}
-              <motion.path
-                d="M30 50 L100 150 L170 50"
-                stroke="#00F2FF"
-                strokeWidth="4"
-                fill="none"
-                strokeLinecap="round"
-                filter="url(#glow)"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ delay: 2.5, duration: 1.5 }}
+              <motion.span
+                animate={{ scale: [1, 1.3, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="w-1.5 h-1.5 rounded-full bg-[#00F2FF]"
               />
-              <motion.path
-                d="M100 130 L100 160"
-                stroke="#FF9933"
-                strokeWidth="6"
-                strokeLinecap="round"
-                filter="url(#glow)"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ delay: 4, duration: 0.5 }}
-              />
-            </svg>
-          </div>
-        </motion.div>
+              Powering Vikshit Bharat 2047
+              <ChevronRight size={12} />
+            </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.5, duration: 0.7 }}
-          className="mt-16 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto"
-        >
-          {[
-            { value: "5x", label: "Faster Delivery" },
-            { value: "70%", label: "Cost Savings" },
-            { value: "2047", label: "Target Year" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div
-                className="text-2xl sm:text-3xl font-bold"
-                style={{ fontFamily: "'Sora', sans-serif", color: "#00F2FF" }}
+            {/* Headline — word by word */}
+            <h1
+              className="text-4xl sm:text-5xl lg:text-[3.6rem] font-bold leading-[1.1] mb-5"
+              style={{ fontFamily: "'Sora', sans-serif" }}
+            >
+              {words.map((word, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  variants={wordVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className={`inline-block mr-3 ${
+                    word === "Developed" || word === "India."
+                      ? "text-[#00F2FF]"
+                      : "text-foreground"
+                  }`}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h1>
+
+            {/* Subtext */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg"
+            >
+              Enterprise-grade software at SME-friendly prices. Powering your growth to achieve{" "}
+              <span className="text-[#FF9933] font-semibold">Vikshit Bharat by 2047</span>.
+            </motion.p>
+
+            {/* CTA buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-3 mb-10"
+            >
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" })}
+                className="flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#00F2FF] text-[#0A192F] font-bold text-sm cyan-glow"
               >
-                {stat.value}
-              </div>
-              <div className="text-xs sm:text-sm text-muted-foreground mt-1">{stat.label}</div>
-            </div>
-          ))}
+                <Zap size={16} className="fill-[#0A192F]" />
+                Grow My Business
+                <ArrowRight size={16} />
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02, borderColor: "rgba(0,242,255,0.5)" }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => document.querySelector("#services")?.scrollIntoView({ behavior: "smooth" })}
+                className="flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-[#00F2FF]/30 text-foreground font-medium text-sm glass transition-all"
+              >
+                Explore Services
+                <ChevronRight size={14} />
+              </motion.button>
+            </motion.div>
+
+            {/* Stats row */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.1, duration: 0.6 }}
+              className="flex gap-6 sm:gap-10"
+            >
+              {[
+                { value: "5x", label: "Faster Delivery" },
+                { value: "87%", label: "Cost Savings" },
+                { value: "1M+", label: "SME Target" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div
+                    className="text-2xl sm:text-3xl font-bold"
+                    style={{ fontFamily: "'Sora', sans-serif", color: "#00F2FF" }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* ── RIGHT: 3 people with phones ── */}
+          <motion.div
+            style={{ y: phoneY }}
+            className="relative flex items-end justify-center gap-4 sm:gap-6 lg:gap-8 pt-16 pb-4"
+          >
+            {/* Glow base */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 h-20 bg-[#00F2FF]/10 blur-3xl rounded-full" />
+
+            {/* Person 1 — left */}
+            <motion.div
+              initial={{ opacity: 0, x: -40, y: 20 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.7, type: "spring" }}
+            >
+              <PersonCard
+                popupIndex={1}
+                floatDelay={0.8}
+                position="left"
+                size="sm"
+                label="Priya — Retailer"
+                emoji="👩‍💼"
+              />
+            </motion.div>
+
+            {/* Person 2 — center (tallest) */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8, type: "spring" }}
+              className="-mt-8"
+            >
+              <PersonCard
+                popupIndex={0}
+                floatDelay={0}
+                position="center"
+                size="lg"
+                label="Rahul — Distributor"
+                emoji="👨‍💻"
+              />
+            </motion.div>
+
+            {/* Person 3 — right */}
+            <motion.div
+              initial={{ opacity: 0, x: 40, y: 20 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.7, type: "spring" }}
+            >
+              <PersonCard
+                popupIndex={2}
+                floatDelay={1.6}
+                position="right"
+                size="md"
+                label="Meera — Manufacturer"
+                emoji="👩‍🏭"
+              />
+            </motion.div>
+
+            {/* Hint text */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.8 }}
+              className="absolute bottom-[-1.5rem] left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs text-muted-foreground whitespace-nowrap"
+            >
+              <motion.span
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 1.8, repeat: Infinity }}
+              >
+                👆
+              </motion.span>
+              Hover to see live dashboards
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+          <span className="text-xs text-muted-foreground">Scroll to explore</span>
+          <motion.div
+            className="w-5 h-8 rounded-full border border-[#00F2FF]/40 flex items-start justify-center pt-1.5"
+          >
+            <motion.div
+              className="w-1 h-2 rounded-full bg-[#00F2FF]"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }
 
+/* ─────────────────────────────────────────────────────────
+   Comparison Section
+───────────────────────────────────────────────────────── */
 function ComparisonSection() {
   const [sliderPos, setSliderPos] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!isDragging.current || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const pos = ((e.clientX - rect.left) / rect.width) * 100;
     setSliderPos(Math.min(Math.max(pos, 5), 95));
-  };
+  }, []);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const pos = ((e.touches[0].clientX - rect.left) / rect.width) * 100;
     setSliderPos(Math.min(Math.max(pos, 5), 95));
-  };
+  }, []);
 
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <ScrollReveal>
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF] text-xs font-medium mb-4">
-            <FileX size={12} />
-            The Digital Transformation
+            <FileX size={12} /> The Digital Transformation
           </div>
-          <h2
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
-            style={{ fontFamily: "'Sora', sans-serif" }}
-          >
-            Stop managing your business on{" "}
-            <span className="text-[#00F2FF]">paper</span>.
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "'Sora', sans-serif" }}>
+            Stop managing on <span className="text-[#00F2FF]">paper</span>.
             <br />
             Start leading with <span className="text-[#FF9933]">Data</span>.
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            Drag the slider to see the transformation from legacy chaos to digital clarity.
+            Drag the slider to see the before/after transformation.
           </p>
         </div>
       </ScrollReveal>
@@ -308,7 +615,7 @@ function ComparisonSection() {
           onMouseLeave={() => (isDragging.current = false)}
           onTouchMove={handleTouchMove}
         >
-          {/* Before (Legacy) */}
+          {/* Before */}
           <div className="absolute inset-0 bg-gradient-to-br from-red-950/80 to-orange-950/60 flex flex-col items-start justify-center p-8 sm:p-12">
             <div className="flex items-center gap-2 mb-6">
               <FileX size={20} className="text-red-400" />
@@ -324,7 +631,7 @@ function ComparisonSection() {
             </div>
           </div>
 
-          {/* After (Vextor Flow) */}
+          {/* After */}
           <div
             className="absolute inset-0 flex flex-col items-end justify-center p-8 sm:p-12"
             style={{
@@ -332,7 +639,7 @@ function ComparisonSection() {
               background: "linear-gradient(135deg, rgba(10,25,47,0.95), rgba(0,30,60,0.9))",
             }}
           >
-            <div className="flex items-center gap-2 mb-6 mr-0">
+            <div className="flex items-center gap-2 mb-6">
               <Activity size={20} className="text-[#00F2FF]" />
               <span className="text-[#00F2FF] font-semibold text-sm uppercase tracking-widest">Vextor Flow</span>
             </div>
@@ -344,7 +651,6 @@ function ComparisonSection() {
                 </div>
               ))}
             </div>
-            {/* Mini dashboard mockup */}
             <div className="absolute bottom-4 right-4 glass rounded-xl p-3 border border-[#00F2FF]/30 hidden sm:block">
               <div className="flex gap-2 mb-2">
                 {[40, 65, 45, 80, 60].map((h, i) => (
@@ -373,47 +679,15 @@ function ComparisonSection() {
   );
 }
 
+/* ─────────────────────────────────────────────────────────
+   Bento Grid Section
+───────────────────────────────────────────────────────── */
 const bentoItems = [
-  {
-    icon: Settings,
-    title: "Workflow Automation",
-    desc: "Eliminate manual entries. Auto-sync inventory and sales with intelligent triggers.",
-    color: "#00F2FF",
-    gradient: "from-cyan-500/10 to-transparent",
-    span: "col-span-1",
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile Apps",
-    desc: "Your office in your pocket. Manage from anywhere, anytime.",
-    color: "#FF9933",
-    gradient: "from-orange-500/10 to-transparent",
-    span: "col-span-1",
-  },
-  {
-    icon: Globe,
-    title: "Web & SMM",
-    desc: "High-converting React sites + AI-powered Social Marketing that drives growth.",
-    color: "#00F2FF",
-    gradient: "from-blue-500/10 to-transparent",
-    span: "col-span-1 md:col-span-2",
-  },
-  {
-    icon: Server,
-    title: "Infrastructure",
-    desc: "Microservices that never crash. Bank-grade security with zero downtime SLA.",
-    color: "#FF9933",
-    gradient: "from-amber-500/10 to-transparent",
-    span: "col-span-1 md:col-span-2",
-  },
-  {
-    icon: Zap,
-    title: "AI Augmented",
-    desc: "We build 5x faster using AI-augmented workflows. No agency bloat.",
-    color: "#00F2FF",
-    gradient: "from-purple-500/10 to-transparent",
-    span: "col-span-1",
-  },
+  { icon: Settings, title: "Workflow Automation", desc: "Eliminate manual entries. Auto-sync inventory and sales with intelligent triggers.", color: "#00F2FF", span: "col-span-1" },
+  { icon: Smartphone, title: "Mobile Apps", desc: "Your office in your pocket. Manage from anywhere, anytime.", color: "#FF9933", span: "col-span-1" },
+  { icon: Globe, title: "Web & SMM", desc: "High-converting React sites + AI-powered Social Marketing that drives real growth.", color: "#00F2FF", span: "col-span-1 md:col-span-2" },
+  { icon: Server, title: "Infrastructure", desc: "Microservices that never crash. Bank-grade security with zero downtime SLA.", color: "#FF9933", span: "col-span-1 md:col-span-2" },
+  { icon: Zap, title: "AI Augmented", desc: "We build 5x faster using AI-augmented workflows. No agency bloat.", color: "#00F2FF", span: "col-span-1" },
 ];
 
 function BentoSection() {
@@ -424,12 +698,8 @@ function BentoSection() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF] text-xs font-medium mb-4">
             The Complete Solution
           </div>
-          <h2
-            className="text-3xl sm:text-4xl font-bold"
-            style={{ fontFamily: "'Sora', sans-serif" }}
-          >
-            Everything you need to{" "}
-            <span className="text-[#00F2FF]">scale</span>
+          <h2 className="text-3xl sm:text-4xl font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
+            Everything you need to <span className="text-[#00F2FF]">scale</span>
           </h2>
         </div>
       </ScrollReveal>
@@ -440,20 +710,14 @@ function BentoSection() {
           return (
             <ScrollReveal key={item.title} delay={i * 0.1} className={item.span}>
               <motion.div
-                className={`bento-card glass rounded-2xl p-6 sm:p-8 h-full bg-gradient-to-br ${item.gradient} cursor-pointer`}
+                className="bento-card glass rounded-2xl p-6 sm:p-8 h-full cursor-pointer"
                 whileHover={{ scale: 1.02, y: -4 }}
                 transition={{ duration: 0.3 }}
               >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: `${item.color}15`, border: `1px solid ${item.color}30` }}
-                >
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${item.color}15`, border: `1px solid ${item.color}30` }}>
                   <Icon size={22} style={{ color: item.color }} />
                 </div>
-                <h3
-                  className="text-lg font-bold mb-2"
-                  style={{ fontFamily: "'Sora', sans-serif", color: item.color }}
-                >
+                <h3 className="text-lg font-bold mb-2" style={{ fontFamily: "'Sora', sans-serif", color: item.color }}>
                   {item.title}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>

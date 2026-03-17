@@ -314,6 +314,11 @@
   animation: drawPath 2s ease-in-out forwards;
 }
 
+/* Performance: hint GPU layers for animated elements */
+.svg-grid, .ken-burns, .float-anim {
+  will-change: transform;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
