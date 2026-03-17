@@ -1,0 +1,137 @@
+Global Design System (The Vextor Framework)
+Theme: Modern Dark Mode (bg-[#0A192F]).
+
+Typography: Headlines: Sora (Sans-serif, Bold); Body: Inter (Clean, Sans-serif).
+
+Primary Palette: * Main: Electric Cyan (#00F2FF) (Buttons, icons, active borders).
+
+Base: Deep Space Blue (#0A192F) (Backgrounds).
+
+Accent: Ashoka Gold (#FF9933) (Subtle highlights for the 2047 mission).
+
+UI Style: Glassmorphism (background-blur), Bento Grids, 1px thin borders.
+
+Global Animation: framer-motion for scroll-triggered fade-ins and scale-ups.
+
+Page 1: Home (The Gateway to 2047)
+Section 1: Hero (The Mission)
+Content:
+
+H1: "The Tech Direction of a Developed India."
+
+Subtext: "Enterprise-grade software at SME-friendly prices. Powering your growth to achieve Vikshit Bharat by 2047."
+
+CTA: Button [Grow My Business →] (Cyan glow effect).
+
+Icon: Zap (Lucide-react) floating near the CTA.
+
+Image: 3D Abstract "Vector" arrow composed of glowing blue dots.
+
+Animation: Text reveals via "Letter Stagger" effect. The background has a slow-moving SVG Grid.
+
+Section 2: The "Excel-to-Digital" Pivot (The Pain Point)
+Content:
+
+Left Side: "Legacy Chaos" — Blurred list of "Paper Registers," "Broken Excel Formulas," and "Manual Errors."
+
+Right Side: "Vextor Flow" — Clean, real-time dashboard mockup.
+
+Headline: "Stop managing your business on paper. Start leading with Data."
+
+Icon: FileX transitioning into Activity.
+
+Animation: A "Comparison Slider" that users can drag to see the before/after.
+
+Section 3: The Complete Solution (Bento Grid)
+Content: 4 Large interactive tiles.
+
+Workflow Automation: "Eliminate manual entries. Auto-sync inventory and sales."
+
+Mobile Apps: "Your office in your pocket. Manage from anywhere."
+
+Web & SMM: "High-converting React sites + AI Social Marketing."
+
+Infrastructure: "Microservices that never crash. Bank-grade security."
+
+Icons: Settings, Smartphone, Globe, Server.
+
+Animation: Hovering over a tile causes a "border-draw" animation in Cyan.
+
+Page 2: Services (The Infrastructure Suite)
+Section 1: Workflow Automation (Deep Dive)
+Content: "From Bahi-Khata to Cloud."
+
+Features: Custom CRM, Automated Invoicing, Inventory Tracking, HR Management.
+
+Visual: An animated flowchart showing data moving from a "Form" to "Insights."
+
+Animation: Scroll-linked "Path Drawing" that connects the features.
+
+Section 2: Mobile & Web (The Digital Interface)
+Content: "Cross-Platform Performance."
+
+Details: Flutter-based Android/iOS apps & Next.js 15 Web Applications.
+
+Image: High-quality mockups of an SME Admin App on an iPhone 16 Pro.
+
+Animation: Parallax floating effect on the phone mockups.
+
+Section 3: Infrastructure & Microservices (The USP)
+Content: "Enterprise Power. Zero Bloat."
+
+Details: Docker-based deployment, Microservice architecture (Scalable), Automated Backups on Oracle Cloud.
+
+Punchline: "We build the backbone; you reap the rewards."
+
+Icon: Cpu with a pulsing light animation.
+
+Page 3: The "SME Advantage" (Pricing & Vision)
+Section 1: Why We Are Low Cost (Transparency)
+Content: "Advanced Tech, No Agency Tax."
+
+List: * Vibe Coding: We build 5x faster using AI-augmented workflows.
+
+Cloud Native: No expensive physical servers.
+
+Lean Ops: We invest in code, not fancy offices.
+
+Image: A minimalist graphic showing "Traditional Costs" vs "Vextor Efficiency."
+
+Section 2: The 2047 Vision Banner
+Content: "Target: 1 Million SMEs Digitized by 2047."
+
+Visual: A countdown timer to August 15, 2047. Background image of a high-tech Indian city silhouette.
+
+Copy: "A developed India needs tech-first businesses. We are here to make that affordable."
+
+Animation: Slow "Ken Burns" (zoom-in) effect on the background image.
+
+Page 4: Contact & Conversion (The Growth Engine)
+Section 1: The "Smart Quote" Form
+Step-by-Step UI:
+
+Selection: "What is your biggest bottleneck?" [Manual Work / Bad Website / Server Crashes].
+
+Business Info: "Industry & Scale."
+
+Contact: "WhatsApp Number."
+
+Animation: Slide-in transition between steps.
+
+Section 2: The WhatsApp Lead-Gen
+Visual: Floating Button.
+
+Copy: "Chat with a Solution Architect now."
+
+Icon: MessageCircle (WhatsApp brand color on hover).
+
+Instructions for the AI Agent:
+Build System: Use Next.js 15 (App Router) and Tailwind CSS.
+
+State Management: Use framer-motion for all transitions.
+
+Responsive Design: Prioritize Mobile-First (90% of Indian SMEs will view this on a phone).
+
+Icons: Use the lucide-react library.
+
+Performance: Ensure all images are in .webp and use next/image for LCP optimization.

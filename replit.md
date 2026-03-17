@@ -16,6 +16,22 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+### `artifacts/vextor-website` (`@workspace/vextor-website`)
+
+Vextor marketing website — a modern, animated single-page app with dark/light mode.
+
+- **Tech Stack**: React 18 + Vite, Tailwind CSS v4, Framer Motion, Lucide React
+- **Design**: Glassmorphism, Bento Grids, Electric Cyan (#00F2FF) + Deep Space Blue (#0A192F) + Ashoka Gold (#FF9933)
+- **Typography**: Sora (headlines), Inter (body) via Google Fonts
+- **Pages**:
+  - **Home**: Hero with letter-stagger animation, SVG grid background, before/after comparison slider, Bento grid solutions
+  - **Services**: Workflow automation flowchart, parallax phone mockup, infrastructure status dashboard
+  - **SME Advantage / Pricing**: Cost comparison table, countdown timer to August 15, 2047
+  - **Contact**: 3-step smart quote form with WhatsApp lead generation
+- **Features**: Floating WhatsApp button, scroll-triggered reveal animations, dark/light mode toggle, mobile-first responsive
+
 ## Structure
 
 ```text
