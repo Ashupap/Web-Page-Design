@@ -1,169 +1,130 @@
 /* Professional flat-style character illustrations — transparent backgrounds */
 
-/* ── PRIYA — Professional woman, large glowing laptop front and center ── */
+/* ── PRIYA — Laptop is the hero. Z-order: body → laptop screen → arms → head ── */
 export function PersonRetailer({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 240 260" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       <defs>
-        <linearGradient id="pr3-jacket" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0891B2" />
-          <stop offset="100%" stopColor="#0E7490" />
+        <linearGradient id="pr-outfit" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#7C3AED" />
+          <stop offset="100%" stopColor="#5B21B6" />
         </linearGradient>
-        <linearGradient id="pr3-screen" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#050D1E" />
-          <stop offset="100%" stopColor="#081525" />
-        </linearGradient>
-        <linearGradient id="pr3-screenglow" x1="0%" y1="100%" x2="0%" y2="0%">
-          <stop offset="0%" stopColor="#FF6B35" stopOpacity="0.08" />
-          <stop offset="100%" stopColor="#00C8FF" stopOpacity="0.06" />
-        </linearGradient>
-        <filter id="pr3-glow">
-          <feGaussianBlur stdDeviation="2" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
       </defs>
 
-      {/* Ground shadow */}
-      <ellipse cx="120" cy="254" rx="80" ry="6" fill="rgba(0,0,0,0.13)" />
+      {/* 1 · Ground shadow */}
+      <ellipse cx="100" cy="216" rx="70" ry="5" fill="rgba(0,0,0,0.15)" />
 
-      {/* ── Legs / Lower body ── */}
-      {/* Left leg forward */}
-      <path d="M78 210 Q56 214 44 228 Q38 238 56 240 Q76 242 88 226 Q94 216 88 208Z" fill="url(#pr3-jacket)" />
-      {/* Right leg */}
-      <path d="M145 210 Q166 214 178 228 Q184 238 166 240 Q146 242 134 226 Q128 216 134 208Z" fill="url(#pr3-jacket)" />
-      {/* Feet */}
-      <ellipse cx="50" cy="240" rx="16" ry="7" fill="#E8A870" />
-      <ellipse cx="172" cy="240" rx="16" ry="7" fill="#E8A870" />
+      {/* 2 · Cross-legged lower body (behind keyboard) */}
+      <path d="M66 172 Q48 176 38 190 Q34 200 50 202 Q66 204 74 190 Q78 181 76 170Z" fill="url(#pr-outfit)" />
+      <path d="M118 172 Q136 176 146 190 Q150 200 134 202 Q118 204 110 190 Q106 181 108 170Z" fill="url(#pr-outfit)" />
+      <ellipse cx="41" cy="202" rx="14" ry="6" fill="#E8A870" />
+      <ellipse cx="143" cy="202" rx="14" ry="6" fill="#E8A870" />
 
-      {/* ── LAPTOP — the star of the show ── */}
+      {/* 3 · Torso (mostly hidden behind laptop, shoulders peek at sides) */}
+      <path d="M55 72 Q57 62 100 60 Q143 62 145 72 L146 160 H54Z" fill="url(#pr-outfit)" />
+      <path d="M100 60 L93 74 L100 84 L107 74Z" fill="rgba(255,255,255,0.88)" />
 
-      {/* Keyboard base with perspective */}
-      <path d="M22 210 L218 210 L225 235 L15 235Z" fill="#1E2D45" />
-      {/* Keyboard surface */}
-      <path d="M26 208 L214 208 L218 210 L22 210Z" fill="#243652" />
-      {/* Key rows (subtle) */}
-      <rect x="30" y="212" width="180" height="3" rx="1.5" fill="rgba(255,255,255,0.06)" />
-      <rect x="30" y="217" width="180" height="3" rx="1.5" fill="rgba(255,255,255,0.05)" />
-      <rect x="30" y="222" width="180" height="3" rx="1.5" fill="rgba(255,255,255,0.04)" />
-      {/* Trackpad */}
-      <rect x="90" y="214" width="60" height="14" rx="3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" />
-      {/* Hinge */}
-      <rect x="22" y="205" width="196" height="6" rx="2" fill="#162030" />
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          4 · LAPTOP SCREEN — the hero element
+          Screen: x=15 y=62 w=170 h=96
+          All coordinates fit within 200×220 viewBox
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
 
-      {/* Screen back (lid) */}
-      <rect x="24" y="95" width="192" height="114" rx="8" fill="#162030" />
-      {/* Screen bezel */}
-      <rect x="28" y="99" width="184" height="106" rx="6" fill="#1A2540" />
-      {/* Screen display area */}
-      <rect x="32" y="103" width="176" height="98" rx="4" fill="url(#pr3-screen)" />
-      {/* Screen background glow */}
-      <rect x="32" y="103" width="176" height="98" rx="4" fill="url(#pr3-screenglow)" />
+      {/* Lid back */}
+      <rect x="15" y="62" width="170" height="96" rx="8" fill="#0B1628" />
+      {/* Bezel frame */}
+      <rect x="19" y="66" width="162" height="88" rx="6" fill="#1A2540" />
+      {/* Display */}
+      <rect x="23" y="70" width="154" height="80" rx="4" fill="#060C18" />
 
-      {/* ── Screen content — dashboard ── */}
-      {/* Top bar */}
-      <rect x="34" y="105" width="172" height="12" rx="2" fill="rgba(0,180,255,0.07)" />
-      <rect x="38" y="108" width="40" height="5" rx="2.5" fill="#00C8FF" opacity="0.8" />
-      <rect x="82" y="109" width="24" height="3" rx="1.5" fill="rgba(255,255,255,0.2)" />
-      <rect x="110" y="109" width="20" height="3" rx="1.5" fill="rgba(255,255,255,0.15)" />
-      {/* User avatar icon top-right */}
-      <circle cx="196" cy="111" r="5" fill="rgba(0,200,255,0.2)" stroke="rgba(0,200,255,0.4)" strokeWidth="0.8" />
+      {/* ── Screen content ── */}
+      {/* Header bar */}
+      <rect x="25" y="72" width="150" height="11" rx="2" fill="rgba(0,180,255,0.07)" />
+      <rect x="28" y="75" width="34" height="4.5" rx="2.2" fill="#00C8FF" opacity="0.9" />
+      <rect x="66" y="76" width="16" height="2.5" rx="1.2" fill="rgba(255,255,255,0.22)" />
+      <rect x="86" y="76" width="12" height="2.5" rx="1.2" fill="rgba(255,255,255,0.15)" />
+      <circle cx="167" cy="77.5" r="4.5" fill="rgba(0,200,255,0.22)" stroke="rgba(0,200,255,0.5)" strokeWidth="0.8" />
 
-      {/* Metric cards row */}
-      <rect x="34" y="121" width="52" height="28" rx="4" fill="rgba(255,107,53,0.1)" stroke="rgba(255,107,53,0.3)" strokeWidth="0.8" />
-      <rect x="38" y="124" width="18" height="3" rx="1.5" fill="rgba(255,107,53,0.6)" />
-      <rect x="38" y="130" width="30" height="7" rx="2" fill="rgba(255,107,53,0)" />
-      <text x="38" y="138" fontSize="9" fill="#FF9933" fontFamily="sans-serif" fontWeight="bold">₹2.4L</text>
+      {/* Stat cards */}
+      <rect x="25" y="86" width="44" height="23" rx="3.5" fill="rgba(255,107,53,0.13)" stroke="rgba(255,107,53,0.45)" strokeWidth="0.8" />
+      <rect x="28" y="89.5" width="16" height="2.5" rx="1.2" fill="rgba(255,107,53,0.65)" />
+      <rect x="28" y="96" width="30" height="6" rx="2" fill="#FF9933" opacity="0.9" />
 
-      <rect x="92" y="121" width="52" height="28" rx="4" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.25)" strokeWidth="0.8" />
-      <rect x="96" y="124" width="22" height="3" rx="1.5" fill="rgba(0,200,255,0.5)" />
-      <text x="96" y="138" fontSize="9" fill="#00C8FF" fontFamily="sans-serif" fontWeight="bold">+18%</text>
+      <rect x="75" y="86" width="44" height="23" rx="3.5" fill="rgba(0,200,255,0.09)" stroke="rgba(0,200,255,0.42)" strokeWidth="0.8" />
+      <rect x="78" y="89.5" width="20" height="2.5" rx="1.2" fill="rgba(0,200,255,0.6)" />
+      <rect x="78" y="96" width="30" height="6" rx="2" fill="#00C8FF" opacity="0.88" />
 
-      <rect x="150" y="121" width="52" height="28" rx="4" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.25)" strokeWidth="0.8" />
-      <rect x="154" y="124" width="20" height="3" rx="1.5" fill="rgba(52,211,153,0.5)" />
-      <text x="154" y="138" fontSize="9" fill="#34D399" fontFamily="sans-serif" fontWeight="bold">142</text>
+      <rect x="125" y="86" width="50" height="23" rx="3.5" fill="rgba(52,211,153,0.09)" stroke="rgba(52,211,153,0.42)" strokeWidth="0.8" />
+      <rect x="128" y="89.5" width="18" height="2.5" rx="1.2" fill="rgba(52,211,153,0.6)" />
+      <rect x="128" y="96" width="30" height="6" rx="2" fill="#34D399" opacity="0.88" />
 
       {/* Bar chart */}
-      <line x1="36" y1="154" x2="36" y2="193" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-      <line x1="36" y1="193" x2="200" y2="193" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-      {/* Bars — tall and vibrant */}
-      <rect x="40" y="176" width="14" height="17" rx="2.5" fill="#FF9933" opacity="0.75" />
-      <rect x="58" y="165" width="14" height="28" rx="2.5" fill="#FF9933" opacity="0.9" />
-      <rect x="76" y="157" width="14" height="36" rx="2.5" fill="#FF6B35" />
-      <rect x="94" y="168" width="14" height="25" rx="2.5" fill="#FF9933" opacity="0.8" />
-      <rect x="112" y="160" width="14" height="33" rx="2.5" fill="#FF9933" />
-      <rect x="130" y="154" width="14" height="39" rx="2.5" fill="#FF6B35" />
-      <rect x="148" y="163" width="14" height="30" rx="2.5" fill="#FF9933" opacity="0.85" />
-      <rect x="166" y="159" width="14" height="34" rx="2.5" fill="#FF9933" />
-      <rect x="184" y="155" width="14" height="38" rx="2.5" fill="#FF6B35" />
-      {/* Chart line overlay */}
-      <path d="M47 184 L65 173 L83 161 L101 175 L119 164 L137 158 L155 170 L173 163 L191 159" stroke="rgba(0,200,255,0.6)" strokeWidth="1.5" fill="none" strokeDasharray="3,2" />
-      {/* Cursor glow */}
-      <circle cx="137" cy="158" r="3.5" fill="#00C8FF" opacity="0.9" />
-      <circle cx="137" cy="158" r="7" fill="rgba(0,200,255,0.2)" />
+      <line x1="26" y1="112" x2="26" y2="146" stroke="rgba(255,255,255,0.09)" strokeWidth="0.8" />
+      <line x1="26" y1="146" x2="174" y2="146" stroke="rgba(255,255,255,0.09)" strokeWidth="0.8" />
 
-      {/* Screen edge glow */}
-      <rect x="32" y="103" width="176" height="98" rx="4" fill="none" stroke="rgba(0,200,255,0.18)" strokeWidth="1" />
-      {/* Screen glare highlight */}
-      <path d="M34 105 L120 105 L100 115 L34 115Z" fill="rgba(255,255,255,0.025)" />
+      <rect x="29" y="135" width="13" height="11" rx="2" fill="#FF9933" opacity="0.72" />
+      <rect x="45" y="128" width="13" height="18" rx="2" fill="#FF9933" opacity="0.85" />
+      <rect x="61" y="120" width="13" height="26" rx="2" fill="#FF6B35" />
+      <rect x="77" y="130" width="13" height="16" rx="2" fill="#FF9933" opacity="0.78" />
+      <rect x="93" y="123" width="13" height="23" rx="2" fill="#FF9933" />
+      <rect x="109" y="116" width="13" height="30" rx="2" fill="#FF6B35" />
+      <rect x="125" y="126" width="13" height="20" rx="2" fill="#FF9933" opacity="0.82" />
+      <rect x="141" y="119" width="13" height="27" rx="2" fill="#FF9933" />
+      <rect x="157" y="114" width="13" height="32" rx="2" fill="#FF6B35" />
 
-      {/* Notch (webcam) */}
-      <circle cx="120" cy="101" r="2.5" fill="rgba(255,255,255,0.15)" />
+      {/* Trend line */}
+      <path d="M35 141 L51 134 L67 124 L83 136 L99 127 L115 120 L131 130 L147 123 L163 118"
+        stroke="rgba(0,200,255,0.72)" strokeWidth="1.6" fill="none" />
+      {/* Cursor */}
+      <circle cx="115" cy="120" r="2.5" fill="#00C8FF" />
+      <circle cx="115" cy="120" r="5.5" fill="rgba(0,200,255,0.22)" />
 
-      {/* ── Character — visible above screen ── */}
+      {/* Screen glow border */}
+      <rect x="23" y="70" width="154" height="80" rx="4" fill="none" stroke="rgba(0,200,255,0.22)" strokeWidth="1.2" />
+      {/* Webcam */}
+      <circle cx="100" cy="68" r="2.2" fill="rgba(255,255,255,0.22)" />
 
-      {/* Left arm reaching to keyboard */}
-      <path d="M44 175 Q28 178 22 195 L30 200 L50 185Z" fill="url(#pr3-jacket)" />
-      <ellipse cx="22" cy="198" rx="10" ry="6" fill="#E8A870" />
-      {/* Right arm */}
-      <path d="M196 175 Q212 178 218 195 L210 200 L190 185Z" fill="url(#pr3-jacket)" />
-      <ellipse cx="218" cy="198" rx="10" ry="6" fill="#E8A870" />
+      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          5 · KEYBOARD BASE (over legs)
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <path d="M13 157 L187 157 L193 178 L7 178Z" fill="#1E293B" />
+      <path d="M15 155 L185 155 L187 157 L13 157Z" fill="#334155" />
+      <rect x="19" y="160" width="162" height="2.5" rx="1.2" fill="rgba(255,255,255,0.07)" />
+      <rect x="19" y="165" width="162" height="2.5" rx="1.2" fill="rgba(255,255,255,0.06)" />
+      <rect x="19" y="170" width="162" height="2.5" rx="1.2" fill="rgba(255,255,255,0.05)" />
+      <rect x="72" y="160" width="56" height="14" rx="3" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
 
-      {/* Torso — visible at sides and above laptop */}
-      <path d="M58 120 Q60 100 120 98 Q180 100 182 120 L184 212 H56Z" fill="url(#pr3-jacket)" />
-      {/* White collar */}
-      <path d="M120 98 L112 112 L120 122 L128 112Z" fill="rgba(255,255,255,0.9)" />
-      {/* Jacket lapels */}
-      <path d="M112 112 L68 130 L60 180" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" fill="none" />
-      <path d="M128 112 L172 130 L180 180" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" fill="none" />
+      {/* 6 · Arms reaching around to keyboard */}
+      <path d="M37 147 Q21 151 13 166 L21 172 L43 158Z" fill="url(#pr-outfit)" />
+      <ellipse cx="12" cy="168" rx="9" ry="5.5" fill="#E8A870" />
+      <path d="M163 147 Q179 151 187 166 L179 172 L157 158Z" fill="url(#pr-outfit)" />
+      <ellipse cx="188" cy="168" rx="9" ry="5.5" fill="#E8A870" />
 
-      {/* Neck */}
-      <rect x="112" y="84" width="16" height="18" rx="8" fill="#E8A870" />
+      {/* 7 · Neck */}
+      <rect x="93" y="52" width="14" height="14" rx="7" fill="#E8A870" />
 
-      {/* ── Head — new character ── */}
-      <ellipse cx="120" cy="68" rx="28" ry="29" fill="#E8A870" />
+      {/* 8 · Head */}
+      <ellipse cx="100" cy="36" rx="24" ry="25" fill="#E8A870" />
 
-      {/* Hair — straight black bob with fringe */}
-      {/* Top and sides */}
-      <path d="M93 62 Q92 36 120 34 Q148 36 148 62 Q146 40 120 38 Q94 40 93 62Z" fill="#1A0800" />
-      {/* Bob cut sides — straight */}
-      <path d="M93 62 L90 82 Q92 90 96 88 L96 62Z" fill="#1A0800" />
-      <path d="M148 62 L150 82 Q148 90 144 88 L144 62Z" fill="#1A0800" />
-      {/* Fringe/bangs across forehead */}
-      <path d="M95 52 Q120 46 145 52 Q140 60 120 58 Q100 60 95 52Z" fill="#1A0800" />
+      {/* 9 · Hair — straight bob with fringe */}
+      <path d="M77 30 Q77 11 100 9 Q123 11 123 30 Q121 14 100 13 Q79 14 77 30Z" fill="#1A0800" />
+      <path d="M77 30 Q75 44 77 56 Q79 62 83 59 Q81 49 81 37Z" fill="#1A0800" />
+      <path d="M123 30 Q125 44 123 56 Q121 62 117 59 Q119 49 119 37Z" fill="#1A0800" />
+      <path d="M79 27 Q100 21 121 27 Q116 35 100 33 Q84 35 79 27Z" fill="#1A0800" />
 
-      {/* Eyes — wide, almond shaped */}
-      <ellipse cx="106" cy="66" rx="6" ry="5.5" fill="white" />
-      <ellipse cx="134" cy="66" rx="6" ry="5.5" fill="white" />
-      {/* Pupils */}
-      <ellipse cx="107" cy="67.5" rx="3.2" ry="3.2" fill="#1A0800" />
-      <ellipse cx="135" cy="67.5" rx="3.2" ry="3.2" fill="#1A0800" />
-      <circle cx="108" cy="66.5" r="1.2" fill="white" />
-      <circle cx="136" cy="66.5" r="1.2" fill="white" />
-
-      {/* Eyebrows — neat, arched */}
-      <path d="M99 57 Q106 54 113 56" stroke="#1A0800" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-      <path d="M127 56 Q134 54 141 57" stroke="#1A0800" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-
-      {/* Nose */}
-      <path d="M119 75 Q117 79 119 81 Q121 81 123 79 Q121 79 119 75Z" fill="rgba(0,0,0,0.08)" />
-
-      {/* Smile — warm and focused */}
-      <path d="M110 87 Q120 93 130 87" stroke="#B56030" strokeWidth="2" strokeLinecap="round" fill="none" />
-      <path d="M110 87 Q115 91 120 92 Q125 91 130 87" fill="rgba(181,96,48,0.15)" />
-
-      {/* Stud earrings — teal */}
-      <circle cx="92" cy="71" r="3.5" fill="#0891B2" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" />
-      <circle cx="148" cy="71" r="3.5" fill="#0891B2" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" />
+      {/* 10 · Face */}
+      <ellipse cx="90" cy="37" rx="5.2" ry="4.8" fill="white" />
+      <ellipse cx="110" cy="37" rx="5.2" ry="4.8" fill="white" />
+      <ellipse cx="91" cy="38.5" rx="2.9" ry="2.9" fill="#1A0800" />
+      <ellipse cx="111" cy="38.5" rx="2.9" ry="2.9" fill="#1A0800" />
+      <circle cx="92" cy="37.5" r="1.1" fill="white" />
+      <circle cx="112" cy="37.5" r="1.1" fill="white" />
+      <path d="M84 29.5 Q90 27 96 29" stroke="#1A0800" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M104 29 Q110 27 116 29.5" stroke="#1A0800" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M99 44 Q97 47.5 99 49.5 Q101 49.5 103 47.5 Q101 47.5 99 44Z" fill="rgba(0,0,0,0.09)" />
+      <path d="M93 53 Q100 58.5 107 53" stroke="#B06030" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <circle cx="76" cy="40" r="3.2" fill="#7C3AED" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" />
+      <circle cx="124" cy="40" r="3.2" fill="#7C3AED" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" />
     </svg>
   );
 }
@@ -320,7 +281,7 @@ export function PersonManufacturer({ className = "" }: { className?: string }) {
       <line x1="180" y1="162" x2="180" y2="182" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
 
       {/* Chair backrest — angled upward to the right */}
-      <path d="M192 90 L210 162 L224 158 L206 86Z" fill="url(#mf2-chair)" rx="4" />
+      <path d="M192 90 L210 162 L224 158 L206 86Z" fill="url(#mf2-chair)" />
       {/* Backrest slats */}
       <line x1="195" y1="98" x2="218" y2="96" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
       <line x1="198" y1="112" x2="220" y2="110" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
@@ -423,9 +384,6 @@ export function PersonManufacturer({ className = "" }: { className?: string }) {
       <line x1="132" y1="54" x2="148" y2="54" stroke="#FF9933" strokeWidth="1.4" />
       <line x1="114" y1="54" x2="110" y2="51" stroke="#FF9933" strokeWidth="1.3" />
       <line x1="166" y1="54" x2="170" y2="51" stroke="#FF9933" strokeWidth="1.3" />
-      {/* Lens glare */}
-      <ellipse cx="122" cy="52" rx="5" ry="3" fill="rgba(0,242,255,0.1)" />
-      <ellipse cx="156" cy="52" rx="5" ry="3" fill="rgba(0,242,255,0.1)" />
 
       {/* Big relaxed smile */}
       <path d="M126 72 Q140 83 154 72" stroke="#7A3A10" strokeWidth="2.5" strokeLinecap="round" fill="none" />
