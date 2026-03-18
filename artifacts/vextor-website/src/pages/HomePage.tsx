@@ -4,7 +4,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import {
   Zap, FileX, Activity, Settings, Smartphone, Globe, Server,
   ArrowRight, ChevronRight, TrendingUp, Package, Receipt, Bell,
-  Truck, CheckCircle, BarChart2, Users, Star, Boxes
+  Truck, CheckCircle, BarChart2, Users, Star, Boxes, ShieldCheck, Clock
 } from "lucide-react";
 import { ScrollReveal } from "../components/ScrollReveal";
 import {
@@ -753,10 +753,46 @@ function HeroSection() {
 /* ─────────────────────────────────────────────────────────
    Comparison Section
 ───────────────────────────────────────────────────────── */
+const transformationMetrics = [
+  { label: "Revenue Growth", value: "3.2x", suffix: "", icon: TrendingUp, color: "#00F2FF", desc: "Average uplift in 6 months" },
+  { label: "Manual Errors", value: "0", suffix: "%", icon: ShieldCheck, color: "#FF9933", desc: "Auto-validated workflows" },
+  { label: "Time Saved", value: "60", suffix: "%", icon: Clock, color: "#00F2FF", desc: "On daily operations" },
+  { label: "Team Efficiency", value: "5x", suffix: "", icon: Users, color: "#FF9933", desc: "Faster decision making" },
+];
+
+function AnimatedCounter({ to, suffix, inView }: { to: number; suffix: string; inView: boolean }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    let start = 0;
+    const duration = 1400;
+    const step = 16;
+    const increment = to / (duration / step);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= to) { setCount(to); clearInterval(timer); }
+      else setCount(Math.floor(start));
+    }, step);
+    return () => clearInterval(timer);
+  }, [inView, to]);
+  return <>{count}{suffix}</>;
+}
+
 function ComparisonSection() {
   const [sliderPos, setSliderPos] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+  const metricsRef = useRef<HTMLDivElement>(null);
+  const [metricsInView, setMetricsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setMetricsInView(true); },
+      { threshold: 0.3 }
+    );
+    if (metricsRef.current) observer.observe(metricsRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!isDragging.current || !containerRef.current) return;
@@ -775,7 +811,7 @@ function ComparisonSection() {
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <ScrollReveal>
-        <div className="text-center mb-16">
+        <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF] text-xs font-medium mb-4">
             <FileX size={12} /> The Digital Transformation
           </div>
@@ -790,76 +826,140 @@ function ComparisonSection() {
         </div>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.2}>
-        <div
-          ref={containerRef}
-          className="relative rounded-3xl overflow-hidden cursor-col-resize border border-[#00F2FF]/20 h-72 sm:h-96 select-none"
-          onMouseMove={handleMouseMove}
-          onMouseDown={() => (isDragging.current = true)}
-          onMouseUp={() => (isDragging.current = false)}
-          onMouseLeave={() => (isDragging.current = false)}
-          onTouchMove={handleTouchMove}
-        >
-          {/* Before */}
-          <div className="absolute inset-0 bg-gradient-to-br from-red-950/80 to-orange-950/60 flex flex-col items-start justify-center p-8 sm:p-12">
-            <div className="flex items-center gap-2 mb-6">
-              <FileX size={20} className="text-red-400" />
-              <span className="text-red-400 font-semibold text-sm uppercase tracking-widest">Legacy Chaos</span>
-            </div>
-            <div className="space-y-3">
-              {["Paper Registers", "Broken Excel Formulas", "Manual Errors", "Data Loss Risk", "Zero Real-time Visibility"].map((item) => (
-                <div key={item} className="flex items-center gap-3 blur-[1px]">
-                  <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
-                  <span className="text-red-200/80 text-sm font-medium line-through">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
-          {/* After */}
+        {/* ── Left: Comparison Slider ── */}
+        <ScrollReveal delay={0.1}>
           <div
-            className="absolute inset-0 flex flex-col items-end justify-center p-8 sm:p-12"
-            style={{
-              clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
-              background: "linear-gradient(135deg, rgba(10,25,47,0.95), rgba(0,30,60,0.9))",
-            }}
+            ref={containerRef}
+            className="relative rounded-3xl overflow-hidden cursor-col-resize border border-[#00F2FF]/20 h-64 sm:h-72 select-none"
+            onMouseMove={handleMouseMove}
+            onMouseDown={() => (isDragging.current = true)}
+            onMouseUp={() => (isDragging.current = false)}
+            onMouseLeave={() => (isDragging.current = false)}
+            onTouchMove={handleTouchMove}
           >
-            <div className="flex items-center gap-2 mb-6">
-              <Activity size={20} className="text-[#00F2FF]" />
-              <span className="text-[#00F2FF] font-semibold text-sm uppercase tracking-widest">Vextor Flow</span>
-            </div>
-            <div className="space-y-3">
-              {["Real-time Dashboard", "Auto Inventory Sync", "One-click Invoicing", "AI-powered Insights", "Mobile Access Anywhere"].map((item) => (
-                <div key={item} className="flex items-center gap-3 justify-end">
-                  <span className="text-cyan-100 text-sm font-medium">{item}</span>
-                  <span className="w-2 h-2 rounded-full bg-[#00F2FF] shrink-0 pulse-cyan" />
-                </div>
-              ))}
-            </div>
-            <div className="absolute bottom-4 right-4 glass rounded-xl p-3 border border-[#00F2FF]/30 hidden sm:block">
-              <div className="flex gap-2 mb-2">
-                {[40, 65, 45, 80, 60].map((h, i) => (
-                  <div key={i} className="w-3 rounded-sm" style={{ height: `${h * 0.6}px`, background: i === 3 ? "#00F2FF" : "rgba(0,242,255,0.3)" }} />
+            {/* Before */}
+            <div className="absolute inset-0 bg-gradient-to-br from-red-950/80 to-orange-950/60 flex flex-col items-center justify-center p-6 text-center">
+              <div className="flex items-center gap-2 mb-5">
+                <FileX size={18} className="text-red-400" />
+                <span className="text-red-400 font-semibold text-xs uppercase tracking-widest">Legacy Chaos</span>
+              </div>
+              <div className="space-y-2.5">
+                {["Paper Registers", "Broken Spreadsheets", "Manual Errors", "Data Loss Risk", "No Real-time View"].map((item) => (
+                  <div key={item} className="flex items-center justify-center gap-2 blur-[0.6px]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+                    <span className="text-red-200/80 text-xs font-medium line-through">{item}</span>
+                  </div>
                 ))}
               </div>
-              <div className="text-[10px] text-[#00F2FF] font-medium">Revenue ↑ 3.2x</div>
             </div>
-          </div>
 
-          {/* Slider handle */}
-          <div
-            className="absolute top-0 bottom-0 flex items-center justify-center"
-            style={{ left: `calc(${sliderPos}% - 20px)`, width: "40px" }}
-          >
-            <div className="w-0.5 h-full bg-[#00F2FF] opacity-70" />
-            <div className="absolute w-10 h-10 rounded-full bg-[#00F2FF] flex items-center justify-center text-[#0A192F] shadow-xl cursor-grab active:cursor-grabbing cyan-glow">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M4 8H12M4 8L6.5 5M4 8L6.5 11M12 8L9.5 5M12 8L9.5 11" stroke="#0A192F" strokeWidth="2" strokeLinecap="round" />
-              </svg>
+            {/* After */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center"
+              style={{
+                clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
+                background: "linear-gradient(135deg, rgba(10,25,47,0.95), rgba(0,30,60,0.9))",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-5">
+                <Activity size={18} className="text-[#00F2FF]" />
+                <span className="text-[#00F2FF] font-semibold text-xs uppercase tracking-widest">Vextor Flow</span>
+              </div>
+              <div className="space-y-2.5">
+                {["Real-time Dashboard", "Auto Inventory Sync", "One-click Invoicing", "AI-powered Insights", "Mobile Access Anywhere"].map((item) => (
+                  <div key={item} className="flex items-center justify-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00F2FF] shrink-0 pulse-cyan" />
+                    <span className="text-cyan-100 text-xs font-medium">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Slider handle */}
+            <div
+              className="absolute top-0 bottom-0 flex items-center justify-center"
+              style={{ left: `calc(${sliderPos}% - 18px)`, width: "36px" }}
+            >
+              <div className="w-0.5 h-full bg-[#00F2FF] opacity-70" />
+              <div className="absolute w-9 h-9 rounded-full bg-[#00F2FF] flex items-center justify-center text-[#0A192F] shadow-xl cursor-grab active:cursor-grabbing cyan-glow">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 8H12M4 8L6.5 5M4 8L6.5 11M12 8L9.5 5M12 8L9.5 11" stroke="#0A192F" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Drag hint */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] text-white/40 pointer-events-none select-none tracking-wide">
+              ← drag →
             </div>
           </div>
-        </div>
-      </ScrollReveal>
+        </ScrollReveal>
+
+        {/* ── Right: Animated Metrics Panel ── */}
+        <ScrollReveal delay={0.25}>
+          <div ref={metricsRef} className="glass rounded-3xl border border-[#00F2FF]/15 p-6 sm:p-8 h-full flex flex-col justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#00F2FF] mb-1">Impact by the numbers</p>
+              <h3 className="text-xl sm:text-2xl font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
+                Real results, not promises.
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 flex-1">
+              {transformationMetrics.map((m, i) => {
+                const Icon = m.icon;
+                const isNumeric = !isNaN(Number(m.value));
+                return (
+                  <motion.div
+                    key={m.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={metricsInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.1 + i * 0.12, ease: "easeOut" }}
+                    className="rounded-2xl p-4 flex flex-col gap-2"
+                    style={{ background: `${m.color}08`, border: `1px solid ${m.color}20` }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${m.color}18` }}>
+                        <Icon size={14} style={{ color: m.color }} />
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-medium leading-tight">{m.label}</span>
+                    </div>
+                    <div className="text-2xl font-bold" style={{ color: m.color, fontFamily: "'Sora', sans-serif" }}>
+                      {isNumeric
+                        ? <AnimatedCounter to={Number(m.value)} suffix={m.suffix} inView={metricsInView} />
+                        : <motion.span
+                            initial={{ opacity: 0, scale: 0.7 }}
+                            animate={metricsInView ? { opacity: 1, scale: 1 } : {}}
+                            transition={{ duration: 0.45, delay: 0.2 + i * 0.12 }}
+                          >{m.value}{m.suffix}</motion.span>
+                      }
+                    </div>
+                    <p className="text-[10px] text-muted-foreground leading-snug">{m.desc}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={metricsInView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.7, duration: 0.5 }}
+              className="flex items-center gap-3 pt-2 border-t border-white/5"
+            >
+              <motion.div
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-2 h-2 rounded-full bg-[#00F2FF] shrink-0"
+              />
+              <p className="text-[11px] text-muted-foreground">
+                Based on avg. performance of SMEs onboarded in 2024–25
+              </p>
+            </motion.div>
+          </div>
+        </ScrollReveal>
+      </div>
     </section>
   );
 }
