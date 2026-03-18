@@ -1140,7 +1140,7 @@ function AnalyticsAnim() {
   const path = "M4,46 L18,34 L32,38 L46,18 L60,26 L74,10";
   const dots: [number,number][] = [[4,46],[18,34],[32,38],[46,18],[60,26],[74,10]];
   return (
-    <div className="w-full space-y-1">
+    <div className="w-full space-y-2">
       <div className="flex items-baseline gap-2">
         <span className="text-base font-bold tabular-nums" style={{ color: "#FF9933", fontFamily: "'Sora',sans-serif" }}>
           ₹{(rev / 100000).toFixed(1)}L
@@ -1148,20 +1148,20 @@ function AnalyticsAnim() {
         <span className="text-[11px] font-semibold text-emerald-400">↑ 18%</span>
         <span className="text-[10px] text-slate-500 ml-auto">this month</span>
       </div>
-      <svg viewBox="0 0 78 56" fill="none" className="w-full h-12">
+      <svg viewBox="0 0 78 56" fill="none" className="w-full h-24">
         <defs>
           <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FF9933" stopOpacity="0.25"/>
+            <stop offset="0%" stopColor="#FF9933" stopOpacity="0.3"/>
             <stop offset="100%" stopColor="#FF9933" stopOpacity="0"/>
           </linearGradient>
         </defs>
         <path d={`${path} L74,56 L4,56 Z`} fill="url(#chartFill)" />
-        <motion.path d={path} stroke="#FF9933" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
+        <motion.path d={path} stroke="#FF9933" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: [0, 1, 1, 0] }}
           transition={{ duration: 4.5, repeat: Infinity, times: [0, 0.55, 0.88, 1], ease: "easeInOut" }} />
         {dots.map(([x, y], i) => (
-          <motion.circle key={i} cx={x} cy={y} r="2.5" fill="#FF9933"
+          <motion.circle key={i} cx={x} cy={y} r="3.5" fill="#FF9933"
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: [0, 1, 1, 0], scale: [0, 1, 1, 0] }}
             transition={{ duration: 4.5, delay: i * 0.09, repeat: Infinity, times: [0, 0.55, 0.88, 1] }} />
