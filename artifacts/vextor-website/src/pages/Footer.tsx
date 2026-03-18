@@ -76,6 +76,7 @@ function PreFooterCTA() {
 ───────────────────────────────────────────────────────── */
 export function Footer() {
   const handleNav = (href: string) => {
+    if (!href || href === "#") return;
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
