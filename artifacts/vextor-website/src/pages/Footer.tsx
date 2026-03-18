@@ -84,7 +84,7 @@ export function Footer() {
     <>
       <PreFooterCTA />
 
-      <footer className="relative border-t border-border/40 mt-0"
+      <footer className="relative border-t border-border/40 mt-0 overflow-hidden"
         style={{ background: "linear-gradient(180deg,#071828 0%,#050f1c 100%)" }}>
         {/* Subtle grid overlay */}
         <div className="absolute inset-0 svg-grid opacity-10 pointer-events-none" />
