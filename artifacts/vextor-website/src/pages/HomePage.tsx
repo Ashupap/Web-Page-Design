@@ -955,51 +955,245 @@ function ComparisonSection() {
 }
 
 /* ─────────────────────────────────────────────────────────
-   Bento Grid Section
+   Bento Grid Section — 3D Tilt Cards
 ───────────────────────────────────────────────────────── */
 const bentoItems = [
-  { icon: Settings, title: "Workflow Automation", desc: "Eliminate manual entries. Auto-sync inventory and sales with intelligent triggers.", color: "#00F2FF", span: "col-span-1" },
-  { icon: Smartphone, title: "Mobile Apps", desc: "Your office in your pocket. Manage from anywhere, anytime.", color: "#FF9933", span: "col-span-1" },
-  { icon: Globe, title: "Web & SMM", desc: "High-converting React sites + AI-powered Social Marketing that drives real growth.", color: "#00F2FF", span: "col-span-1 md:col-span-2" },
-  { icon: Server, title: "Infrastructure", desc: "Microservices that never crash. Bank-grade security with zero downtime SLA.", color: "#FF9933", span: "col-span-1 md:col-span-2" },
-  { icon: Zap, title: "AI Augmented", desc: "We build 5x faster using AI-augmented workflows. No agency bloat.", color: "#00F2FF", span: "col-span-1" },
+  {
+    icon: Settings, color: "#00F2FF",
+    title: "Workflow Automation",
+    desc: "Eliminate manual entries. Auto-sync inventory and sales with intelligent triggers.",
+    decoration: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
+        <circle cx="40" cy="40" r="28" stroke="#00F2FF" strokeWidth="1.5" strokeDasharray="4 4"/>
+        <circle cx="40" cy="40" r="16" stroke="#00F2FF" strokeWidth="1" strokeDasharray="3 3"/>
+        {[0,60,120,180,240,300].map((deg,i) => (
+          <circle key={i} cx={40+28*Math.cos(deg*Math.PI/180)} cy={40+28*Math.sin(deg*Math.PI/180)} r="3" fill="#00F2FF"/>
+        ))}
+        <path d="M20 40 Q30 25 40 40 Q50 55 60 40" stroke="#00F2FF" strokeWidth="1.5" fill="none"/>
+      </svg>
+    ),
+  },
+  {
+    icon: Smartphone, color: "#FF9933",
+    title: "Mobile Apps",
+    desc: "Your office in your pocket. Manage from anywhere, anytime.",
+    decoration: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
+        <rect x="25" y="10" width="30" height="60" rx="6" stroke="#FF9933" strokeWidth="1.5"/>
+        <rect x="30" y="18" width="20" height="30" rx="2" fill="#FF9933" fillOpacity="0.15"/>
+        <circle cx="40" cy="62" r="3" fill="#FF9933"/>
+        <rect x="33" y="22" width="14" height="2" rx="1" fill="#FF9933"/>
+        <rect x="33" y="27" width="10" height="2" rx="1" fill="#FF9933"/>
+        <rect x="33" y="32" width="12" height="2" rx="1" fill="#FF9933"/>
+      </svg>
+    ),
+  },
+  {
+    icon: Globe, color: "#00F2FF",
+    title: "Web & SMM",
+    desc: "High-converting React sites + AI-powered Social Marketing that drives real growth.",
+    decoration: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
+        <circle cx="40" cy="40" r="28" stroke="#00F2FF" strokeWidth="1.5"/>
+        <ellipse cx="40" cy="40" rx="14" ry="28" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="12" y1="40" x2="68" y2="40" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="40" y1="12" x2="40" y2="68" stroke="#00F2FF" strokeWidth="1"/>
+        <path d="M16 26 Q40 22 64 26" stroke="#00F2FF" strokeWidth="1" fill="none"/>
+        <path d="M16 54 Q40 58 64 54" stroke="#00F2FF" strokeWidth="1" fill="none"/>
+      </svg>
+    ),
+  },
+  {
+    icon: Server, color: "#FF9933",
+    title: "Infrastructure",
+    desc: "Microservices that never crash. Bank-grade security with zero downtime SLA.",
+    decoration: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
+        {[14,30,46].map((y,i) => (
+          <g key={i}>
+            <rect x="15" y={y} width="50" height="12" rx="3" stroke="#FF9933" strokeWidth="1.5"/>
+            <circle cx="24" cy={y+6} r="3" fill="#FF9933"/>
+            <circle cx="33" cy={y+6} r="3" fill="#FF9933" fillOpacity={i===0?1:0.4}/>
+            <rect x="42" y={y+4} width="18" height="4" rx="1" fill="#FF9933" fillOpacity="0.3"/>
+          </g>
+        ))}
+        <line x1="40" y1="62" x2="40" y2="72" stroke="#FF9933" strokeWidth="1.5"/>
+        <line x1="30" y1="72" x2="50" y2="72" stroke="#FF9933" strokeWidth="1.5"/>
+      </svg>
+    ),
+  },
+  {
+    icon: Zap, color: "#00F2FF",
+    title: "AI Augmented",
+    desc: "We build 5x faster using AI-augmented workflows. No agency bloat.",
+    decoration: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
+        {[[40,15],[20,35],[60,35],[15,55],[40,55],[65,55],[30,72],[50,72]].map(([cx,cy],i)=>(
+          <circle key={i} cx={cx} cy={cy} r="3.5" fill="#00F2FF"/>
+        ))}
+        <line x1="40" y1="15" x2="20" y2="35" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="40" y1="15" x2="60" y2="35" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="20" y1="35" x2="15" y2="55" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="20" y1="35" x2="40" y2="55" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="60" y1="35" x2="40" y2="55" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="60" y1="35" x2="65" y2="55" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="15" y1="55" x2="30" y2="72" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="40" y1="55" x2="30" y2="72" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="40" y1="55" x2="50" y2="72" stroke="#00F2FF" strokeWidth="1"/>
+        <line x1="65" y1="55" x2="50" y2="72" stroke="#00F2FF" strokeWidth="1"/>
+      </svg>
+    ),
+  },
+  {
+    icon: BarChart2, color: "#FF9933",
+    title: "Analytics & Reports",
+    desc: "Real-time dashboards and smart reports that tell you exactly where to grow next.",
+    decoration: (
+      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
+        <line x1="14" y1="66" x2="66" y2="66" stroke="#FF9933" strokeWidth="1.5"/>
+        <line x1="14" y1="14" x2="14" y2="66" stroke="#FF9933" strokeWidth="1.5"/>
+        {[[20,50,42],[30,32,30],[40,22,20],[50,40,14],[56,28,8]].map(([x,y,h],i)=>(
+          <rect key={i} x={x} y={y} width="10" height={h} rx="2" fill="#FF9933" fillOpacity={i===2?0.6:0.25}/>
+        ))}
+        <path d="M20 46 L30 28 L40 18 L50 36 L60 24" stroke="#FF9933" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="40" cy="18" r="3" fill="#FF9933"/>
+      </svg>
+    ),
+  },
 ];
+
+function Card3D({ item, delay }: { item: typeof bentoItems[0]; delay: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const rotX = useMotionValue(0);
+  const rotY = useMotionValue(0);
+  const springRotX = useSpring(rotX, { stiffness: 220, damping: 22 });
+  const springRotY = useSpring(rotY, { stiffness: 220, damping: 22 });
+  const [shine, setShine] = useState({ x: 50, y: 50 });
+  const [hovered, setHovered] = useState(false);
+  const Icon = item.icon;
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) / rect.width;
+    const cy = (e.clientY - rect.top) / rect.height;
+    rotX.set((cy - 0.5) * -20);
+    rotY.set((cx - 0.5) * 20);
+    setShine({ x: cx * 100, y: cy * 100 });
+  };
+
+  const onMouseLeave = () => {
+    rotX.set(0);
+    rotY.set(0);
+    setHovered(false);
+  };
+
+  return (
+    <ScrollReveal delay={delay}>
+      <div style={{ perspective: "900px" }}>
+        <motion.div
+          ref={cardRef}
+          onMouseMove={onMouseMove}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={onMouseLeave}
+          style={{
+            rotateX: springRotX,
+            rotateY: springRotY,
+            transformStyle: "preserve-3d",
+          }}
+          className="relative rounded-2xl overflow-hidden h-64 cursor-pointer group"
+        >
+          {/* Base background */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(145deg, ${item.color}12 0%, rgba(10,25,47,0.95) 60%, ${item.color}06 100%)`,
+            }}
+          />
+          {/* Border */}
+          <div
+            className="absolute inset-0 rounded-2xl transition-all duration-300"
+            style={{
+              border: `1px solid ${item.color}${hovered ? "50" : "20"}`,
+              boxShadow: hovered
+                ? `0 20px 60px ${item.color}18, 0 0 0 1px ${item.color}20, inset 0 1px 0 ${item.color}20`
+                : `0 4px 20px rgba(0,0,0,0.3)`,
+            }}
+          />
+          {/* Shine */}
+          <div
+            className="absolute inset-0 pointer-events-none z-10 rounded-2xl transition-opacity duration-300"
+            style={{
+              background: `radial-gradient(circle at ${shine.x}% ${shine.y}%, rgba(255,255,255,0.13) 0%, transparent 55%)`,
+              opacity: hovered ? 1 : 0,
+            }}
+          />
+          {/* Decoration illustration (background) */}
+          <div
+            className="absolute right-0 bottom-0 w-36 h-36 transition-transform duration-500"
+            style={{ transform: hovered ? "scale(1.1) translateZ(0)" : "scale(1)" }}
+          >
+            {item.decoration}
+          </div>
+          {/* Content — lifted in Z */}
+          <div
+            className="relative z-20 h-full flex flex-col p-6"
+            style={{ transform: "translateZ(30px)" }}
+          >
+            {/* Icon badge */}
+            <motion.div
+              animate={hovered ? { y: -4 } : { y: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="w-13 h-13 w-12 h-12 rounded-2xl flex items-center justify-center mb-auto"
+              style={{
+                background: `${item.color}18`,
+                border: `1px solid ${item.color}40`,
+                boxShadow: hovered ? `0 8px 20px ${item.color}30` : "none",
+                transition: "box-shadow 0.3s",
+              }}
+            >
+              <Icon size={24} style={{ color: item.color }} />
+            </motion.div>
+            {/* Text */}
+            <div>
+              <h3
+                className="text-base font-bold mb-1.5"
+                style={{ fontFamily: "'Sora', sans-serif", color: item.color }}
+              >
+                {item.title}
+              </h3>
+              <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
+                {item.desc}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </ScrollReveal>
+  );
+}
 
 function BentoSection() {
   return (
-    <section id="services-preview" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="services-preview" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <ScrollReveal>
-        <div className="text-center mb-12">
+        <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF] text-xs font-medium mb-4">
-            The Complete Solution
+            <Zap size={12} /> The Complete Solution
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
             Everything you need to <span className="text-[#00F2FF]">scale</span>
           </h2>
+          <p className="text-muted-foreground mt-3 max-w-md mx-auto text-sm">
+            Six pillars of growth — hover each card to explore.
+          </p>
         </div>
       </ScrollReveal>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {bentoItems.map((item, i) => {
-          const Icon = item.icon;
-          return (
-            <ScrollReveal key={item.title} delay={i * 0.1} className={item.span}>
-              <motion.div
-                className="bento-card glass rounded-2xl p-6 sm:p-8 h-full cursor-pointer"
-                whileHover={{ scale: 1.02, y: -4 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: `${item.color}15`, border: `1px solid ${item.color}30` }}>
-                  <Icon size={22} style={{ color: item.color }} />
-                </div>
-                <h3 className="text-lg font-bold mb-2" style={{ fontFamily: "'Sora', sans-serif", color: item.color }}>
-                  {item.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
-            </ScrollReveal>
-          );
-        })}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {bentoItems.map((item, i) => (
+          <Card3D key={item.title} item={item} delay={i * 0.08} />
+        ))}
       </div>
     </section>
   );
