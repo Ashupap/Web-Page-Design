@@ -261,7 +261,7 @@ export function Footer() {
 
             {/* Centre: India flag */}
             <div className="flex items-center gap-1.5">
-              <span style={{ display: "inline-block", width: 14, height: 8, background: "linear-gradient(#FF9933 33%,#fff 33% 66%,#22c55e 66%)", borderRadius: 2 }} />
+              <span style={{ fontSize: 14 }}>🇮🇳</span>
               <span className="text-[10px] text-muted-foreground/50">Building Vikshit Bharat 2047</span>
             </div>
 
