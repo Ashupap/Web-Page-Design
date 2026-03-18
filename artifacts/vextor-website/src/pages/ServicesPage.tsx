@@ -99,11 +99,139 @@ const workflows: WorkflowDef[] = [
 ];
 
 /* ─────────────────────────────────────────────────────────
+   Vector icon for each N8N node type (centered at 0,0)
+───────────────────────────────────────────────────────── */
+function NodeIcon({ icon, color }: { icon: string; color: string }) {
+  const s = { stroke: color, fill: "none", strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  switch (icon) {
+    case "🌐": return <g {...s}>
+      <circle cx="0" cy="0" r="6" strokeWidth="1.3"/>
+      <ellipse cx="0" cy="0" rx="3" ry="6" strokeWidth="1"/>
+      <line x1="-6" y1="0" x2="6" y2="0" strokeWidth="0.9"/>
+      <line x1="-5" y1="-3" x2="5" y2="-3" strokeWidth="0.8"/>
+      <line x1="-5" y1="3" x2="5" y2="3" strokeWidth="0.8"/>
+    </g>;
+    case "⏰": return <g {...s}>
+      <circle cx="0" cy="0" r="6" strokeWidth="1.3"/>
+      <line x1="0" y1="0" x2="0" y2="-4" strokeWidth="1.4"/>
+      <line x1="0" y1="0" x2="2.8" y2="2" strokeWidth="1.4"/>
+      <circle cx="0" cy="0" r="0.9" fill={color} strokeWidth="0"/>
+    </g>;
+    case "📝": return <g {...s}>
+      <path d="M-4,-5 L2.5,-5 L5,-2.5 L5,5 L-4,5 Z" strokeWidth="1.2"/>
+      <path d="M2.5,-5 L2.5,-2.5 L5,-2.5" strokeWidth="1"/>
+      <line x1="-2" y1="0.5" x2="3" y2="0.5" strokeWidth="0.9"/>
+      <line x1="-2" y1="2.5" x2="1.5" y2="2.5" strokeWidth="0.9"/>
+    </g>;
+    case "📄": return <g {...s}>
+      <path d="M-4,-5 L2.5,-5 L5,-2.5 L5,5 L-4,5 Z" strokeWidth="1.2"/>
+      <path d="M2.5,-5 L2.5,-2.5 L5,-2.5" strokeWidth="1"/>
+      <line x1="-2" y1="-0.5" x2="3" y2="-0.5" strokeWidth="0.9"/>
+      <line x1="-2" y1="2" x2="3" y2="2" strokeWidth="0.9"/>
+      <line x1="-2" y1="4.5" x2="1" y2="4.5" strokeWidth="0.9"/>
+    </g>;
+    case "💬": return <g {...s}>
+      <path d="M-5.5,-4.5 Q-5.5,-7 -3,-7 L4,-7 Q6,-7 6,-4.5 L6,1 Q6,3.5 4,3.5 L1,3.5 L-2.5,7 L-2,3.5 L-3,3.5 Q-5.5,3.5 -5.5,1 Z" strokeWidth="1.2"/>
+    </g>;
+    case "📦": return <g {...s}>
+      <path d="M0,-6 L5.5,-3 L5.5,3 L0,6 L-5.5,3 L-5.5,-3 Z" strokeWidth="1.2"/>
+      <line x1="-5.5" y1="-3" x2="0" y2="0" strokeWidth="0.9"/>
+      <line x1="5.5" y1="-3" x2="0" y2="0" strokeWidth="0.9"/>
+      <line x1="0" y1="0" x2="0" y2="6" strokeWidth="0.9"/>
+    </g>;
+    case "✅": return <g {...s}>
+      <circle cx="0" cy="0" r="6" strokeWidth="1.3"/>
+      <path d="M-3.5,0.5 L-1,3 L3.5,-3" strokeWidth="1.5"/>
+    </g>;
+    case "👥": return <g {...s}>
+      <circle cx="-1.5" cy="-3" r="2.5" strokeWidth="1.2"/>
+      <path d="M-6.5,5 Q-6.5,0.5 -1.5,0.5 Q3.5,0.5 3.5,5" strokeWidth="1.2"/>
+      <circle cx="3.5" cy="-4" r="2" strokeWidth="1" strokeDasharray="none"/>
+    </g>;
+    case "🤖": return <g {...s}>
+      <rect x="-4.5" y="-4.5" width="9" height="9" rx="2" strokeWidth="1.2"/>
+      <circle cx="0" cy="0" r="2.3" strokeWidth="1"/>
+      <line x1="-4.5" y1="-2" x2="-6.5" y2="-2" strokeWidth="1"/>
+      <line x1="-4.5" y1="2" x2="-6.5" y2="2" strokeWidth="1"/>
+      <line x1="4.5" y1="-2" x2="6.5" y2="-2" strokeWidth="1"/>
+      <line x1="4.5" y1="2" x2="6.5" y2="2" strokeWidth="1"/>
+      <line x1="-2" y1="-4.5" x2="-2" y2="-6.5" strokeWidth="1"/>
+      <line x1="2" y1="-4.5" x2="2" y2="-6.5" strokeWidth="1"/>
+    </g>;
+    case "📧": return <g {...s}>
+      <rect x="-6" y="-4" width="12" height="8.5" rx="1.5" strokeWidth="1.2"/>
+      <path d="M-6,-4 L0,2.5 L6,-4" strokeWidth="1.1"/>
+    </g>;
+    case "📊": return <g {...s}>
+      <line x1="-5.5" y1="5.5" x2="5.5" y2="5.5" strokeWidth="1.1"/>
+      <line x1="-5.5" y1="-6" x2="-5.5" y2="5.5" strokeWidth="1.1"/>
+      <rect x="-4" y="0.5" width="2.5" height="5" strokeWidth="0.9"/>
+      <rect x="-0.5" y="-2.5" width="2.5" height="8" strokeWidth="0.9"/>
+      <rect x="3" y="-5" width="2.5" height="10.5" strokeWidth="0.9"/>
+    </g>;
+    case "📅": return <g {...s}>
+      <rect x="-5.5" y="-3.5" width="11" height="9.5" rx="1.5" strokeWidth="1.2"/>
+      <line x1="-5.5" y1="-0.5" x2="5.5" y2="-0.5" strokeWidth="1"/>
+      <line x1="-2" y1="-3.5" x2="-2" y2="-6" strokeWidth="1.3"/>
+      <line x1="2" y1="-3.5" x2="2" y2="-6" strokeWidth="1.3"/>
+      <rect x="-1" y="1" width="2" height="2" rx="0.4" fill={color} strokeWidth="0"/>
+    </g>;
+    case "🏦": return <g {...s}>
+      <line x1="-5.5" y1="6" x2="5.5" y2="6" strokeWidth="1.1"/>
+      <line x1="-5.5" y1="1" x2="5.5" y2="1" strokeWidth="1"/>
+      <line x1="0" y1="-5.5" x2="-5.5" y2="1" strokeWidth="1"/>
+      <line x1="0" y1="-5.5" x2="5.5" y2="1" strokeWidth="1"/>
+      <line x1="-3.5" y1="1" x2="-3.5" y2="6" strokeWidth="1.1"/>
+      <line x1="0" y1="1" x2="0" y2="6" strokeWidth="1.1"/>
+      <line x1="3.5" y1="1" x2="3.5" y2="6" strokeWidth="1.1"/>
+    </g>;
+    case "🔢": return <g {...s}>
+      <rect x="-5" y="-5.5" width="10" height="11" rx="2" strokeWidth="1.2"/>
+      <line x1="-5" y1="-1.5" x2="5" y2="-1.5" strokeWidth="0.9"/>
+      <line x1="0" y1="-5.5" x2="0" y2="-1.5" strokeWidth="0.9"/>
+      <rect x="-3.5" y="0.5" width="2" height="2" rx="0.4" fill={color} strokeWidth="0"/>
+      <rect x="-0.5" y="0.5" width="2" height="2" rx="0.4" fill={color} strokeWidth="0"/>
+      <rect x="2" y="0.5" width="2" height="2" rx="0.4" fill={color} strokeWidth="0"/>
+    </g>;
+    case "📋": return <g {...s}>
+      <rect x="-5" y="-3" width="10" height="9.5" rx="1.5" strokeWidth="1.2"/>
+      <rect x="-2.5" y="-5.5" width="5" height="3" rx="1" strokeWidth="1"/>
+      <line x1="-3" y1="0.5" x2="3" y2="0.5" strokeWidth="0.9"/>
+      <line x1="-3" y1="3" x2="3" y2="3" strokeWidth="0.9"/>
+      <line x1="-3" y1="5.5" x2="0.5" y2="5.5" strokeWidth="0.9"/>
+    </g>;
+    case "👤": return <g {...s}>
+      <circle cx="0" cy="-2.5" r="3" strokeWidth="1.2"/>
+      <path d="M-5.5,5.5 Q-5.5,0.5 0,0.5 Q5.5,0.5 5.5,5.5" strokeWidth="1.2"/>
+    </g>;
+    case "💰": return <g {...s}>
+      <circle cx="0" cy="0" r="5.5" strokeWidth="1.2"/>
+      <line x1="0" y1="-2.5" x2="0" y2="2.5" strokeWidth="1.3"/>
+      <line x1="-2" y1="-0.8" x2="2" y2="-0.8" strokeWidth="1"/>
+      <line x1="-2" y1="1" x2="2" y2="1" strokeWidth="1"/>
+    </g>;
+    case "🗓️": return <g {...s}>
+      <rect x="-5.5" y="-3.5" width="11" height="9.5" rx="1.5" strokeWidth="1.2"/>
+      <line x1="-5.5" y1="-0.5" x2="5.5" y2="-0.5" strokeWidth="1"/>
+      <line x1="-2" y1="-3.5" x2="-2" y2="-6" strokeWidth="1.3"/>
+      <line x1="2" y1="-3.5" x2="2" y2="-6" strokeWidth="1.3"/>
+      <path d="M-2.5,2.5 L-0.5,4.5 L3.5,0.5" strokeWidth="1.4"/>
+    </g>;
+    case "🔍": return <g {...s}>
+      <circle cx="-1" cy="-1" r="4.5" strokeWidth="1.3"/>
+      <line x1="2.5" y1="2.5" x2="6" y2="6" strokeWidth="1.6"/>
+    </g>;
+    default: return <g {...s}><circle cx="0" cy="0" r="5.5" strokeWidth="1.2"/></g>;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
    N8N-Style Workflow Diagram
 ───────────────────────────────────────────────────────── */
-const NW = 80, NH = 44, GAP = 18;
-const NODE_XS = [14, 112, 210, 308, 406];
-const NODE_Y = 14;
+const NW = 82, NH = 48, GAP = 16;
+const NODE_XS = [12, 110, 208, 306, 404];
+const NODE_Y  = 10;
+const CY      = NODE_Y + NH / 2;  // vertical center of nodes
 
 function N8NWorkflowDiagram({ wf }: { wf: WorkflowDef }) {
   return (
@@ -115,36 +243,28 @@ function N8NWorkflowDiagram({ wf }: { wf: WorkflowDef }) {
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.25 }}
       >
-        <svg viewBox="0 0 500 72" fill="none" className="w-full">
+        {/* viewBox height = NODE_Y*2 + NH = 10+48+10 = 68 */}
+        <svg viewBox="0 0 500 68" fill="none" className="w-full" style={{ display: "block" }}>
           <defs>
-            <marker
-              id="n8nArrow"
-              viewBox="0 0 8 6"
-              refX="7"
-              refY="3"
-              markerWidth="5"
-              markerHeight="4"
-              orient="auto"
-            >
-              <path d="M0 0 L8 3 L0 6z" fill="rgba(0,242,255,0.45)" />
+            <marker id="n8nArrow" viewBox="0 0 8 6" refX="7" refY="3"
+              markerWidth="5" markerHeight="4" orient="auto">
+              <path d="M0 0 L8 3 L0 6z" fill="rgba(0,242,255,0.5)" />
             </marker>
           </defs>
 
           {/* Connections */}
           {NODE_XS.slice(0, -1).map((x, i) => {
-            const x1 = x + NW;
-            const x2 = NODE_XS[i + 1];
-            const y  = NODE_Y + NH / 2;
+            const x1 = x + NW, x2 = NODE_XS[i + 1];
             return (
               <g key={i}>
-                <line x1={x1} y1={y} x2={x2} y2={y} stroke="rgba(0,242,255,0.1)" strokeWidth="1.5" />
+                <line x1={x1} y1={CY} x2={x2} y2={CY}
+                  stroke="rgba(0,242,255,0.1)" strokeWidth="1.5" />
                 <motion.line
-                  x1={x1} y1={y} x2={x2} y2={y}
-                  stroke="rgba(0,242,255,0.5)"
-                  strokeWidth="1.5"
+                  x1={x1} y1={CY} x2={x2} y2={CY}
+                  stroke="rgba(0,242,255,0.55)" strokeWidth="1.5"
                   strokeDasharray="3 3"
                   animate={{ strokeDashoffset: [6, 0] }}
-                  transition={{ duration: 0.45, repeat: Infinity, ease: "linear", delay: i * 0.12 }}
+                  transition={{ duration: 0.44, repeat: Infinity, ease: "linear", delay: i * 0.12 }}
                   markerEnd="url(#n8nArrow)"
                 />
               </g>
@@ -155,6 +275,9 @@ function N8NWorkflowDiagram({ wf }: { wf: WorkflowDef }) {
           {wf.nodes.map((node, i) => {
             const x = NODE_XS[i];
             const c = nodeColor[node.type];
+            const iconCX = x + 20;   // center x of icon circle
+            const labelX = x + 36;   // x start of text labels
+
             return (
               <motion.g
                 key={`${wf.name}-${i}`}
@@ -162,37 +285,40 @@ function N8NWorkflowDiagram({ wf }: { wf: WorkflowDef }) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.07, type: "spring", stiffness: 220, damping: 18 }}
               >
-                {/* Trigger glow pulse */}
+                {/* Trigger pulse ring */}
                 {i === 0 && (
                   <motion.rect
-                    x={x - 2} y={NODE_Y - 2} width={NW + 4} height={NH + 4} rx="9"
+                    x={x - 2} y={NODE_Y - 2} width={NW + 4} height={NH + 4} rx="10"
                     fill="none" stroke={c} strokeWidth="1"
-                    animate={{ opacity: [0.3, 0.7, 0.3] }}
+                    animate={{ opacity: [0.25, 0.7, 0.25] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   />
                 )}
                 {/* Node body */}
-                <rect x={x} y={NODE_Y} width={NW} height={NH} rx="7"
-                  fill="rgba(8,20,42,0.96)" stroke={`${c}35`} strokeWidth="1" />
-                {/* Left colored strip */}
-                <rect x={x} y={NODE_Y + 4} width="5" height={NH - 8} rx="2.5" fill={c} />
-                {/* Icon background */}
-                <circle cx={x + 18} cy={NODE_Y + NH / 2} r="11" fill={`${c}18`} />
-                {/* Emoji icon */}
-                <text x={x + 18} y={NODE_Y + NH / 2 + 4} textAnchor="middle" fontSize="10">
-                  {node.icon}
-                </text>
-                {/* Labels */}
+                <rect x={x} y={NODE_Y} width={NW} height={NH} rx="8"
+                  fill="rgba(6,16,38,0.97)" stroke={`${c}35`} strokeWidth="1" />
+                {/* Left accent strip */}
+                <rect x={x} y={NODE_Y + 5} width="5" height={NH - 10} rx="2.5" fill={c} />
+                {/* Icon background circle */}
+                <circle cx={iconCX} cy={CY} r="12" fill={`${c}16`} />
+                {/* Vector icon — centered on (iconCX, CY) */}
+                <g transform={`translate(${iconCX}, ${CY})`}>
+                  <NodeIcon icon={node.icon} color={c} />
+                </g>
+                {/* Labels — vertically centered in node */}
                 {node.line2 ? (
                   <>
-                    <text x={x + 33} y={NODE_Y + 17} fontSize="7.5" fill="#e2e8f0"
-                      fontFamily="Inter, sans-serif" fontWeight="600">{node.line1}</text>
-                    <text x={x + 33} y={NODE_Y + 28} fontSize="6.5" fill="#94a3b8"
-                      fontFamily="Inter, sans-serif">{node.line2}</text>
+                    <text x={labelX} y={CY - 4} fontSize="7.5" fill="#e2e8f0"
+                      fontFamily="Inter, sans-serif" fontWeight="600"
+                      dominantBaseline="middle">{node.line1}</text>
+                    <text x={labelX} y={CY + 7} fontSize="6.5" fill="#94a3b8"
+                      fontFamily="Inter, sans-serif"
+                      dominantBaseline="middle">{node.line2}</text>
                   </>
                 ) : (
-                  <text x={x + 33} y={NODE_Y + NH / 2 + 3} fontSize="7.5" fill="#e2e8f0"
-                    fontFamily="Inter, sans-serif" fontWeight="600">{node.line1}</text>
+                  <text x={labelX} y={CY} fontSize="7.5" fill="#e2e8f0"
+                    fontFamily="Inter, sans-serif" fontWeight="600"
+                    dominantBaseline="middle">{node.line1}</text>
                 )}
               </motion.g>
             );
