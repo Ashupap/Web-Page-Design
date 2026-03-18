@@ -955,111 +955,229 @@ function ComparisonSection() {
 }
 
 /* ─────────────────────────────────────────────────────────
-   Bento Grid Section — 3D Tilt Cards
+   Bento Grid Section — 3D Cards with Animated Use Cases
 ───────────────────────────────────────────────────────── */
-const bentoItems = [
-  {
-    icon: Settings, color: "#00F2FF",
-    title: "Workflow Automation",
-    desc: "Eliminate manual entries. Auto-sync inventory and sales with intelligent triggers.",
-    decoration: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
-        <circle cx="40" cy="40" r="28" stroke="#00F2FF" strokeWidth="1.5" strokeDasharray="4 4"/>
-        <circle cx="40" cy="40" r="16" stroke="#00F2FF" strokeWidth="1" strokeDasharray="3 3"/>
-        {[0,60,120,180,240,300].map((deg,i) => (
-          <circle key={i} cx={40+28*Math.cos(deg*Math.PI/180)} cy={40+28*Math.sin(deg*Math.PI/180)} r="3" fill="#00F2FF"/>
+
+function WorkflowAnim() {
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setStep(s => (s + 1) % 5), 950);
+    return () => clearInterval(t);
+  }, []);
+  const steps = [
+    { label: "Order Received",      Icon: Package },
+    { label: "Invoice Generated",   Icon: Receipt },
+    { label: "Stock Synced",        Icon: CheckCircle },
+  ];
+  return (
+    <div className="space-y-2 w-full">
+      {steps.map((s, i) => {
+        const active = step > i;
+        const SIcon = s.Icon;
+        return (
+          <div key={s.label} className="flex items-center gap-2.5"
+            style={{ opacity: step >= i ? 1 : 0.3, transition: "opacity 0.4s" }}>
+            <div className="w-5 h-5 rounded-full border flex items-center justify-center shrink-0"
+              style={{ borderColor: active ? "#00F2FF80" : "rgba(0,242,255,0.2)", background: active ? "#00F2FF18" : "transparent", transition: "all 0.4s" }}>
+              {active
+                ? <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}><CheckCircle size={10} color="#00F2FF" /></motion.div>
+                : <SIcon size={9} color="rgba(0,242,255,0.5)" />}
+            </div>
+            <span className="text-[11px] flex-1"
+              style={{ color: active ? "#e2e8f0" : "rgba(226,232,240,0.4)", transition: "color 0.4s" }}>
+              {s.label}
+            </span>
+            {active && <motion.span initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }} className="text-[10px] font-bold text-[#00F2FF]">✓</motion.span>}
+          </div>
+        );
+      })}
+      <div className="h-0.5 rounded-full bg-[#00F2FF]/10 overflow-hidden mt-1">
+        <motion.div className="h-full bg-[#00F2FF]/50 rounded-full"
+          animate={{ width: `${Math.min(Math.round(step / 3 * 100), 100)}%` }}
+          style={{ transition: "width 0.55s ease" }} />
+      </div>
+    </div>
+  );
+}
+
+function MobileAnim() {
+  const [sales, setSales] = useState(0);
+  const [orders, setOrders] = useState(0);
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    let s = 0, o = 0;
+    const t = setInterval(() => {
+      s = Math.min(s + 530, 12840);
+      o = Math.min(o + 1, 23);
+      setSales(s); setOrders(o);
+      if (s >= 12840) {
+        setTimeout(() => { setSales(0); setOrders(0); setTick(k => k + 1); }, 1600);
+        clearInterval(t);
+      }
+    }, 80);
+    return () => clearInterval(t);
+  }, [tick]);
+  return (
+    <div className="w-full space-y-2">
+      <div className="rounded-xl p-3" style={{ background: "rgba(255,153,51,0.08)", border: "1px solid rgba(255,153,51,0.2)" }}>
+        <div className="text-[10px] text-orange-400/60 mb-0.5 font-medium uppercase tracking-wider">Today's Sales</div>
+        <div className="text-lg font-bold tabular-nums" style={{ color: "#FF9933", fontFamily: "'Sora',sans-serif" }}>
+          ₹{sales.toLocaleString("en-IN")}
+        </div>
+        <div className="h-1 rounded-full bg-[#FF9933]/10 mt-1.5 overflow-hidden">
+          <div className="h-full bg-[#FF9933]/50 rounded-full transition-all duration-150" style={{ width: `${(sales / 12840) * 100}%` }} />
+        </div>
+      </div>
+      <div className="flex gap-2">
+        {[{ label: "Orders", val: orders }, { label: "Live Users", val: "📱 42" }].map(m => (
+          <div key={m.label} className="flex-1 rounded-lg p-2" style={{ background: "rgba(255,153,51,0.06)", border: "1px solid rgba(255,153,51,0.15)" }}>
+            <div className="text-[9px] text-orange-400/50 uppercase tracking-wider">{m.label}</div>
+            <div className="text-sm font-bold tabular-nums" style={{ color: "#FF9933", fontFamily: "'Sora',sans-serif" }}>{m.val}</div>
+          </div>
         ))}
-        <path d="M20 40 Q30 25 40 40 Q50 55 60 40" stroke="#00F2FF" strokeWidth="1.5" fill="none"/>
-      </svg>
-    ),
-  },
-  {
-    icon: Smartphone, color: "#FF9933",
-    title: "Mobile Apps",
-    desc: "Your office in your pocket. Manage from anywhere, anytime.",
-    decoration: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
-        <rect x="25" y="10" width="30" height="60" rx="6" stroke="#FF9933" strokeWidth="1.5"/>
-        <rect x="30" y="18" width="20" height="30" rx="2" fill="#FF9933" fillOpacity="0.15"/>
-        <circle cx="40" cy="62" r="3" fill="#FF9933"/>
-        <rect x="33" y="22" width="14" height="2" rx="1" fill="#FF9933"/>
-        <rect x="33" y="27" width="10" height="2" rx="1" fill="#FF9933"/>
-        <rect x="33" y="32" width="12" height="2" rx="1" fill="#FF9933"/>
-      </svg>
-    ),
-  },
-  {
-    icon: Globe, color: "#00F2FF",
-    title: "Web & SMM",
-    desc: "High-converting React sites + AI-powered Social Marketing that drives real growth.",
-    decoration: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
-        <circle cx="40" cy="40" r="28" stroke="#00F2FF" strokeWidth="1.5"/>
-        <ellipse cx="40" cy="40" rx="14" ry="28" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="12" y1="40" x2="68" y2="40" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="40" y1="12" x2="40" y2="68" stroke="#00F2FF" strokeWidth="1"/>
-        <path d="M16 26 Q40 22 64 26" stroke="#00F2FF" strokeWidth="1" fill="none"/>
-        <path d="M16 54 Q40 58 64 54" stroke="#00F2FF" strokeWidth="1" fill="none"/>
-      </svg>
-    ),
-  },
-  {
-    icon: Server, color: "#FF9933",
-    title: "Infrastructure",
-    desc: "Microservices that never crash. Bank-grade security with zero downtime SLA.",
-    decoration: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
-        {[14,30,46].map((y,i) => (
-          <g key={i}>
-            <rect x="15" y={y} width="50" height="12" rx="3" stroke="#FF9933" strokeWidth="1.5"/>
-            <circle cx="24" cy={y+6} r="3" fill="#FF9933"/>
-            <circle cx="33" cy={y+6} r="3" fill="#FF9933" fillOpacity={i===0?1:0.4}/>
-            <rect x="42" y={y+4} width="18" height="4" rx="1" fill="#FF9933" fillOpacity="0.3"/>
-          </g>
+      </div>
+    </div>
+  );
+}
+
+function WebSmmAnim() {
+  const metrics = [
+    { label: "Reach",  value: "12.4K", pct: 82, delay: 0 },
+    { label: "Clicks", value: "4.2K",  pct: 56, delay: 0.18 },
+    { label: "Conv.",  value: "847",   pct: 28, delay: 0.36 },
+  ];
+  return (
+    <div className="space-y-2.5 w-full">
+      {metrics.map(m => (
+        <div key={m.label} className="flex items-center gap-2">
+          <span className="text-[10px] text-slate-400 w-8 shrink-0">{m.label}</span>
+          <div className="flex-1 h-1.5 rounded-full bg-[#00F2FF]/10 overflow-hidden">
+            <motion.div className="h-full rounded-full"
+              style={{ background: "linear-gradient(90deg,#00F2FF,#00F2FF70)" }}
+              initial={{ width: 0 }}
+              animate={{ width: ["0%", `${m.pct}%`, `${m.pct}%`, "0%"] }}
+              transition={{ duration: 4, delay: m.delay, repeat: Infinity, times: [0, 0.5, 0.85, 1], ease: "easeInOut" }} />
+          </div>
+          <span className="text-[10px] font-semibold text-[#00F2FF] w-9 text-right tabular-nums">{m.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function InfraAnim() {
+  const services = [
+    { name: "API Gateway", uptime: "99.9%" },
+    { name: "Database",    uptime: "100%" },
+    { name: "CDN Edge",    uptime: "99.7%" },
+  ];
+  return (
+    <div className="space-y-2 w-full">
+      {services.map((s, i) => (
+        <div key={s.name} className="flex items-center gap-2.5 rounded-lg px-2.5 py-2"
+          style={{ background: "rgba(255,153,51,0.06)", border: "1px solid rgba(255,153,51,0.12)" }}>
+          <motion.div className="w-2 h-2 rounded-full shrink-0" style={{ background: "#22c55e" }}
+            animate={{ opacity: [1, 0.3, 1], scale: [1, 0.75, 1] }}
+            transition={{ duration: 1.8, delay: i * 0.45, repeat: Infinity, ease: "easeInOut" }} />
+          <span className="text-[11px] text-slate-300 flex-1">{s.name}</span>
+          <span className="text-[11px] font-bold tabular-nums" style={{ color: "#22c55e" }}>{s.uptime}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AiAnim() {
+  return (
+    <div className="space-y-3 w-full">
+      <div>
+        <div className="flex justify-between mb-1">
+          <span className="text-[10px] text-slate-400">Manual Process</span>
+          <span className="text-[10px] text-slate-400">14 days</span>
+        </div>
+        <div className="h-2 rounded-full bg-slate-700/40 overflow-hidden">
+          <motion.div className="h-full rounded-full bg-slate-500/60"
+            animate={{ width: ["0%", "100%", "100%", "0%"] }}
+            transition={{ duration: 4, repeat: Infinity, times: [0, 0.65, 0.88, 1], ease: "easeOut" }} />
+        </div>
+      </div>
+      <div>
+        <div className="flex justify-between mb-1">
+          <span className="text-[10px] font-semibold text-[#00F2FF]">⚡ Vextor AI</span>
+          <span className="text-[10px] font-bold text-[#00F2FF]">3 days</span>
+        </div>
+        <div className="h-2 rounded-full bg-[#00F2FF]/10 overflow-hidden">
+          <motion.div className="h-full rounded-full"
+            style={{ background: "linear-gradient(90deg,#00F2FF,#00F2FF70)" }}
+            animate={{ width: ["0%", "21%", "21%", "0%"] }}
+            transition={{ duration: 4, repeat: Infinity, times: [0, 0.36, 0.88, 1], ease: "easeOut" }} />
+        </div>
+      </div>
+      <motion.p className="text-[10px] font-semibold text-center text-[#00F2FF]"
+        animate={{ opacity: [0, 1, 1, 0] }}
+        transition={{ duration: 4, repeat: Infinity, times: [0.3, 0.5, 0.86, 1] }}>
+        5× faster · Zero manual work
+      </motion.p>
+    </div>
+  );
+}
+
+function AnalyticsAnim() {
+  const [rev, setRev] = useState(180000);
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    let r = 180000;
+    const t = setInterval(() => {
+      r = Math.min(r + 5800, 240000);
+      setRev(r);
+      if (r >= 240000) {
+        setTimeout(() => { setRev(180000); setTick(k => k + 1); }, 1800);
+        clearInterval(t);
+      }
+    }, 80);
+    return () => clearInterval(t);
+  }, [tick]);
+  const path = "M4,46 L18,34 L32,38 L46,18 L60,26 L74,10";
+  const dots: [number,number][] = [[4,46],[18,34],[32,38],[46,18],[60,26],[74,10]];
+  return (
+    <div className="w-full space-y-1">
+      <div className="flex items-baseline gap-2">
+        <span className="text-base font-bold tabular-nums" style={{ color: "#FF9933", fontFamily: "'Sora',sans-serif" }}>
+          ₹{(rev / 100000).toFixed(1)}L
+        </span>
+        <span className="text-[11px] font-semibold text-emerald-400">↑ 18%</span>
+        <span className="text-[10px] text-slate-500 ml-auto">this month</span>
+      </div>
+      <svg viewBox="0 0 78 56" fill="none" className="w-full h-12">
+        <defs>
+          <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#FF9933" stopOpacity="0.25"/>
+            <stop offset="100%" stopColor="#FF9933" stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d={`${path} L74,56 L4,56 Z`} fill="url(#chartFill)" />
+        <motion.path d={path} stroke="#FF9933" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: [0, 1, 1, 0] }}
+          transition={{ duration: 4.5, repeat: Infinity, times: [0, 0.55, 0.88, 1], ease: "easeInOut" }} />
+        {dots.map(([x, y], i) => (
+          <motion.circle key={i} cx={x} cy={y} r="2.5" fill="#FF9933"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: [0, 1, 1, 0], scale: [0, 1, 1, 0] }}
+            transition={{ duration: 4.5, delay: i * 0.09, repeat: Infinity, times: [0, 0.55, 0.88, 1] }} />
         ))}
-        <line x1="40" y1="62" x2="40" y2="72" stroke="#FF9933" strokeWidth="1.5"/>
-        <line x1="30" y1="72" x2="50" y2="72" stroke="#FF9933" strokeWidth="1.5"/>
       </svg>
-    ),
-  },
-  {
-    icon: Zap, color: "#00F2FF",
-    title: "AI Augmented",
-    desc: "We build 5x faster using AI-augmented workflows. No agency bloat.",
-    decoration: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
-        {[[40,15],[20,35],[60,35],[15,55],[40,55],[65,55],[30,72],[50,72]].map(([cx,cy],i)=>(
-          <circle key={i} cx={cx} cy={cy} r="3.5" fill="#00F2FF"/>
-        ))}
-        <line x1="40" y1="15" x2="20" y2="35" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="40" y1="15" x2="60" y2="35" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="20" y1="35" x2="15" y2="55" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="20" y1="35" x2="40" y2="55" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="60" y1="35" x2="40" y2="55" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="60" y1="35" x2="65" y2="55" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="15" y1="55" x2="30" y2="72" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="40" y1="55" x2="30" y2="72" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="40" y1="55" x2="50" y2="72" stroke="#00F2FF" strokeWidth="1"/>
-        <line x1="65" y1="55" x2="50" y2="72" stroke="#00F2FF" strokeWidth="1"/>
-      </svg>
-    ),
-  },
-  {
-    icon: BarChart2, color: "#FF9933",
-    title: "Analytics & Reports",
-    desc: "Real-time dashboards and smart reports that tell you exactly where to grow next.",
-    decoration: (
-      <svg viewBox="0 0 80 80" fill="none" className="w-full h-full opacity-20">
-        <line x1="14" y1="66" x2="66" y2="66" stroke="#FF9933" strokeWidth="1.5"/>
-        <line x1="14" y1="14" x2="14" y2="66" stroke="#FF9933" strokeWidth="1.5"/>
-        {[[20,50,42],[30,32,30],[40,22,20],[50,40,14],[56,28,8]].map(([x,y,h],i)=>(
-          <rect key={i} x={x} y={y} width="10" height={h} rx="2" fill="#FF9933" fillOpacity={i===2?0.6:0.25}/>
-        ))}
-        <path d="M20 46 L30 28 L40 18 L50 36 L60 24" stroke="#FF9933" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="40" cy="18" r="3" fill="#FF9933"/>
-      </svg>
-    ),
-  },
+    </div>
+  );
+}
+
+const bentoItems: { icon: React.ElementType; color: string; title: string; desc: string; Anim: React.FC }[] = [
+  { icon: Settings,   color: "#00F2FF", title: "Workflow Automation",  desc: "Eliminate manual entries. Auto-sync inventory and sales with intelligent triggers.", Anim: WorkflowAnim },
+  { icon: Smartphone, color: "#FF9933", title: "Mobile Apps",          desc: "Your office in your pocket. Manage orders, sales, and teams from anywhere.", Anim: MobileAnim },
+  { icon: Globe,      color: "#00F2FF", title: "Web & SMM",            desc: "High-converting React sites + AI-powered Social Marketing that drives real growth.", Anim: WebSmmAnim },
+  { icon: Server,     color: "#FF9933", title: "Infrastructure",       desc: "Microservices that never crash. Bank-grade security with zero downtime SLA.", Anim: InfraAnim },
+  { icon: Zap,        color: "#00F2FF", title: "AI Augmented",         desc: "We build 5× faster using AI-augmented workflows. No agency bloat.", Anim: AiAnim },
+  { icon: BarChart2,  color: "#FF9933", title: "Analytics & Reports",  desc: "Real-time dashboards and smart reports that tell you exactly where to grow next.", Anim: AnalyticsAnim },
 ];
 
 function Card3D({ item, delay }: { item: typeof bentoItems[0]; delay: number }) {
@@ -1128,44 +1246,41 @@ function Card3D({ item, delay }: { item: typeof bentoItems[0]; delay: number }) 
               opacity: hovered ? 1 : 0,
             }}
           />
-          {/* Decoration illustration (background) */}
-          <div
-            className="absolute right-0 bottom-0 w-36 h-36 transition-transform duration-500"
-            style={{ transform: hovered ? "scale(1.1) translateZ(0)" : "scale(1)" }}
-          >
-            {item.decoration}
-          </div>
           {/* Content — lifted in Z */}
           <div
-            className="relative z-20 h-full flex flex-col p-6"
+            className="relative z-20 h-full flex flex-col gap-3 p-5"
             style={{ transform: "translateZ(30px)" }}
           >
-            {/* Icon badge */}
-            <motion.div
-              animate={hovered ? { y: -4 } : { y: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="w-13 h-13 w-12 h-12 rounded-2xl flex items-center justify-center mb-auto"
-              style={{
-                background: `${item.color}18`,
-                border: `1px solid ${item.color}40`,
-                boxShadow: hovered ? `0 8px 20px ${item.color}30` : "none",
-                transition: "box-shadow 0.3s",
-              }}
-            >
-              <Icon size={24} style={{ color: item.color }} />
-            </motion.div>
-            {/* Text */}
-            <div>
-              <h3
-                className="text-base font-bold mb-1.5"
-                style={{ fontFamily: "'Sora', sans-serif", color: item.color }}
+            {/* Icon + Title row */}
+            <div className="flex items-center gap-3">
+              <motion.div
+                animate={hovered ? { y: -2 } : { y: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                style={{
+                  background: `${item.color}18`,
+                  border: `1px solid ${item.color}40`,
+                  boxShadow: hovered ? `0 6px 18px ${item.color}30` : "none",
+                  transition: "box-shadow 0.3s",
+                }}
               >
+                <Icon size={18} style={{ color: item.color }} />
+              </motion.div>
+              <h3 className="text-sm font-bold leading-snug"
+                style={{ fontFamily: "'Sora', sans-serif", color: item.color }}>
                 {item.title}
               </h3>
-              <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
-                {item.desc}
-              </p>
             </div>
+            {/* Animation area */}
+            <div className="flex-1 flex items-center min-h-0">
+              <div className="w-full">
+                <item.Anim />
+              </div>
+            </div>
+            {/* Description */}
+            <p className="text-muted-foreground text-[11px] leading-relaxed line-clamp-2">
+              {item.desc}
+            </p>
           </div>
         </motion.div>
       </div>
