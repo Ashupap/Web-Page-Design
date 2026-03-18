@@ -333,44 +333,67 @@ function N8NWorkflowDiagram({ wf }: { wf: WorkflowDef }) {
    Phone screen — Website preview
 ───────────────────────────────────────────────────────── */
 function PhoneWebsite() {
+  const products = [
+    { name: "Smart LED Bulb",     price: "₹299",  badge: "Best Seller", badgeClr: "#FF9933", bg: "linear-gradient(135deg,#1e3a5f,#0a2a4a)", icon: "💡" },
+    { name: "Wireless Earbuds",   price: "₹1,499", badge: "New",         badgeClr: "#22c55e", bg: "linear-gradient(135deg,#2d1b69,#1a0e3f)", icon: "🎧" },
+    { name: "Cotton Kurta",       price: "₹799",  badge: "20% OFF",     badgeClr: "#ef4444", bg: "linear-gradient(135deg,#3b1f1f,#1a0a0a)", icon: "👕" },
+    { name: "Steel Water Bottle", price: "₹599",  badge: "",            badgeClr: "",        bg: "linear-gradient(135deg,#1a3322,#0a1f14)", icon: "🍶" },
+  ];
   return (
     <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
-      transition={{ duration: 0.28 }} style={{ height: "100%", overflow: "hidden" }}>
-      {/* Nav bar */}
-      <div style={{ background: "rgba(10,25,47,0.97)", padding: "6px 10px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(0,242,255,0.12)" }}>
-        <span style={{ color: "#00F2FF", fontWeight: 800, fontSize: 9, letterSpacing: 1 }}>VexBiz</span>
-        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {[0,1,2].map(i => <div key={i} style={{ width: 13, height: 1.5, background: "rgba(255,255,255,0.35)", borderRadius: 1 }} />)}
+      transition={{ duration: 0.28 }} style={{ height: "100%", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+      {/* Top bar */}
+      <div style={{ background: "#0a192f", padding: "5px 10px", display: "flex", alignItems: "center", gap: 6, borderBottom: "1px solid rgba(0,242,255,0.1)" }}>
+        <div style={{ flex: 1, background: "rgba(255,255,255,0.06)", borderRadius: 20, padding: "3px 8px", display: "flex", alignItems: "center", gap: 4, border: "1px solid rgba(255,255,255,0.08)" }}>
+          <span style={{ fontSize: 7, color: "rgba(255,255,255,0.3)" }}>🔍</span>
+          <span style={{ fontSize: 7, color: "rgba(255,255,255,0.28)" }}>Search products…</span>
+        </div>
+        <div style={{ position: "relative" }}>
+          <span style={{ fontSize: 13 }}>🛒</span>
+          <div style={{ position: "absolute", top: -2, right: -2, width: 8, height: 8, borderRadius: "50%", background: "#FF9933", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ fontSize: 5, color: "#000", fontWeight: 700 }}>3</span>
+          </div>
         </div>
       </div>
-      {/* Hero */}
-      <div style={{ background: "linear-gradient(135deg, #0a192f 0%, #1a3a6f 100%)", padding: "14px 12px 12px" }}>
-        <div style={{ fontSize: 10, fontWeight: 800, color: "#fff", lineHeight: 1.3 }}>Your Business,</div>
-        <div style={{ fontSize: 10, fontWeight: 800, color: "#00F2FF", lineHeight: 1.3, marginBottom: 8 }}>Supercharged.</div>
-        <div style={{ fontSize: 7, color: "rgba(255,255,255,0.55)", marginBottom: 10, lineHeight: 1.5 }}>Enterprise-grade software for India's growing SMEs</div>
-        <div style={{ display: "inline-flex", background: "#00F2FF", color: "#000", fontSize: 7.5, fontWeight: 700, padding: "4px 12px", borderRadius: 20, gap: 4 }}>
-          <span>Get Started</span><span>→</span>
-        </div>
-      </div>
-      {/* Cards */}
-      <div style={{ padding: "8px 10px", display: "flex", flexDirection: "column", gap: 5 }}>
-        <div style={{ fontSize: 7, color: "rgba(255,255,255,0.35)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>Services</div>
-        {[
-          { title: "Workflow Automation", sub: "n8n-powered pipelines", clr: "#00F2FF" },
-          { title: "Mobile & Web Apps", sub: "Flutter · Next.js 15", clr: "#FF9933" },
-          { title: "Cloud Infrastructure", sub: "Oracle Cloud · Docker", clr: "#a855f7" },
-        ].map((s, i) => (
-          <motion.div key={i} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.12 }}
-            style={{ background: "rgba(255,255,255,0.03)", borderRadius: 8, padding: "7px 8px", border: `1px solid ${s.clr}22`, display: "flex", alignItems: "center", gap: 7 }}>
-            <div style={{ width: 3.5, height: 30, borderRadius: 2, background: s.clr, flexShrink: 0 }} />
-            <div>
-              <div style={{ fontSize: 8, fontWeight: 700, color: "#e2e8f0" }}>{s.title}</div>
-              <div style={{ fontSize: 6, color: "rgba(255,255,255,0.35)", marginTop: 1 }}>{s.sub}</div>
-            </div>
-            <div style={{ marginLeft: "auto", fontSize: 8, color: s.clr }}>›</div>
-          </motion.div>
+      {/* Nav categories */}
+      <div style={{ display: "flex", gap: 5, padding: "5px 10px 4px", overflowX: "hidden" }}>
+        {["All", "Electronics", "Fashion", "Home", "Deals"].map((c, i) => (
+          <div key={c} style={{ padding: "2.5px 8px", borderRadius: 20, fontSize: 6.5, fontWeight: i === 0 ? 700 : 400, flexShrink: 0, background: i === 0 ? "#00F2FF" : "rgba(255,255,255,0.05)", color: i === 0 ? "#000" : "rgba(255,255,255,0.45)", border: `1px solid ${i === 0 ? "#00F2FF" : "rgba(255,255,255,0.08)"}` }}>{c}</div>
         ))}
+      </div>
+      {/* Banner */}
+      <div style={{ margin: "0 10px 6px", borderRadius: 10, background: "linear-gradient(110deg,#0a2a4a,#1e3a8a)", padding: "8px 10px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid rgba(0,242,255,0.15)" }}>
+        <div>
+          <div style={{ fontSize: 7, color: "rgba(255,255,255,0.5)", marginBottom: 1 }}>Summer Sale 🔥</div>
+          <div style={{ fontSize: 9.5, fontWeight: 800, color: "#fff", lineHeight: 1.2 }}>Up to <span style={{ color: "#FF9933" }}>50% OFF</span></div>
+          <div style={{ marginTop: 5, background: "#00F2FF", color: "#000", fontSize: 6.5, fontWeight: 700, padding: "2.5px 8px", borderRadius: 12, display: "inline-block" }}>Shop Now</div>
+        </div>
+        <div style={{ fontSize: 30, opacity: 0.85 }}>🛍️</div>
+      </div>
+      {/* Product grid */}
+      <div style={{ padding: "0 10px 6px" }}>
+        <div style={{ fontSize: 7, color: "rgba(255,255,255,0.38)", fontWeight: 700, marginBottom: 5, textTransform: "uppercase", letterSpacing: 0.8 }}>Trending Now</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 }}>
+          {products.map((p, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.09 }}
+              style={{ borderRadius: 9, overflow: "hidden", border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.03)" }}>
+              {/* Product image placeholder */}
+              <div style={{ background: p.bg, height: 52, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                <span style={{ fontSize: 22 }}>{p.icon}</span>
+                {p.badge && (
+                  <div style={{ position: "absolute", top: 4, left: 4, background: p.badgeClr, color: "#fff", fontSize: 5.5, fontWeight: 700, padding: "1.5px 4px", borderRadius: 4 }}>{p.badge}</div>
+                )}
+              </div>
+              {/* Info */}
+              <div style={{ padding: "5px 6px 6px" }}>
+                <div style={{ fontSize: 7, fontWeight: 600, color: "#e2e8f0", lineHeight: 1.25, marginBottom: 2 }}>{p.name}</div>
+                <div style={{ fontSize: 8.5, fontWeight: 800, color: "#00F2FF" }}>{p.price}</div>
+                <div style={{ marginTop: 4, background: "rgba(0,242,255,0.12)", border: "1px solid rgba(0,242,255,0.2)", color: "#00F2FF", fontSize: 6, fontWeight: 700, padding: "2px 0", borderRadius: 5, textAlign: "center" }}>+ Add</div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </motion.div>
   );
