@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring, useMotionValueEvent, type MotionValue } from "framer-motion";
 import { useRef, useState, useCallback, useEffect } from "react";
 import {
   Zap, FileX, Activity, Settings, Smartphone, Globe, Server,
@@ -754,28 +754,20 @@ function HeroSection() {
    Comparison Section
 ───────────────────────────────────────────────────────── */
 const transformationMetrics = [
-  { label: "Revenue Growth", value: "3.2x", suffix: "", icon: TrendingUp, color: "#00F2FF", desc: "Average uplift in 6 months" },
-  { label: "Manual Errors", value: "0", suffix: "%", icon: ShieldCheck, color: "#FF9933", desc: "Auto-validated workflows" },
-  { label: "Time Saved", value: "60", suffix: "%", icon: Clock, color: "#00F2FF", desc: "On daily operations" },
-  { label: "Team Efficiency", value: "5x", suffix: "", icon: Users, color: "#FF9933", desc: "Faster decision making" },
+  { label: "Revenue Growth", from: 1.0, to: 3.2, decimals: 1, unit: "x", icon: TrendingUp, color: "#00F2FF", desc: "Average uplift in 6 months" },
+  { label: "Manual Errors",  from: 45,  to: 0,   decimals: 0, unit: "%", icon: ShieldCheck, color: "#FF9933", desc: "Auto-validated workflows" },
+  { label: "Time Saved",     from: 5,   to: 60,  decimals: 0, unit: "%", icon: Clock,       color: "#00F2FF", desc: "On daily operations" },
+  { label: "Team Efficiency",from: 1.0, to: 5.0, decimals: 1, unit: "x", icon: Users,       color: "#FF9933", desc: "Faster decision making" },
 ];
 
-function AnimatedCounter({ to, suffix, inView }: { to: number; suffix: string; inView: boolean }) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const duration = 1400;
-    const step = 16;
-    const increment = to / (duration / step);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= to) { setCount(to); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, step);
-    return () => clearInterval(timer);
-  }, [inView, to]);
-  return <>{count}{suffix}</>;
+function MetricValue({ motionPos, from, to, decimals, unit }: {
+  motionPos: MotionValue<number>;
+  from: number; to: number; decimals: number; unit: string;
+}) {
+  const transformed = useTransform(motionPos, [5, 95], [from, to]);
+  const [display, setDisplay] = useState(from + ((50 - 5) / 90) * (to - from));
+  useMotionValueEvent(transformed, "change", (v) => setDisplay(v));
+  return <>{display.toFixed(decimals)}{unit}</>;
 }
 
 function ComparisonSection() {
@@ -784,6 +776,8 @@ function ComparisonSection() {
   const isDragging = useRef(false);
   const metricsRef = useRef<HTMLDivElement>(null);
   const [metricsInView, setMetricsInView] = useState(false);
+  const sliderMV = useMotionValue(50);
+  const sliderSpring = useSpring(sliderMV, { stiffness: 200, damping: 30 });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -797,16 +791,18 @@ function ComparisonSection() {
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!isDragging.current || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const pos = ((e.clientX - rect.left) / rect.width) * 100;
-    setSliderPos(Math.min(Math.max(pos, 5), 95));
-  }, []);
+    const pos = Math.min(Math.max(((e.clientX - rect.left) / rect.width) * 100, 5), 95);
+    setSliderPos(pos);
+    sliderMV.set(pos);
+  }, [sliderMV]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const pos = ((e.touches[0].clientX - rect.left) / rect.width) * 100;
-    setSliderPos(Math.min(Math.max(pos, 5), 95));
-  }, []);
+    const pos = Math.min(Math.max(((e.touches[0].clientX - rect.left) / rect.width) * 100, 5), 95);
+    setSliderPos(pos);
+    sliderMV.set(pos);
+  }, [sliderMV]);
 
   return (
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -829,7 +825,8 @@ function ComparisonSection() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
         {/* ── Left: Comparison Slider ── */}
-        <ScrollReveal delay={0.1}>
+        <ScrollReveal delay={0.1} className="h-full">
+          <div className="flex flex-col justify-center h-full">
           <div
             ref={containerRef}
             className="relative rounded-3xl overflow-hidden cursor-col-resize border border-[#00F2FF]/20 h-64 sm:h-72 select-none"
@@ -895,10 +892,11 @@ function ComparisonSection() {
               ← drag →
             </div>
           </div>
+          </div>
         </ScrollReveal>
 
         {/* ── Right: Animated Metrics Panel ── */}
-        <ScrollReveal delay={0.25}>
+        <ScrollReveal delay={0.25} className="h-full">
           <div ref={metricsRef} className="glass rounded-3xl border border-[#00F2FF]/15 p-6 sm:p-8 h-full flex flex-col justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-[#00F2FF] mb-1">Impact by the numbers</p>
@@ -910,7 +908,6 @@ function ComparisonSection() {
             <div className="grid grid-cols-2 gap-4 flex-1">
               {transformationMetrics.map((m, i) => {
                 const Icon = m.icon;
-                const isNumeric = !isNaN(Number(m.value));
                 return (
                   <motion.div
                     key={m.label}
@@ -926,15 +923,8 @@ function ComparisonSection() {
                       </div>
                       <span className="text-[11px] text-muted-foreground font-medium leading-tight">{m.label}</span>
                     </div>
-                    <div className="text-2xl font-bold" style={{ color: m.color, fontFamily: "'Sora', sans-serif" }}>
-                      {isNumeric
-                        ? <AnimatedCounter to={Number(m.value)} suffix={m.suffix} inView={metricsInView} />
-                        : <motion.span
-                            initial={{ opacity: 0, scale: 0.7 }}
-                            animate={metricsInView ? { opacity: 1, scale: 1 } : {}}
-                            transition={{ duration: 0.45, delay: 0.2 + i * 0.12 }}
-                          >{m.value}{m.suffix}</motion.span>
-                      }
+                    <div className="text-2xl font-bold tabular-nums" style={{ color: m.color, fontFamily: "'Sora', sans-serif" }}>
+                      <MetricValue motionPos={sliderSpring} from={m.from} to={m.to} decimals={m.decimals} unit={m.unit} />
                     </div>
                     <p className="text-[10px] text-muted-foreground leading-snug">{m.desc}</p>
                   </motion.div>
