@@ -33,13 +33,13 @@ const TECH_LOGOS = [
   { label: "Oracle",    color: "#F80000", symbol: "O",    owner: "meera" },
 ];
 
-/* All positions in the right-half of the viewport (x: 50–98%) */
+/* Positions relative to the character group container — surround all 3 */
 const LOGO_POSITIONS = [
-  { x: 53, y: 8  }, { x: 88, y: 6  }, { x: 68, y: 20 },
-  { x: 94, y: 28 }, { x: 57, y: 38 }, { x: 75, y: 14 },
-  { x: 82, y: 50 }, { x: 92, y: 60 }, { x: 62, y: 70 },
-  { x: 78, y: 80 }, { x: 52, y: 82 }, { x: 95, y: 72 },
-  { x: 70, y: 58 }, { x: 86, y: 40 },
+  { x: 2,  y: 8  }, { x: 90, y: 5  }, { x: 48, y: 2  },
+  { x: 4,  y: 42 }, { x: 94, y: 38 }, { x: 18, y: 18 },
+  { x: 76, y: 15 }, { x: 6,  y: 72 }, { x: 90, y: 68 },
+  { x: 30, y: 85 }, { x: 65, y: 82 }, { x: 94, y: 55 },
+  { x: 2,  y: 58 }, { x: 50, y: 88 },
 ];
 
 function FloatingTechLogos({ hoveredPerson }: { hoveredPerson: string | null }) {
@@ -332,19 +332,31 @@ const PERSON_SLIDES: Record<string, { title: string; icon: React.ElementType; co
 /* ─────────────────────────────────────────────────────────
    Single person card — auto-cycling dashboard popup
 ───────────────────────────────────────────────────────── */
+/* Detect mobile for responsive popup placement */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 1024);
+  useEffect(() => {
+    const fn = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+  return isMobile;
+}
+
 interface PersonCardProps {
   personId: string;
   floatDelay?: number;
-  position?: "left" | "center" | "right";
+  desktopPopupSide?: "left" | "right" | "above";
   size?: "sm" | "md" | "lg";
   label: string;
   Illustration: React.ComponentType<{ className?: string }>;
   onHoverChange: (id: string | null) => void;
 }
 
-function PersonCard({ personId, floatDelay = 0, position = "center", size = "md", label, Illustration, onHoverChange }: PersonCardProps) {
+function PersonCard({ personId, floatDelay = 0, desktopPopupSide = "above", size = "md", label, Illustration, onHoverChange }: PersonCardProps) {
   const [hovered, setHovered] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
+  const isMobile = useIsMobile();
   const slides = PERSON_SLIDES[personId] ?? PERSON_SLIDES["priya"];
   const slide = slides[Math.min(slideIndex, slides.length - 1)];
   const Icon = slide.icon;
@@ -355,13 +367,26 @@ function PersonCard({ personId, floatDelay = 0, position = "center", size = "md"
     return () => clearInterval(id);
   }, [hovered, slides.length]);
 
-  const illuSizeMap = { sm: "w-36", md: "w-44", lg: "w-52" };
+  /* On mobile everything pops above; on desktop respect desktopPopupSide */
+  const side = isMobile ? "above" : desktopPopupSide;
   const popupPos =
-    position === "left"
-      ? "left-full ml-4 top-4"
-      : position === "right"
-      ? "right-full mr-4 top-4"
-      : "left-1/2 -translate-x-1/2 bottom-[calc(100%+12px)]";
+    side === "left"
+      ? "left-full ml-3 top-2"
+      : side === "right"
+      ? "right-full mr-3 top-2"
+      : "left-1/2 -translate-x-1/2 bottom-[calc(100%+10px)]";
+
+  const popupInitial =
+    side === "left"  ? { opacity: 0, scale: 0.9, x: -8 }
+    : side === "right" ? { opacity: 0, scale: 0.9, x: 8 }
+    : { opacity: 0, scale: 0.9, y: 8 };
+
+  /* Responsive illustration widths */
+  const illuSizeMap = {
+    sm: "w-24 sm:w-28 lg:w-36",
+    md: "w-28 sm:w-32 lg:w-44",
+    lg: "w-32 sm:w-40 lg:w-52",
+  };
 
   return (
     <motion.div
@@ -398,15 +423,15 @@ function PersonCard({ personId, floatDelay = 0, position = "center", size = "md"
         </span>
       </div>
 
-      {/* Hover Popup — auto-scrolling slides */}
+      {/* Hover Popup — auto-cycling, vertical scroll transition */}
       <AnimatePresence>
         {hovered && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.88, y: position === "center" ? 8 : 0, x: position === "left" ? -8 : position === "right" ? 8 : 0 }}
-            animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-            exit={{ opacity: 0, scale: 0.88 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className={`absolute z-50 w-52 p-3 rounded-2xl ${popupPos}`}
+            initial={popupInitial}
+            animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`absolute z-50 w-48 sm:w-52 p-3 rounded-2xl ${popupPos}`}
             style={{
               background: "rgba(6,16,36,0.97)",
               border: `1px solid ${slide.color}45`,
@@ -416,32 +441,32 @@ function PersonCard({ personId, floatDelay = 0, position = "center", size = "md"
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-2.5">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: `${slide.color}20`, border: `1px solid ${slide.color}40` }}>
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-6 h-6 shrink-0 rounded-lg flex items-center justify-center" style={{ background: `${slide.color}20`, border: `1px solid ${slide.color}40` }}>
                   <Icon size={12} style={{ color: slide.color }} />
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={slideIndex}
-                    initial={{ opacity: 0, y: -6 }}
+                    initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-xs font-bold text-white"
+                    exit={{ opacity: 0, y: 5 }}
+                    transition={{ duration: 0.18 }}
+                    className="text-xs font-bold text-white truncate"
                   >
                     {slide.title}
                   </motion.span>
                 </AnimatePresence>
               </div>
-              {/* Slide dots */}
-              <div className="flex gap-1">
+              {/* Slide pill dots */}
+              <div className="flex gap-1 shrink-0 ml-2">
                 {slides.map((_, i) => (
                   <div
                     key={i}
                     className="rounded-full transition-all duration-300"
                     style={{
-                      width: i === slideIndex ? 14 : 5,
-                      height: 5,
+                      width: i === slideIndex ? 12 : 4,
+                      height: 4,
                       background: i === slideIndex ? slide.color : `${slide.color}30`,
                     }}
                   />
@@ -449,14 +474,14 @@ function PersonCard({ personId, floatDelay = 0, position = "center", size = "md"
               </div>
             </div>
 
-            {/* Slide content */}
+            {/* Slide content — vertical scroll transition */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={slideIndex}
-                initial={{ opacity: 0, x: 12 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }}
-                transition={{ duration: 0.25 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.22 }}
               >
                 {slide.content}
               </motion.div>
@@ -512,16 +537,13 @@ function HeroSection() {
         style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--background)))" }}
       />
 
-      {/* Floating tech logos — right-half only, highlight on hover */}
-      <FloatingTechLogos hoveredPerson={hoveredPerson} />
-
       <motion.div
         style={{ opacity }}
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 w-full"
       >
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center min-h-[85vh]">
-          {/* ── LEFT: Text content ── */}
-          <motion.div style={{ y: textY }} className="flex flex-col justify-center">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          {/* ── LEFT: Text content — second on mobile, first on desktop ── */}
+          <motion.div style={{ y: textY }} className="flex flex-col justify-center text-center lg:text-left items-center lg:items-start order-2 lg:order-1">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -577,7 +599,7 @@ function HeroSection() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-3 mb-10"
+              className="flex flex-col sm:flex-row gap-3 mb-10 w-full sm:w-auto justify-center lg:justify-start"
             >
               <motion.button
                 whileHover={{ scale: 1.04 }}
@@ -626,80 +648,81 @@ function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* ── RIGHT: 3 people with phones ── */}
-          <motion.div
-            style={{ y: phoneY }}
-            className="relative flex items-end justify-center gap-4 sm:gap-6 lg:gap-8 pt-16 pb-4"
-          >
-            {/* Glow base */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 h-20 bg-[#00F2FF]/10 blur-3xl rounded-full" />
+          {/* ── RIGHT: Characters + floating tech logos — first on mobile ── */}
+          <motion.div style={{ y: phoneY }} className="relative order-1 lg:order-2">
+            {/* Logos float inside this container, around the characters */}
+            <FloatingTechLogos hoveredPerson={hoveredPerson} />
 
-            {/* Person 1 — left */}
-            <motion.div
-              initial={{ opacity: 0, x: -40, y: 20 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.7, type: "spring" }}
-            >
-              <PersonCard
-                personId="priya"
-                floatDelay={0.8}
-                position="left"
-                size="sm"
-                label="Priya — Retailer"
-                Illustration={PersonRetailer}
-                onHoverChange={setHoveredPerson}
-              />
-            </motion.div>
+            {/* Characters row */}
+            <div className="relative z-10 flex items-end justify-center gap-3 sm:gap-6 lg:gap-8 pt-10 pb-6">
+              {/* Glow base */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-16 bg-[#00F2FF]/10 blur-3xl rounded-full pointer-events-none" />
 
-            {/* Person 2 — center (tallest) */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8, type: "spring" }}
-              className="-mt-8"
-            >
-              <PersonCard
-                personId="rahul"
-                floatDelay={0}
-                position="center"
-                size="lg"
-                label="Rahul — Distributor"
-                Illustration={PersonDistributor}
-                onHoverChange={setHoveredPerson}
-              />
-            </motion.div>
+              {/* Person 1 — Priya (always visible) */}
+              <motion.div
+                initial={{ opacity: 0, x: -30, y: 20 }}
+                animate={{ opacity: 1, x: 0, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.7, type: "spring" }}
+              >
+                <PersonCard
+                  personId="priya"
+                  floatDelay={0.8}
+                  desktopPopupSide="left"
+                  size="sm"
+                  label="Priya — Retailer"
+                  Illustration={PersonRetailer}
+                  onHoverChange={setHoveredPerson}
+                />
+              </motion.div>
 
-            {/* Person 3 — right */}
-            <motion.div
-              initial={{ opacity: 0, x: 40, y: 20 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.7, type: "spring" }}
-            >
-              <PersonCard
-                personId="meera"
-                floatDelay={1.6}
-                position="right"
-                size="md"
-                label="Meera — Manufacturer"
-                Illustration={PersonManufacturer}
-                onHoverChange={setHoveredPerson}
-              />
-            </motion.div>
+              {/* Person 2 — Rahul (always visible, popup goes LEFT towards Priya) */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8, type: "spring" }}
+                className="-mt-6 sm:-mt-8"
+              >
+                <PersonCard
+                  personId="rahul"
+                  floatDelay={0}
+                  desktopPopupSide="right"
+                  size="lg"
+                  label="Rahul — Distributor"
+                  Illustration={PersonDistributor}
+                  onHoverChange={setHoveredPerson}
+                />
+              </motion.div>
+
+              {/* Person 3 — Meera (hidden on mobile, shown on lg+) */}
+              <motion.div
+                initial={{ opacity: 0, x: 30, y: 20 }}
+                animate={{ opacity: 1, x: 0, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.7, type: "spring" }}
+                className="hidden lg:block"
+              >
+                <PersonCard
+                  personId="meera"
+                  floatDelay={1.6}
+                  desktopPopupSide="above"
+                  size="md"
+                  label="Meera — Manufacturer"
+                  Illustration={PersonManufacturer}
+                  onHoverChange={setHoveredPerson}
+                />
+              </motion.div>
+            </div>
 
             {/* Hint text */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.8 }}
-              className="absolute bottom-[-1.5rem] left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs text-muted-foreground whitespace-nowrap"
+              className="text-center flex items-center justify-center gap-1.5 text-xs text-muted-foreground mt-1"
             >
-              <motion.span
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 1.8, repeat: Infinity }}
-              >
+              <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }}>
                 👆
               </motion.span>
-              Hover to see live dashboards
+              Tap to see live dashboards
             </motion.div>
           </motion.div>
         </div>
