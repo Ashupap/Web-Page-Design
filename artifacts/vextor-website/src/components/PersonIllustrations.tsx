@@ -1,6 +1,6 @@
 /* Professional flat-style character illustrations — transparent backgrounds */
 
-/* ── PRIYA — Retailer using laptop (smaller, screen angled toward her) ── */
+/* ── PRIYA — Retailer using laptop (screen faces her) ── */
 export function PersonRetailer({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 200 230" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
@@ -24,9 +24,9 @@ export function PersonRetailer({ className = "" }: { className?: string }) {
       <path d="M62 95 Q64 82 100 80 Q136 82 138 95 L140 182 H60Z" fill="url(#pr-outfit)" />
       <path d="M100 80 L93 93 L100 103 L107 93Z" fill="rgba(255,255,255,0.85)" />
 
-      {/* ── LAPTOP — smaller, 76px wide, natural 3/4 perspective ── */}
+      {/* ── LAPTOP — screen faces PRIYA (viewer sees the back of the lid) ── */}
 
-      {/* Keyboard deck — top surface visible (parallelogram = top-down angle) */}
+      {/* Keyboard deck — top surface */}
       <path d="M57 175 L143 175 L148 192 L52 192Z" fill="#1E293B" />
       <path d="M59 173 L141 173 L143 175 L57 175Z" fill="#334155" />
       <rect x="63" y="177" width="74" height="2" rx="1" fill="rgba(255,255,255,0.07)" />
@@ -37,44 +37,21 @@ export function PersonRetailer({ className = "" }: { className?: string }) {
       {/* Hinge */}
       <rect x="57" y="170" width="86" height="5" rx="2" fill="#0F172A" />
 
-      {/* Screen lid back */}
-      <rect x="59" y="110" width="82" height="63" rx="6" fill="#0B1628" />
-      {/* Screen bezel */}
-      <rect x="63" y="114" width="74" height="55" rx="4.5" fill="#1A2540" />
-      {/* Display */}
-      <rect x="67" y="118" width="66" height="47" rx="3" fill="#060C18" />
-
-      {/* Screen content — compact dashboard */}
-      {/* Header */}
-      <rect x="69" y="120" width="62" height="8" rx="1.5" fill="rgba(0,180,255,0.07)" />
-      <rect x="71" y="122" width="22" height="3.5" rx="1.8" fill="#00C8FF" opacity="0.9" />
-      <circle cx="127" cy="124" r="3.5" fill="rgba(0,200,255,0.25)" stroke="rgba(0,200,255,0.5)" strokeWidth="0.7" />
-      {/* Stat row */}
-      <rect x="69" y="131" width="18" height="14" rx="2.5" fill="rgba(255,107,53,0.12)" stroke="rgba(255,107,53,0.45)" strokeWidth="0.7" />
-      <rect x="71" y="133" width="8" height="2" rx="1" fill="rgba(255,107,53,0.6)" />
-      <rect x="71" y="137" width="12" height="4" rx="1.2" fill="#FF9933" opacity="0.9" />
-      <rect x="91" y="131" width="18" height="14" rx="2.5" fill="rgba(0,200,255,0.09)" stroke="rgba(0,200,255,0.4)" strokeWidth="0.7" />
-      <rect x="93" y="133" width="10" height="2" rx="1" fill="rgba(0,200,255,0.6)" />
-      <rect x="93" y="137" width="12" height="4" rx="1.2" fill="#00C8FF" opacity="0.88" />
-      <rect x="113" y="131" width="18" height="14" rx="2.5" fill="rgba(52,211,153,0.09)" stroke="rgba(52,211,153,0.4)" strokeWidth="0.7" />
-      <rect x="115" y="133" width="8" height="2" rx="1" fill="rgba(52,211,153,0.6)" />
-      <rect x="115" y="137" width="12" height="4" rx="1.2" fill="#34D399" opacity="0.88" />
-      {/* Bar chart */}
-      <rect x="70" y="153" width="7" height="9" rx="1.5" fill="#FF9933" opacity="0.7" />
-      <rect x="80" y="148" width="7" height="14" rx="1.5" fill="#FF9933" opacity="0.85" />
-      <rect x="90" y="144" width="7" height="18" rx="1.5" fill="#FF6B35" />
-      <rect x="100" y="150" width="7" height="12" rx="1.5" fill="#FF9933" opacity="0.78" />
-      <rect x="110" y="146" width="7" height="16" rx="1.5" fill="#FF9933" />
-      <rect x="120" y="142" width="7" height="20" rx="1.5" fill="#FF6B35" />
-      <line x1="69" y1="162" x2="133" y2="162" stroke="rgba(255,255,255,0.07)" strokeWidth="0.7" />
-      {/* Trend line */}
-      <path d="M73 159 L83 154 L93 148 L103 156 L113 150 L123 146" stroke="rgba(0,200,255,0.7)" strokeWidth="1.3" fill="none" />
-      <circle cx="123" cy="146" r="2" fill="#00C8FF" />
-      <circle cx="123" cy="146" r="4" fill="rgba(0,200,255,0.22)" />
-      {/* Screen glow border */}
-      <rect x="67" y="118" width="66" height="47" rx="3" fill="none" stroke="rgba(0,200,255,0.2)" strokeWidth="1" />
-      {/* Webcam dot */}
-      <circle cx="100" cy="116" r="1.8" fill="rgba(255,255,255,0.2)" />
+      {/* Laptop lid BACK — screen faces Priya, we see the outer shell */}
+      <rect x="59" y="110" width="82" height="63" rx="6" fill="#1A2535" />
+      <rect x="62" y="113" width="76" height="57" rx="4.5" fill="#243347" />
+      {/* Subtle sheen on lid surface */}
+      <path d="M66 117 Q85 113 104 117" stroke="rgba(255,255,255,0.08)" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+      {/* Logo / brand mark on back of lid */}
+      <rect x="83" y="136" width="34" height="16" rx="3" fill="rgba(0,200,255,0.07)" stroke="rgba(0,200,255,0.3)" strokeWidth="0.8" />
+      <circle cx="92" cy="144" r="4" fill="rgba(0,200,255,0.18)" stroke="rgba(0,200,255,0.45)" strokeWidth="0.9" />
+      <path d="M90 144 L92 140 L94 144 L92 148Z" fill="rgba(0,200,255,0.7)" />
+      <rect x="99" y="141" width="14" height="2.5" rx="1.2" fill="rgba(0,200,255,0.5)" />
+      <rect x="99" y="146" width="10" height="2" rx="1" fill="rgba(0,200,255,0.3)" />
+      {/* Screen glow leaking around the hinge edge (screen is lit on her side) */}
+      <rect x="59" y="168" width="82" height="3" rx="1" fill="rgba(0,200,255,0.12)" />
+      {/* Webcam indicator light on top edge */}
+      <circle cx="100" cy="113" r="1.8" fill="rgba(0,200,255,0.35)" />
 
       {/* Arms reaching to keyboard */}
       <path d="M60 165 Q46 169 40 180 L48 186 L64 174Z" fill="url(#pr-outfit)" />
@@ -88,11 +65,17 @@ export function PersonRetailer({ className = "" }: { className?: string }) {
       {/* Head */}
       <ellipse cx="100" cy="52" rx="23" ry="24" fill="#E8A870" />
 
-      {/* Hair — straight bob with fringe */}
-      <path d="M78 46 Q78 28 100 26 Q122 28 122 46 Q120 30 100 29 Q80 30 78 46Z" fill="#1A0800" />
-      <path d="M78 46 Q76 59 78 70 Q80 75 84 72 Q82 62 82 50Z" fill="#1A0800" />
-      <path d="M122 46 Q124 59 122 70 Q120 75 116 72 Q118 62 118 50Z" fill="#1A0800" />
-      <path d="M80 43 Q100 37 120 43 Q115 50 100 48 Q85 50 80 43Z" fill="#1A0800" />
+      {/* ── HAIR — prominent front-facing bob with clear bangs ── */}
+      {/* Main hair cap — top and crown */}
+      <path d="M77 50 Q76 26 100 23 Q124 26 123 50 Q121 28 100 27 Q79 28 77 50Z" fill="#2D1200" />
+      {/* Bangs / fringe — clearly visible across forehead */}
+      <path d="M78 42 Q100 35 122 42 Q120 53 100 51 Q80 53 78 42Z" fill="#3A1800" />
+      {/* Hair highlight on top for depth */}
+      <path d="M87 29 Q100 26 113 29 Q109 37 100 36 Q91 37 87 29Z" fill="rgba(90,44,8,0.45)" />
+      {/* Left side flowing down */}
+      <path d="M77 50 Q74 60 76 72 Q78 80 83 76 Q80 66 80 54Z" fill="#2D1200" />
+      {/* Right side flowing down */}
+      <path d="M123 50 Q126 60 124 72 Q122 80 117 76 Q120 66 120 54Z" fill="#2D1200" />
 
       {/* Face */}
       <ellipse cx="90" cy="53" rx="5" ry="4.5" fill="white" />
@@ -111,7 +94,7 @@ export function PersonRetailer({ className = "" }: { className?: string }) {
   );
 }
 
-/* ── RAHUL — Distributor, phone tilted toward his face ── */
+/* ── RAHUL — Distributor, phone screen facing HIM (viewer sees back of phone) ── */
 export function PersonDistributor({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 180 250" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
@@ -154,21 +137,30 @@ export function PersonDistributor({ className = "" }: { className?: string }) {
       {/* Left arm — bent up, holding phone */}
       <path d="M30 118 Q14 125 10 148 Q8 164 24 168 L40 166 L48 138Z" fill="url(#rd-suit)" />
 
-      {/* ── Phone — rotated ~28° toward Rahul's head (upper-right) ── */}
+      {/* ── Phone BACK faces viewer — screen faces Rahul ── */}
       <g transform="rotate(-28, 20, 112)">
-        {/* Phone body */}
-        <rect x="2" y="82" width="36" height="60" rx="7" fill="#0A0F1C" stroke="rgba(0,200,255,0.85)" strokeWidth="1.8" />
-        {/* Screen */}
-        <rect x="5" y="86" width="30" height="50" rx="5" fill="#060C18" />
-        {/* Notch */}
-        <rect x="14" y="86" width="10" height="3" rx="1.5" fill="#0A0F1C" />
-        {/* Screen content */}
-        <rect x="8" y="92" width="14" height="3" rx="1.5" fill="rgba(0,200,255,0.6)" />
-        <rect x="8" y="98" width="9" height="2.5" rx="1.2" fill="rgba(255,255,255,0.25)" />
-        <rect x="8" y="108" width="6" height="20" rx="1.5" fill="rgba(0,200,255,0.3)" />
-        <rect x="16" y="103" width="6" height="25" rx="1.5" fill="rgba(0,200,255,0.55)" />
-        <rect x="24" y="106" width="6" height="22" rx="1.5" fill="#00F2FF" />
-        <rect x="32" y="112" width="4" height="16" rx="1" fill="rgba(0,200,255,0.4)" />
+        {/* Phone body — back panel */}
+        <rect x="2" y="82" width="36" height="60" rx="7" fill="#0D1117" stroke="rgba(0,200,255,0.5)" strokeWidth="1.4" />
+        {/* Back surface */}
+        <rect x="5" y="85" width="30" height="54" rx="5" fill="#131B2E" />
+        {/* Subtle sheen */}
+        <path d="M8 88 Q18 85 28 88" stroke="rgba(255,255,255,0.07)" strokeWidth="1" fill="none" strokeLinecap="round" />
+        {/* Camera module */}
+        <rect x="7" y="89" width="16" height="16" rx="3.5" fill="#0A0F1C" stroke="rgba(0,200,255,0.35)" strokeWidth="0.8" />
+        {/* Main camera lens */}
+        <circle cx="12" cy="95" r="5" fill="#060C18" stroke="rgba(0,200,255,0.55)" strokeWidth="1" />
+        <circle cx="12" cy="95" r="3.2" fill="#030507" />
+        <circle cx="10.5" cy="93.5" r="1.2" fill="rgba(255,255,255,0.38)" />
+        {/* Secondary lens */}
+        <circle cx="19" cy="95" r="3.5" fill="#060C18" stroke="rgba(0,200,255,0.35)" strokeWidth="0.8" />
+        <circle cx="19" cy="95" r="2" fill="#030507" />
+        <circle cx="18" cy="94" r="0.8" fill="rgba(255,255,255,0.3)" />
+        {/* Flash */}
+        <circle cx="13" cy="102" r="2.2" fill="rgba(255,228,100,0.38)" stroke="rgba(255,228,100,0.55)" strokeWidth="0.6" />
+        {/* Glow from screen on Rahul's side (light leaking) */}
+        <rect x="5" y="130" width="30" height="3" rx="1.5" fill="rgba(0,200,255,0.1)" />
+        {/* Brand emboss */}
+        <rect x="10" y="118" width="18" height="4" rx="2" fill="rgba(0,200,255,0.12)" />
         {/* Notification badge */}
         <circle cx="37" cy="84" r="5.5" fill="#FF9933" />
         <text x="35.5" y="86.2" fontSize="5.5" fill="white" fontFamily="sans-serif" fontWeight="bold">2</text>
@@ -206,7 +198,7 @@ export function PersonDistributor({ className = "" }: { className?: string }) {
   );
 }
 
-/* ── MEERA — Manufacturer, relaxing at beach, phone tilted toward her face ── */
+/* ── MEERA — Manufacturer, phone screen facing HER (viewer sees back of phone) ── */
 export function PersonManufacturer({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
@@ -222,10 +214,6 @@ export function PersonManufacturer({ className = "" }: { className?: string }) {
         <linearGradient id="mf-drink" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#34D399" stopOpacity="0.85" />
           <stop offset="100%" stopColor="#059669" stopOpacity="0.7" />
-        </linearGradient>
-        <linearGradient id="mf-phonescreen" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#FF9933" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#FF6B35" stopOpacity="0.4" />
         </linearGradient>
       </defs>
 
@@ -264,20 +252,30 @@ export function PersonManufacturer({ className = "" }: { className?: string }) {
       <path d="M88 98 Q66 104 50 92 Q36 80 40 66 L60 60 Q72 80 84 95Z" fill="url(#mf-outfit)" />
       <ellipse cx="42" cy="62" rx="11" ry="8" fill="#C47E4E" />
 
-      {/* ── Phone — rotated ~30° toward Meera's face (upper-right, toward x=140) ── */}
+      {/* ── Phone BACK faces viewer — screen faces Meera ── */}
       <g transform="rotate(30, 38, 58)">
-        <rect x="22" y="30" width="32" height="56" rx="7" fill="#0A0F1C" stroke="#FF9933" strokeWidth="1.8" />
-        <rect x="26" y="34" width="24" height="46" rx="5" fill="#070D18" />
-        <rect x="26" y="34" width="24" height="46" rx="5" fill="url(#mf-phonescreen)" />
-        {/* Notch */}
-        <rect x="34" y="34" width="8" height="3" rx="1.5" fill="#0A0F1C" />
-        {/* Screen content */}
-        <rect x="28" y="40" width="20" height="16" rx="3" fill="rgba(255,153,51,0.25)" />
-        <rect x="29" y="58" width="14" height="2.5" rx="1.2" fill="rgba(255,255,255,0.4)" />
-        <rect x="29" y="63" width="10" height="2" rx="1" fill="rgba(255,255,255,0.25)" />
-        <rect x="29" y="68" width="18" height="2" rx="1" fill="rgba(255,153,51,0.4)" />
-        <rect x="29" y="73" width="12" height="2" rx="1" fill="rgba(255,255,255,0.2)" />
-        <path d="M38 43 C38 41 40 40 41 42 C42 40 44 41 44 43 C44 45 41 47 41 47 C41 47 38 45 38 43Z" fill="#EF4444" opacity="0.8" />
+        {/* Phone body — back panel */}
+        <rect x="22" y="30" width="32" height="56" rx="7" fill="#0D1117" stroke="#FF9933" strokeWidth="1.5" />
+        {/* Back surface */}
+        <rect x="25" y="33" width="26" height="50" rx="5" fill="#1A1228" />
+        {/* Subtle sheen */}
+        <path d="M28 36 Q38 33 47 36" stroke="rgba(255,255,255,0.07)" strokeWidth="1" fill="none" strokeLinecap="round" />
+        {/* Camera module */}
+        <rect x="27" y="38" width="18" height="18" rx="4" fill="#0A0613" stroke="rgba(255,153,51,0.45)" strokeWidth="0.9" />
+        {/* Main camera lens */}
+        <circle cx="33" cy="45" r="5.5" fill="#060310" stroke="rgba(255,153,51,0.6)" strokeWidth="1" />
+        <circle cx="33" cy="45" r="3.5" fill="#030208" />
+        <circle cx="31.5" cy="43.5" r="1.3" fill="rgba(255,255,255,0.38)" />
+        {/* Secondary lens */}
+        <circle cx="41" cy="45" r="4" fill="#060310" stroke="rgba(255,153,51,0.4)" strokeWidth="0.8" />
+        <circle cx="41" cy="45" r="2.4" fill="#030208" />
+        <circle cx="40" cy="44" r="0.9" fill="rgba(255,255,255,0.3)" />
+        {/* Flash */}
+        <circle cx="37" cy="53" r="2.5" fill="rgba(255,228,100,0.35)" stroke="rgba(255,228,100,0.5)" strokeWidth="0.6" />
+        {/* Screen glow leaking around edge (screen is lit on her side) */}
+        <rect x="25" y="76" width="26" height="3" rx="1.5" fill="rgba(255,153,51,0.12)" />
+        {/* Brand mark */}
+        <rect x="29" y="62" width="16" height="4" rx="2" fill="rgba(255,153,51,0.14)" />
       </g>
 
       {/* Right arm — extended, holding drink */}
