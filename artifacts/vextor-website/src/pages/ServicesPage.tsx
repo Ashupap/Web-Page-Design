@@ -694,11 +694,11 @@ function InfraArchDiagram() {
 
       <Connector delay={1.2} />
 
-      {/* Oracle Cloud */}
+      {/* Cloud Backup */}
       <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl border border-[#a855f7]/25 w-full justify-center"
         style={{ background: "rgba(168,85,247,0.06)" }}>
         <Cloud size={13} className="text-[#a855f7]" />
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#a855f7" }}>Oracle Cloud Backup</span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#a855f7" }}>Cloud Backup</span>
         <span style={{ fontSize: 9, color: "#64748b", marginLeft: 4 }}>Daily · 99.99%</span>
       </div>
     </div>
@@ -967,11 +967,11 @@ export function ServicesPage() {
                 "Enterprise Power. Zero Bloat."
               </p>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                We build the backbone; you reap the rewards. Docker-based deployment, microservice architecture, automated backups on Oracle Cloud.
+                We build the backbone; you reap the rewards. Docker-based deployment, microservice architecture, automated backups on secure Cloud.
               </p>
               <div className="space-y-3">
                 {[
-                  { icon: Cloud,  label: "Oracle Cloud Backups",   desc: "Automated daily backups with 99.99% uptime" },
+                  { icon: Cloud,  label: "Cloud Backups",          desc: "Automated daily backups with 99.99% uptime" },
                   { icon: Layers, label: "Docker Microservices",   desc: "Horizontally scalable, independent services" },
                   { icon: Shield, label: "Bank-grade Security",    desc: "End-to-end encryption, SOC2 compliance ready" },
                 ].map((item) => (

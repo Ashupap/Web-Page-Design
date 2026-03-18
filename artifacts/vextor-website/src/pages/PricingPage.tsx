@@ -295,7 +295,7 @@ export function PricingPage() {
           },
           {
             icon: Cloud, color: "#FF9933", title: "Cloud Native",
-            desc: "No expensive physical servers. Oracle Cloud's infrastructure at a fraction of the traditional cost.",
+            desc: "No expensive physical servers. Cloud infrastructure at a fraction of the traditional cost.",
             saving: "90% infra savings",
             Anim: CloudCostAnim,
           },
@@ -479,7 +479,7 @@ export function PricingPage() {
               {[
                 { icon: "🔒", label: "SSL & Security",            desc: "Bank-grade TLS + OWASP hardening" },
                 { icon: "📱", label: "Mobile Responsive",          desc: "Looks perfect on every device" },
-                { icon: "☁️", label: "Oracle Cloud Hosting",       desc: "99.99% uptime SLA included" },
+                { icon: "☁️", label: "Cloud Hosting",              desc: "99.99% uptime SLA included" },
                 { icon: "🔄", label: "CI/CD Pipeline",             desc: "Auto-deploy on every commit" },
                 { icon: "📊", label: "Analytics Dashboard",         desc: "Realtime business metrics" },
                 { icon: "🤖", label: "n8n Workflow Engine",         desc: "Visual automation included" },
