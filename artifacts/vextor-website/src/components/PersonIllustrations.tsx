@@ -53,11 +53,11 @@ export function PersonRetailer({ className = "" }: { className?: string }) {
       {/* Webcam indicator light on top edge */}
       <circle cx="100" cy="113" r="1.8" fill="rgba(0,200,255,0.35)" />
 
-      {/* Arms reaching to keyboard */}
-      <path d="M60 165 Q46 169 40 180 L48 186 L64 174Z" fill="url(#pr-outfit)" />
-      <ellipse cx="39" cy="182" rx="8" ry="5" fill="#E8A870" />
-      <path d="M140 165 Q154 169 160 180 L152 186 L136 174Z" fill="url(#pr-outfit)" />
-      <ellipse cx="161" cy="182" rx="8" ry="5" fill="#E8A870" />
+      {/* Arms reaching to keyboard — hands rest ON the keys */}
+      <path d="M64 168 Q62 172 68 178 L76 183 L78 172Z" fill="url(#pr-outfit)" />
+      <ellipse cx="71" cy="181" rx="9" ry="4.5" fill="#E8A870" />
+      <path d="M136 168 Q138 172 132 178 L124 183 L122 172Z" fill="url(#pr-outfit)" />
+      <ellipse cx="129" cy="181" rx="9" ry="4.5" fill="#E8A870" />
 
       {/* Neck */}
       <rect x="93" y="68" width="14" height="15" rx="7" fill="#E8A870" />
@@ -164,7 +164,7 @@ export function PersonDistributor({ className = "" }: { className?: string }) {
       </g>
 
       {/* Hand holding phone */}
-      <ellipse cx="16" cy="146" rx="10" ry="7" fill="#C47E4E" />
+      <ellipse cx="46" cy="140" rx="10" ry="7" fill="#C47E4E" />
 
       {/* Neck */}
       <rect x="82" y="80" width="18" height="18" rx="9" fill="#C47E4E" />

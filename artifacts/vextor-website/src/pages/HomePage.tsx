@@ -209,6 +209,7 @@ function PersonCard({ popupIndex, floatDelay = 0, position = "center", size = "m
       transition={{ duration: 3.5 + floatDelay, repeat: Infinity, ease: "easeInOut", delay: floatDelay }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
+      style={{ zIndex: hovered ? 100 : 1 }}
     >
       {/* Person illustration */}
       <motion.div
