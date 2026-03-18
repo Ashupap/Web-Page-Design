@@ -138,32 +138,29 @@ export function PersonDistributor({ className = "" }: { className?: string }) {
       <path d="M30 118 Q14 125 10 148 Q8 164 24 168 L40 166 L48 138Z" fill="url(#rd-suit)" />
 
       {/* ── Phone BACK faces viewer — screen faces Rahul ── */}
-      <g transform="rotate(-28, 20, 112)">
+      <g transform="rotate(-28, 38, 112)">
         {/* Phone body — back panel */}
-        <rect x="2" y="82" width="36" height="60" rx="7" fill="#0D1117" stroke="rgba(0,200,255,0.5)" strokeWidth="1.4" />
+        <rect x="20" y="82" width="36" height="60" rx="7" fill="#0D1117" stroke="rgba(0,200,255,0.5)" strokeWidth="1.4" />
         {/* Back surface */}
-        <rect x="5" y="85" width="30" height="54" rx="5" fill="#131B2E" />
+        <rect x="23" y="85" width="30" height="54" rx="5" fill="#131B2E" />
         {/* Subtle sheen */}
-        <path d="M8 88 Q18 85 28 88" stroke="rgba(255,255,255,0.07)" strokeWidth="1" fill="none" strokeLinecap="round" />
+        <path d="M26 88 Q36 85 46 88" stroke="rgba(255,255,255,0.07)" strokeWidth="1" fill="none" strokeLinecap="round" />
         {/* Camera module */}
-        <rect x="7" y="89" width="16" height="16" rx="3.5" fill="#0A0F1C" stroke="rgba(0,200,255,0.35)" strokeWidth="0.8" />
+        <rect x="25" y="89" width="16" height="16" rx="3.5" fill="#0A0F1C" stroke="rgba(0,200,255,0.35)" strokeWidth="0.8" />
         {/* Main camera lens */}
-        <circle cx="12" cy="95" r="5" fill="#060C18" stroke="rgba(0,200,255,0.55)" strokeWidth="1" />
-        <circle cx="12" cy="95" r="3.2" fill="#030507" />
-        <circle cx="10.5" cy="93.5" r="1.2" fill="rgba(255,255,255,0.38)" />
+        <circle cx="30" cy="95" r="5" fill="#060C18" stroke="rgba(0,200,255,0.55)" strokeWidth="1" />
+        <circle cx="30" cy="95" r="3.2" fill="#030507" />
+        <circle cx="28.5" cy="93.5" r="1.2" fill="rgba(255,255,255,0.38)" />
         {/* Secondary lens */}
-        <circle cx="19" cy="95" r="3.5" fill="#060C18" stroke="rgba(0,200,255,0.35)" strokeWidth="0.8" />
-        <circle cx="19" cy="95" r="2" fill="#030507" />
-        <circle cx="18" cy="94" r="0.8" fill="rgba(255,255,255,0.3)" />
+        <circle cx="37" cy="95" r="3.5" fill="#060C18" stroke="rgba(0,200,255,0.35)" strokeWidth="0.8" />
+        <circle cx="37" cy="95" r="2" fill="#030507" />
+        <circle cx="36" cy="94" r="0.8" fill="rgba(255,255,255,0.3)" />
         {/* Flash */}
-        <circle cx="13" cy="102" r="2.2" fill="rgba(255,228,100,0.38)" stroke="rgba(255,228,100,0.55)" strokeWidth="0.6" />
+        <circle cx="31" cy="102" r="2.2" fill="rgba(255,228,100,0.38)" stroke="rgba(255,228,100,0.55)" strokeWidth="0.6" />
         {/* Glow from screen on Rahul's side (light leaking) */}
-        <rect x="5" y="130" width="30" height="3" rx="1.5" fill="rgba(0,200,255,0.1)" />
+        <rect x="23" y="130" width="30" height="3" rx="1.5" fill="rgba(0,200,255,0.1)" />
         {/* Brand emboss */}
-        <rect x="10" y="118" width="18" height="4" rx="2" fill="rgba(0,200,255,0.12)" />
-        {/* Notification badge */}
-        <circle cx="37" cy="84" r="5.5" fill="#FF9933" />
-        <text x="35.5" y="86.2" fontSize="5.5" fill="white" fontFamily="sans-serif" fontWeight="bold">2</text>
+        <rect x="28" y="118" width="18" height="4" rx="2" fill="rgba(0,200,255,0.12)" />
       </g>
 
       {/* Hand holding phone */}
