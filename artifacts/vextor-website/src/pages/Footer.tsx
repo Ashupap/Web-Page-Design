@@ -3,6 +3,14 @@ import { Linkedin, Instagram, Mail, Phone, MapPin, MessageCircle, Youtube, Arrow
 
 const WHATSAPP = "919999999999";
 
+const IndiaFlag = ({ size = 16 }: { size?: number }) => (
+  <span style={{ display: "inline-flex", flexDirection: "column", width: size, height: Math.round(size * 0.67), borderRadius: 2, overflow: "hidden", flexShrink: 0, verticalAlign: "middle" }}>
+    <span style={{ flex: 1, background: "#FF9933", display: "block" }} />
+    <span style={{ flex: 1, background: "#ffffff", display: "block" }} />
+    <span style={{ flex: 1, background: "#138808", display: "block" }} />
+  </span>
+);
+
 /* ─────────────────────────────────────────────────────────
    Pre-footer CTA Strip
 ───────────────────────────────────────────────────────── */
@@ -27,7 +35,7 @@ function PreFooterCTA() {
           viewport={{ once: true }}
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FF9933]/40 text-[#FF9933] text-xs font-medium mb-5"
           style={{ background: "rgba(255,153,51,0.08)" }}>
-          🇮🇳 Start Your Digital Journey Today
+          <IndiaFlag size={14} /> Start Your Digital Journey Today
         </motion.div>
 
         <motion.h2
@@ -110,7 +118,7 @@ export function Footer() {
               {/* Made in India badge */}
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg mb-5"
                 style={{ background: "rgba(255,153,51,0.08)", border: "1px solid rgba(255,153,51,0.2)" }}>
-                <span style={{ fontSize: 12 }}>🇮🇳</span>
+                <IndiaFlag size={14} />
                 <span className="text-[10px] font-semibold text-[#FF9933]">Proudly Made in India</span>
               </div>
 
@@ -261,7 +269,7 @@ export function Footer() {
 
             {/* Centre: India flag */}
             <div className="flex items-center gap-1.5">
-              <span style={{ fontSize: 14 }}>🇮🇳</span>
+              <IndiaFlag size={14} />
               <span className="text-[10px] text-muted-foreground/50">Building Vikshit Bharat 2047</span>
             </div>
 

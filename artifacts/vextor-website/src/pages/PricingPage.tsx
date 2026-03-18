@@ -3,6 +3,14 @@ import { useRef, useState, useEffect } from "react";
 import { Zap, Cloud, TrendingDown, CheckCircle } from "lucide-react";
 import { ScrollReveal } from "../components/ScrollReveal";
 
+const IndiaFlag = ({ size = 16 }: { size?: number }) => (
+  <span style={{ display: "inline-flex", flexDirection: "column", width: size, height: Math.round(size * 0.67), borderRadius: 2, overflow: "hidden", flexShrink: 0, verticalAlign: "middle" }}>
+    <span style={{ flex: 1, background: "#FF9933", display: "block" }} />
+    <span style={{ flex: 1, background: "#ffffff", display: "block" }} />
+    <span style={{ flex: 1, background: "#138808", display: "block" }} />
+  </span>
+);
+
 /* ─────────────────────────────────────────────────────────
    Countdown to Independence Day 2047
 ───────────────────────────────────────────────────────── */
@@ -543,7 +551,7 @@ export function PricingPage() {
               viewport={{ once: true }}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#FF9933]/50 text-[#FF9933] text-sm font-medium mb-6"
               style={{ background: "rgba(255,153,51,0.1)" }}>
-              🇮🇳 Vikshit Bharat 2047
+              <IndiaFlag size={14} /> Vikshit Bharat 2047
             </motion.div>
 
             <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
