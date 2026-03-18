@@ -1,7 +1,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
-  Settings, Smartphone, Cpu, Database, Shield, Cloud, Layers, ChevronRight,
+  Settings, Smartphone, Cpu, Database, Shield, Cloud, Layers, ChevronRight, Server, Globe,
 } from "lucide-react";
 import { ScrollReveal } from "../components/ScrollReveal";
 
@@ -330,58 +330,354 @@ function N8NWorkflowDiagram({ wf }: { wf: WorkflowDef }) {
 }
 
 /* ─────────────────────────────────────────────────────────
-   Older diagram (kept for non-automation services)
+   Phone screen — Website preview
 ───────────────────────────────────────────────────────── */
-function AnimatedFlowChart() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const nodes = [
-    { x: 50,  y: 30,  label: "Form Input", icon: "📝" },
-    { x: 200, y: 80,  label: "CRM",        icon: "👥" },
-    { x: 350, y: 30,  label: "Invoicing",  icon: "📄" },
-    { x: 200, y: 160, label: "Inventory",  icon: "📦" },
-    { x: 350, y: 130, label: "HR Mgmt",    icon: "🏢" },
-    { x: 500, y: 80,  label: "Insights",   icon: "📊" },
-  ];
-  const paths = [
-    "M 90 40 Q 145 60 190 80",
-    "M 90 30 Q 220 30 340 30",
-    "M 230 90 Q 230 130 220 155",
-    "M 390 40 Q 445 55 490 80",
-    "M 390 140 Q 445 120 490 90",
-    "M 230 170 Q 380 170 395 145",
+function PhoneWebsite() {
+  return (
+    <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
+      transition={{ duration: 0.28 }} style={{ height: "100%", overflow: "hidden" }}>
+      {/* Nav bar */}
+      <div style={{ background: "rgba(10,25,47,0.97)", padding: "6px 10px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(0,242,255,0.12)" }}>
+        <span style={{ color: "#00F2FF", fontWeight: 800, fontSize: 9, letterSpacing: 1 }}>VexBiz</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {[0,1,2].map(i => <div key={i} style={{ width: 13, height: 1.5, background: "rgba(255,255,255,0.35)", borderRadius: 1 }} />)}
+        </div>
+      </div>
+      {/* Hero */}
+      <div style={{ background: "linear-gradient(135deg, #0a192f 0%, #1a3a6f 100%)", padding: "14px 12px 12px" }}>
+        <div style={{ fontSize: 10, fontWeight: 800, color: "#fff", lineHeight: 1.3 }}>Your Business,</div>
+        <div style={{ fontSize: 10, fontWeight: 800, color: "#00F2FF", lineHeight: 1.3, marginBottom: 8 }}>Supercharged.</div>
+        <div style={{ fontSize: 7, color: "rgba(255,255,255,0.55)", marginBottom: 10, lineHeight: 1.5 }}>Enterprise-grade software for India's growing SMEs</div>
+        <div style={{ display: "inline-flex", background: "#00F2FF", color: "#000", fontSize: 7.5, fontWeight: 700, padding: "4px 12px", borderRadius: 20, gap: 4 }}>
+          <span>Get Started</span><span>→</span>
+        </div>
+      </div>
+      {/* Cards */}
+      <div style={{ padding: "8px 10px", display: "flex", flexDirection: "column", gap: 5 }}>
+        <div style={{ fontSize: 7, color: "rgba(255,255,255,0.35)", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>Services</div>
+        {[
+          { title: "Workflow Automation", sub: "n8n-powered pipelines", clr: "#00F2FF" },
+          { title: "Mobile & Web Apps", sub: "Flutter · Next.js 15", clr: "#FF9933" },
+          { title: "Cloud Infrastructure", sub: "Oracle Cloud · Docker", clr: "#a855f7" },
+        ].map((s, i) => (
+          <motion.div key={i} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.12 }}
+            style={{ background: "rgba(255,255,255,0.03)", borderRadius: 8, padding: "7px 8px", border: `1px solid ${s.clr}22`, display: "flex", alignItems: "center", gap: 7 }}>
+            <div style={{ width: 3.5, height: 30, borderRadius: 2, background: s.clr, flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: 8, fontWeight: 700, color: "#e2e8f0" }}>{s.title}</div>
+              <div style={{ fontSize: 6, color: "rgba(255,255,255,0.35)", marginTop: 1 }}>{s.sub}</div>
+            </div>
+            <div style={{ marginLeft: "auto", fontSize: 8, color: s.clr }}>›</div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   Phone screen — Sales Dashboard
+───────────────────────────────────────────────────────── */
+function PhoneDashboard() {
+  const bars = [32, 58, 41, 76, 63, 92, 74];
+  return (
+    <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
+      transition={{ duration: 0.28 }} style={{ height: "100%", overflow: "hidden" }}>
+      {/* Header */}
+      <div style={{ padding: "6px 11px 4px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <div style={{ fontSize: 9.5, fontWeight: 700, color: "#e2e8f0" }}>Sales Dashboard</div>
+          <div style={{ fontSize: 6.5, color: "rgba(255,255,255,0.38)" }}>March 2026 · Live</div>
+        </div>
+        <div style={{ width: 26, height: 26, borderRadius: "50%", background: "linear-gradient(135deg, #00F2FF, #0a4f6e)", border: "1.5px solid rgba(0,242,255,0.35)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(255,255,255,0.8)" }} />
+        </div>
+      </div>
+      {/* KPI cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 4, padding: "2px 10px 6px" }}>
+        {[
+          { val: "₹2.4L", lbl: "Revenue",  chg: "+18%", clr: "#00F2FF" },
+          { val: "142",   lbl: "Orders",   chg: "+12%", clr: "#FF9933" },
+          { val: "94%",   lbl: "Fulfilment", chg: "+3%", clr: "#22c55e" },
+        ].map(k => (
+          <div key={k.lbl} style={{ background: `${k.clr}0D`, border: `1px solid ${k.clr}22`, borderRadius: 9, padding: "5px 5px" }}>
+            <div style={{ fontSize: 9, fontWeight: 800, color: k.clr, lineHeight: 1 }}>{k.val}</div>
+            <div style={{ fontSize: 6, color: "rgba(255,255,255,0.42)", marginTop: 2 }}>{k.lbl}</div>
+            <div style={{ fontSize: 6, color: "#22c55e", marginTop: 1 }}>{k.chg}</div>
+          </div>
+        ))}
+      </div>
+      {/* Bar chart */}
+      <div style={{ margin: "0 10px 6px", padding: "6px 8px", background: "rgba(255,255,255,0.025)", borderRadius: 9, border: "1px solid rgba(255,255,255,0.05)" }}>
+        <div style={{ fontSize: 6.5, color: "rgba(255,255,255,0.38)", marginBottom: 5 }}>Weekly Revenue</div>
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 3, height: 38 }}>
+          {bars.map((h, i) => (
+            <motion.div key={i} style={{ flex: 1, background: i === 5 ? "#00F2FF" : "rgba(0,242,255,0.2)", borderRadius: "2px 2px 0 0" }}
+              initial={{ height: 0 }} animate={{ height: `${h}%` }}
+              transition={{ delay: i * 0.07, duration: 0.45, ease: "easeOut" }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", marginTop: 2 }}>
+          {["M","T","W","T","F","S","S"].map((d, i) => (
+            <div key={i} style={{ flex: 1, textAlign: "center", fontSize: 5.5, color: "rgba(255,255,255,0.25)" }}>{d}</div>
+          ))}
+        </div>
+      </div>
+      {/* Orders list */}
+      <div style={{ padding: "0 10px" }}>
+        <div style={{ fontSize: 6.5, color: "rgba(255,255,255,0.38)", marginBottom: 4 }}>Recent Orders</div>
+        {[
+          { id: "#1241", amt: "₹3,200", status: "Delivered",  sc: "#22c55e" },
+          { id: "#1240", amt: "₹1,800", status: "In Transit", sc: "#f97316" },
+          { id: "#1239", amt: "₹5,400", status: "Processing", sc: "#94a3b8" },
+        ].map((o, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 7px", background: "rgba(255,255,255,0.03)", borderRadius: 7, marginBottom: 3, border: "1px solid rgba(255,255,255,0.04)" }}>
+            <span style={{ fontSize: 7, color: "#e2e8f0" }}>{o.id}</span>
+            <span style={{ fontSize: 7.5, fontWeight: 700, color: "#00F2FF" }}>{o.amt}</span>
+            <span style={{ fontSize: 6, color: o.sc }}>{o.status}</span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   Phone screen — Monthly Production Report
+───────────────────────────────────────────────────────── */
+function PhoneReport() {
+  const lines = [
+    { name: "Electronics", pct: 78, clr: "#00F2FF", val: "6,248" },
+    { name: "Textiles",    pct: 65, clr: "#FF9933", val: "5,486" },
+    { name: "FMCG",        pct: 91, clr: "#22c55e", val: "7,652" },
   ];
   return (
-    <div ref={ref} className="relative w-full overflow-x-auto">
-      <svg viewBox="0 0 600 210" className="w-full min-w-[400px]">
-        <defs>
-          <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#00F2FF" />
-          </marker>
-          <filter id="nodeGlow">
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        </defs>
-        {paths.map((d, i) => (
-          <motion.path key={i} d={d} stroke="#00F2FF" strokeWidth="1.5" fill="none"
-            strokeDasharray="200"
-            strokeDashoffset={isInView ? 0 : 200}
-            markerEnd="url(#arrow)" opacity="0.6"
-            style={{ transition: `stroke-dashoffset 0.6s ease ${i * 0.2}s` }} />
+    <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}
+      transition={{ duration: 0.28 }} style={{ height: "100%", overflow: "hidden" }}>
+      {/* Header */}
+      <div style={{ padding: "6px 11px 4px" }}>
+        <div style={{ fontSize: 9.5, fontWeight: 700, color: "#e2e8f0" }}>Production Report</div>
+        <div style={{ fontSize: 6.5, color: "rgba(255,255,255,0.38)" }}>March 2026 · Auto-generated</div>
+      </div>
+      {/* Summary KPIs */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 4, padding: "2px 10px 7px" }}>
+        {[
+          { val: "19,386", lbl: "Total Units",  clr: "#00F2FF" },
+          { val: "78%",    lbl: "Efficiency",   clr: "#FF9933" },
+          { val: "0.2%",   lbl: "Defect Rate",  clr: "#22c55e" },
+        ].map(m => (
+          <div key={m.lbl} style={{ background: `${m.clr}0A`, border: `1px solid ${m.clr}22`, borderRadius: 9, padding: "5px 4px", textAlign: "center" }}>
+            <div style={{ fontSize: 8.5, fontWeight: 800, color: m.clr, lineHeight: 1 }}>{m.val}</div>
+            <div style={{ fontSize: 5.5, color: "rgba(255,255,255,0.38)", marginTop: 2, lineHeight: 1.3 }}>{m.lbl}</div>
+          </div>
         ))}
-        {nodes.map((node, i) => (
-          <motion.g key={i} initial={{ opacity: 0, scale: 0 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: i * 0.15 + 0.3, type: "spring" }}>
-            <circle cx={node.x + 10} cy={node.y + 10} r="28"
-              fill="rgba(0,242,255,0.08)" stroke="#00F2FF" strokeWidth="1" filter="url(#nodeGlow)" />
-            <text x={node.x + 10} y={node.y + 14} textAnchor="middle" fontSize="14">{node.icon}</text>
-            <text x={node.x + 10} y={node.y + 38} textAnchor="middle" fontSize="8"
-              fill="#00F2FF" fontFamily="Inter, sans-serif">{node.label}</text>
-          </motion.g>
+      </div>
+      {/* Production lines */}
+      <div style={{ padding: "0 10px" }}>
+        <div style={{ fontSize: 6.5, color: "rgba(255,255,255,0.38)", marginBottom: 6 }}>Production Lines</div>
+        {lines.map((l, i) => (
+          <div key={i} style={{ marginBottom: 9 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+              <span style={{ fontSize: 7.5, color: "#e2e8f0", fontWeight: 600 }}>{l.name}</span>
+              <span style={{ fontSize: 7, color: l.clr, fontWeight: 700 }}>{l.val} units</span>
+            </div>
+            <div style={{ background: "rgba(255,255,255,0.07)", borderRadius: 4, height: 6, overflow: "hidden" }}>
+              <motion.div style={{ height: "100%", background: l.clr, borderRadius: 4 }}
+                initial={{ width: 0 }} animate={{ width: `${l.pct}%` }}
+                transition={{ delay: i * 0.18, duration: 0.7, ease: "easeOut" }} />
+            </div>
+            <div style={{ fontSize: 5.5, color: "rgba(255,255,255,0.28)", marginTop: 1.5 }}>{l.pct}% of monthly capacity</div>
+          </div>
         ))}
-      </svg>
+      </div>
+      {/* Footer */}
+      <div style={{ margin: "0 10px", padding: "4px 8px", background: "rgba(0,242,255,0.05)", borderRadius: 7, border: "1px solid rgba(0,242,255,0.15)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontSize: 6, color: "rgba(255,255,255,0.35)" }}>Powered by Vextor ERP</span>
+        <span style={{ fontSize: 6.5, color: "#00F2FF", fontWeight: 700 }}>↓ PDF</span>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   Mobile showcase — auto-rotating 3-screen phone mockup
+───────────────────────────────────────────────────────── */
+function MobileShowcase() {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setActive(a => (a + 1) % 3), 3800);
+    return () => clearInterval(t);
+  }, []);
+
+  const tabs = [
+    { label: "Website",   color: "#00F2FF" },
+    { label: "Dashboard", color: "#FF9933" },
+    { label: "Report",    color: "#22c55e" },
+  ];
+
+  return (
+    <div className="flex flex-col items-center gap-5">
+      {/* Phone frame */}
+      <div className="relative" style={{ width: 196, height: 418 }}>
+        {/* Shell */}
+        <div className="absolute inset-0" style={{
+          borderRadius: 40,
+          background: "linear-gradient(160deg, #1e293b 0%, #0c1a2e 100%)",
+          border: "2.5px solid #2d4060",
+          boxShadow: "0 28px 70px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 0 1px rgba(0,242,255,0.08)",
+        }}>
+          {/* Screen glass */}
+          <div className="absolute overflow-hidden" style={{ inset: 3, borderRadius: 37, background: "#040c1e" }}>
+            {/* Dynamic Island */}
+            <div className="absolute top-0 left-1/2 z-20" style={{
+              transform: "translateX(-50%)", width: 70, height: 22,
+              background: "#000", borderRadius: "0 0 14px 14px",
+            }} />
+            {/* Status bar */}
+            <div className="absolute top-0 left-0 right-0 z-10 flex justify-between pt-1 px-5"
+              style={{ fontSize: 7, color: "rgba(255,255,255,0.42)", pointerEvents: "none" }}>
+              <span>9:41</span>
+              <span style={{ letterSpacing: 1 }}>●●● ▌</span>
+            </div>
+            {/* Content area */}
+            <div className="absolute inset-0" style={{ paddingTop: 26 }}>
+              <AnimatePresence mode="wait">
+                {active === 0 && <PhoneWebsite key="web" />}
+                {active === 1 && <PhoneDashboard key="dash" />}
+                {active === 2 && <PhoneReport key="report" />}
+              </AnimatePresence>
+            </div>
+          </div>
+          {/* Power button */}
+          <div style={{ position: "absolute", right: -3, top: 88, width: 3, height: 28, background: "#3a5070", borderRadius: "0 2px 2px 0" }} />
+          {/* Volume buttons */}
+          <div style={{ position: "absolute", left: -3, top: 78, width: 3, height: 22, background: "#3a5070", borderRadius: "2px 0 0 2px" }} />
+          <div style={{ position: "absolute", left: -3, top: 106, width: 3, height: 22, background: "#3a5070", borderRadius: "2px 0 0 2px" }} />
+          {/* Home indicator */}
+          <div style={{ position: "absolute", bottom: 7, left: "50%", transform: "translateX(-50%)", width: 74, height: 3, background: "rgba(255,255,255,0.25)", borderRadius: 2 }} />
+        </div>
+        {/* Glow base */}
+        <div style={{ position: "absolute", bottom: -18, left: "50%", transform: "translateX(-50%)", width: 120, height: 24, background: "rgba(0,242,255,0.1)", borderRadius: "50%", filter: "blur(16px)" }} />
+      </div>
+
+      {/* Tab selector */}
+      <div className="flex gap-2">
+        {tabs.map((t, i) => (
+          <button key={t.label} onClick={() => setActive(i)}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full transition-all duration-300"
+            style={{
+              fontSize: 10,
+              fontWeight: active === i ? 600 : 400,
+              background: active === i ? `${t.color}15` : "transparent",
+              border: `1px solid ${active === i ? t.color + "55" : "rgba(255,255,255,0.08)"}`,
+              color: active === i ? t.color : "#64748b",
+              cursor: "pointer",
+            }}>
+            <span style={{ width: 5, height: 5, borderRadius: "50%", background: active === i ? t.color : "#475569", display: "inline-block", flexShrink: 0 }} />
+            {t.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   Infrastructure architecture diagram
+───────────────────────────────────────────────────────── */
+function InfraArchDiagram() {
+  const svcs = [
+    { Icon: Shield,   name: "Auth",      sub: "Service",   clr: "#22c55e" },
+    { Icon: Database, name: "Orders",    sub: "API",       clr: "#00F2FF" },
+    { Icon: Layers,   name: "Notify",    sub: "Service",   clr: "#f97316" },
+    { Icon: Server,   name: "Analytics", sub: "Engine",    clr: "#a855f7" },
+  ];
+
+  function Connector({ delay = 0 }: { delay?: number }) {
+    return (
+      <div className="flex justify-center py-0.5">
+        <div className="relative" style={{ width: 1, height: 24, background: "rgba(0,242,255,0.12)" }}>
+          <motion.div style={{ position: "absolute", width: 7, height: 7, borderRadius: "50%", background: "#00F2FF", left: -3, top: 0 }}
+            animate={{ y: [0, 20], opacity: [1, 0] }}
+            transition={{ duration: 0.7, repeat: Infinity, ease: "easeIn", delay, repeatDelay: 1.2 }} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-0 w-full">
+      {/* Client layer */}
+      <div className="flex gap-3 justify-center">
+        {[
+          { label: "Web App",  Icon: Globe,      clr: "#00F2FF" },
+          { label: "Mobile",   Icon: Smartphone, clr: "#FF9933" },
+        ].map(c => (
+          <div key={c.label} className="flex items-center gap-2 px-3.5 py-2 rounded-xl glass border border-white/10">
+            <c.Icon size={13} style={{ color: c.clr }} />
+            <span style={{ fontSize: 11, color: "#cbd5e1", fontWeight: 500 }}>{c.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <Connector delay={0} />
+
+      {/* API Gateway */}
+      <div className="flex items-center gap-2.5 px-5 py-2 rounded-xl border border-[#f97316]/30"
+        style={{ background: "rgba(249,115,22,0.07)" }}>
+        <motion.div className="w-2 h-2 rounded-full" style={{ background: "#f97316" }}
+          animate={{ opacity: [1, 0.35, 1] }} transition={{ duration: 1.6, repeat: Infinity }} />
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#f97316" }}>API Gateway</span>
+        <span style={{ fontSize: 9, color: "#64748b" }}>· rate limited</span>
+      </div>
+
+      <Connector delay={0.4} />
+
+      {/* Microservices grid */}
+      <div className="grid grid-cols-2 gap-2 w-full">
+        {svcs.map((s, i) => (
+          <motion.div key={s.name}
+            initial={{ opacity: 0, scale: 0.88 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.08 }}
+            className="flex items-center gap-2 p-2 rounded-xl"
+            style={{ background: `${s.clr}0C`, border: `1px solid ${s.clr}28` }}>
+            <s.Icon size={12} style={{ color: s.clr, flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#e2e8f0", lineHeight: 1.2 }}>{s.name}</div>
+              <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)" }}>{s.sub}</div>
+            </div>
+            <motion.div className="ml-auto w-1.5 h-1.5 rounded-full" style={{ background: s.clr }}
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.4 + i * 0.3, repeat: Infinity }} />
+          </motion.div>
+        ))}
+      </div>
+
+      <Connector delay={0.8} />
+
+      {/* DB Cluster */}
+      <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl border border-[#00F2FF]/25 w-full justify-center"
+        style={{ background: "rgba(0,242,255,0.06)" }}>
+        <Database size={13} className="text-[#00F2FF]" />
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#00F2FF" }}>PostgreSQL Cluster</span>
+        <motion.span style={{ fontSize: 9, color: "#22c55e", marginLeft: 6 }}
+          animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}>
+          ● 3 replicas
+        </motion.span>
+      </div>
+
+      <Connector delay={1.2} />
+
+      {/* Oracle Cloud */}
+      <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl border border-[#a855f7]/25 w-full justify-center"
+        style={{ background: "rgba(168,85,247,0.06)" }}>
+        <Cloud size={13} className="text-[#a855f7]" />
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#a855f7" }}>Oracle Cloud Backup</span>
+        <span style={{ fontSize: 9, color: "#64748b", marginLeft: 4 }}>Daily · 99.99%</span>
+      </div>
     </div>
   );
 }
@@ -413,7 +709,7 @@ export function ServicesPage() {
 
       {/* ── Service 1: Workflow Automation ───────────────── */}
       <div className="mb-24">
-        <div className="grid md:grid-cols-2 gap-10 items-start">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
 
           {/* Left: selectable workflow list */}
           <div>
@@ -496,7 +792,7 @@ export function ServicesPage() {
 
           {/* Right: N8N workflow diagram */}
           <ScrollReveal delay={0.15}>
-            <div className="glass rounded-2xl p-5 border border-[#00F2FF]/20 sticky top-24">
+            <div className="glass rounded-2xl p-5 border border-[#00F2FF]/20">
               {/* Card header */}
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
@@ -564,71 +860,47 @@ export function ServicesPage() {
       <div className="mb-24">
         <ScrollReveal>
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Phone mockup */}
+            {/* Phone mockup — 3-screen showcase */}
             <div className="order-2 md:order-1 flex justify-center">
-              <motion.div
-                className="relative"
-                animate={{ y: [-8, 8, -8] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <div className="w-52 h-96 rounded-3xl border-4 border-foreground/20 glass overflow-hidden shadow-2xl relative">
-                  <div className="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-4 rounded-full bg-foreground/30" />
-                  <div className="mt-8 p-3 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="text-xs font-bold text-[#00F2FF]" style={{ fontFamily: "'Sora', sans-serif" }}>Vextor Admin</div>
-                      <div className="w-6 h-6 rounded-full bg-[#00F2FF]/20 border border-[#00F2FF]/30" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[{ v: "₹2.4L", l: "Revenue", c: "#00F2FF" }, { v: "142", l: "Orders", c: "#FF9933" }].map((kpi) => (
-                        <div key={kpi.l} className="rounded-xl p-2 border border-white/10" style={{ background: `${kpi.c}10` }}>
-                          <div className="font-bold text-sm" style={{ color: kpi.c }}>{kpi.v}</div>
-                          <div className="text-[9px] text-muted-foreground">{kpi.l}</div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="rounded-xl p-3 glass border border-white/5">
-                      <div className="text-[9px] text-muted-foreground mb-2">Weekly Sales</div>
-                      <div className="flex items-end gap-1 h-12">
-                        {[30, 55, 40, 80, 60, 90, 70].map((h, i) => (
-                          <motion.div key={i} className="flex-1 rounded-sm"
-                            style={{ background: i === 5 ? "#00F2FF" : "rgba(0,242,255,0.25)" }}
-                            initial={{ height: 0 }}
-                            whileInView={{ height: `${h}%` }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 + 0.5 }} />
-                        ))}
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                      {["Order #1241 — ₹3,200", "Order #1240 — ₹1,800", "Order #1239 — ₹5,400"].map((o, i) => (
-                        <div key={i} className="text-[9px] flex justify-between items-center p-1.5 rounded-lg bg-white/5">
-                          <span className="text-muted-foreground">{o}</span>
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#00F2FF]" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-[#00F2FF]/20 blur-xl rounded-full" />
-              </motion.div>
+              <MobileShowcase />
             </div>
 
             <div className="order-1 md:order-2">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-5">
                 <div className="w-12 h-12 rounded-xl bg-[#FF9933]/10 border border-[#FF9933]/30 flex items-center justify-center">
-                  <Cpu size={24} className="text-[#FF9933]" />
+                  <Smartphone size={24} className="text-[#FF9933]" />
                 </div>
                 <div>
                   <div className="text-xs text-[#FF9933] font-medium uppercase tracking-widest">Cross-Platform</div>
                   <h3 className="text-2xl font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>Mobile & Web</h3>
                 </div>
               </div>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                "Cross-Platform Performance" — Flutter-based Android/iOS apps & Next.js 15 Web Applications that work flawlessly on every device.
+              <p className="text-muted-foreground mb-5 text-sm leading-relaxed">
+                Flutter-powered Android & iOS apps plus Next.js 15 web — your business in every pocket, on every screen. The mockup on the left shows real screens we deliver.
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-3 mb-5">
                 {[
-                  { label: "Flutter Android/iOS", desc: "One codebase, two platforms" },
+                  { clr: "#00F2FF", label: "Website",   desc: "Branded storefront with CMS, SEO-ready and mobile-first" },
+                  { clr: "#FF9933", label: "Dashboard",  desc: "Live sales KPIs, charts, orders — all in one glance" },
+                  { clr: "#22c55e", label: "Reports",    desc: "Auto-generated monthly production & finance PDFs" },
+                ].map((s, i) => (
+                  <motion.div key={s.label}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-start gap-3 p-3 rounded-xl glass border border-white/[0.06] hover:border-white/10 transition-colors">
+                    <div className="w-1 h-10 rounded-full shrink-0 mt-0.5" style={{ background: s.clr }} />
+                    <div>
+                      <div className="text-sm font-semibold mb-0.5" style={{ color: s.clr }}>{s.label}</div>
+                      <div className="text-xs text-muted-foreground leading-snug">{s.desc}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                {[
+                  { label: "Flutter Android/iOS", desc: "One codebase, both stores" },
                   { label: "Next.js 15 Web",      desc: "React Server Components" },
                   { label: "Offline First",        desc: "Works without internet" },
                   { label: "Push Notifications",   desc: "Instant business alerts" },
@@ -637,10 +909,10 @@ export function ServicesPage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="p-3 rounded-xl glass border border-[#FF9933]/10 hover:border-[#FF9933]/30 transition-colors">
+                    transition={{ delay: i * 0.08 }}
+                    className="p-3 rounded-xl glass border border-[#FF9933]/10 hover:border-[#FF9933]/28 transition-colors">
                     <div className="text-xs font-semibold mb-1">{item.label}</div>
-                    <div className="text-xs text-muted-foreground">{item.desc}</div>
+                    <div className="text-[11px] text-muted-foreground">{item.desc}</div>
                   </motion.div>
                 ))}
               </div>
@@ -693,39 +965,17 @@ export function ServicesPage() {
               </div>
             </div>
 
-            {/* Animated server visualization */}
-            <div className="glass rounded-2xl p-6 border border-[#00F2FF]/10">
-              <div className="text-xs text-[#00F2FF] font-medium mb-4 uppercase tracking-widest">System Status</div>
-              <div className="space-y-3">
-                {[
-                  { name: "API Gateway", uptime: "99.99%", load: 42 },
-                  { name: "Auth Service", uptime: "100%",  load: 18 },
-                  { name: "DB Cluster",   uptime: "99.97%", load: 65 },
-                  { name: "CDN Edge",     uptime: "99.99%", load: 28 },
-                ].map((service, i) => (
-                  <div key={service.name} className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span className="font-medium">{service.name}</span>
-                      <span className="text-[#00F2FF]">{service.uptime}</span>
-                    </div>
-                    <div className="w-full bg-foreground/10 rounded-full h-1.5 overflow-hidden">
-                      <motion.div
-                        className="h-full rounded-full"
-                        style={{ background: service.load > 60 ? "#FF9933" : "#00F2FF" }}
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${service.load}%` }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 + 0.3, duration: 0.8 }} />
-                    </div>
-                  </div>
-                ))}
+            {/* Live architecture diagram */}
+            <div className="glass rounded-2xl p-5 border border-[#00F2FF]/15">
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-xs text-[#00F2FF] font-medium uppercase tracking-widest">Live Architecture</span>
+                <div className="flex items-center gap-1.5">
+                  <motion.div className="w-1.5 h-1.5 rounded-full bg-[#22c55e]"
+                    animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.4, repeat: Infinity }} />
+                  <span className="text-[10px] text-muted-foreground">All systems operational</span>
+                </div>
               </div>
-              <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
-                <motion.div className="w-2 h-2 rounded-full bg-[#00F2FF]"
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }} />
-                <span className="text-xs text-[#00F2FF]">All systems operational</span>
-              </div>
+              <InfraArchDiagram />
             </div>
           </div>
         </div>
