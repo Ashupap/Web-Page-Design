@@ -1,23 +1,38 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Switch, Route } from "wouter";
 import { Navbar } from "@/components/Navbar";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { HomePage } from "@/pages/HomePage";
-import { ServicesPage } from "@/pages/ServicesPage";
-import { PricingPage } from "@/pages/PricingPage";
-import { ContactPage } from "@/pages/ContactPage";
 import { Footer } from "@/pages/Footer";
-import { AboutPage } from "@/pages/AboutPage";
-import { PrivacyPage } from "@/pages/PrivacyPage";
-import { TermsPage } from "@/pages/TermsPage";
+
+const ServicesPage  = lazy(() => import("@/pages/ServicesPage").then(m => ({ default: m.ServicesPage })));
+const PricingPage   = lazy(() => import("@/pages/PricingPage").then(m => ({ default: m.PricingPage })));
+const ContactPage   = lazy(() => import("@/pages/ContactPage").then(m => ({ default: m.ContactPage })));
+const AboutPage     = lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
+const PrivacyPage   = lazy(() => import("@/pages/PrivacyPage").then(m => ({ default: m.PrivacyPage })));
+const TermsPage     = lazy(() => import("@/pages/TermsPage").then(m => ({ default: m.TermsPage })));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center py-32">
+      <div className="w-8 h-8 rounded-full border-2 border-[#00F2FF]/30 border-t-[#00F2FF] animate-spin" />
+    </div>
+  );
+}
 
 function MainContent() {
   return (
     <main>
       <HomePage />
-      <ServicesPage />
-      <PricingPage />
-      <ContactPage />
+      <Suspense fallback={null}>
+        <ServicesPage />
+      </Suspense>
+      <Suspense fallback={null}>
+        <PricingPage />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ContactPage />
+      </Suspense>
     </main>
   );
 }
@@ -33,9 +48,15 @@ function App() {
       <Navbar />
       <Switch>
         <Route path="/" component={MainContent} />
-        <Route path="/about" component={AboutPage} />
-        <Route path="/privacy" component={PrivacyPage} />
-        <Route path="/terms" component={TermsPage} />
+        <Route path="/about">
+          <Suspense fallback={<PageLoader />}><AboutPage /></Suspense>
+        </Route>
+        <Route path="/privacy">
+          <Suspense fallback={<PageLoader />}><PrivacyPage /></Suspense>
+        </Route>
+        <Route path="/terms">
+          <Suspense fallback={<PageLoader />}><TermsPage /></Suspense>
+        </Route>
       </Switch>
       <Footer />
       <FloatingWhatsApp />
