@@ -617,8 +617,8 @@ function HeroSection() {
               transition={{ delay: 0.95, duration: 0.6 }}
               className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg"
             >
-              Enterprise-grade software at SME-friendly prices. Powering your growth to achieve{" "}
-              <span className="text-[#FF9933] font-semibold">Vikshit Bharat by 2047</span>.
+              Powerful tech. Honest prices. Built for{" "}
+              <span className="text-[#FF9933] font-semibold">Vikshit Bharat 2047</span>.
             </motion.p>
 
             {/* CTA buttons */}
