@@ -173,19 +173,29 @@ export function Footer() {
               </h4>
               <ul className="space-y-2.5">
                 {[
-                  { label: "About Us",       href: "#home"    },
-                  { label: "SME Advantage",  href: "#pricing" },
-                  { label: "2047 Vision",    href: "#pricing" },
-                  { label: "Get Quote",      href: "#contact" },
-                  { label: "Privacy Policy", href: "#"        },
-                  { label: "Terms of Use",   href: "#"        },
+                  { label: "SME Advantage",  scroll: "#pricing" },
+                  { label: "2047 Vision",    scroll: "#pricing" },
+                  { label: "Get Quote",      scroll: "#contact" },
                 ].map(item => (
                   <li key={item.label}>
-                    <button onClick={() => handleNav(item.href)}
+                    <button onClick={() => handleNav(item.scroll)}
                       className="group flex items-center gap-1.5 text-sm text-muted-foreground hover:text-[#00F2FF] transition-colors text-left">
                       <span className="w-1 h-1 rounded-full bg-[#00F2FF]/30 group-hover:bg-[#00F2FF] transition-colors flex-shrink-0" />
                       {item.label}
                     </button>
+                  </li>
+                ))}
+                {[
+                  { label: "About Us",       path: "/about"   },
+                  { label: "Privacy Policy", path: "/privacy" },
+                  { label: "Terms of Use",   path: "/terms"   },
+                ].map(item => (
+                  <li key={item.label}>
+                    <a href={item.path}
+                      className="group flex items-center gap-1.5 text-sm text-muted-foreground hover:text-[#00F2FF] transition-colors">
+                      <span className="w-1 h-1 rounded-full bg-[#00F2FF]/30 group-hover:bg-[#00F2FF] transition-colors flex-shrink-0" />
+                      {item.label}
+                    </a>
                   </li>
                 ))}
               </ul>
