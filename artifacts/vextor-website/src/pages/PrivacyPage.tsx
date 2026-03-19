@@ -134,7 +134,7 @@ export function PrivacyPage() {
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
             className="text-sm text-muted-foreground mt-3 max-w-xl mx-auto"
           >
-            Vextor Technologies Pvt. Ltd. ("Vextor", "we", "our", "us") is committed to protecting your privacy.
+            Vextor Technologies ("Vextor", "we", "our", "us") is committed to protecting your privacy.
             This policy explains how we collect, use, and safeguard your information.
           </motion.p>
         </div>

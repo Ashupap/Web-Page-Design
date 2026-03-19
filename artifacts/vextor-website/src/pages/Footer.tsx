@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { Linkedin, Instagram, Mail, Phone, MapPin, MessageCircle, Youtube, ArrowRight, Zap } from "lucide-react";
+import { QuoteModal } from "../components/QuoteModal";
 
 const WHATSAPP = "919999999999";
 
@@ -15,67 +17,72 @@ const IndiaFlag = ({ size = 16 }: { size?: number }) => (
    Pre-footer CTA Strip
 ───────────────────────────────────────────────────────── */
 function PreFooterCTA() {
+  const [quoteOpen, setQuoteOpen] = useState(false);
   return (
-    <div className="relative overflow-hidden rounded-3xl mx-4 sm:mx-6 lg:mx-8 mb-0 -mb-1">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#071828] via-[#0a2440] to-[#071828]" />
-      <div className="absolute inset-0 svg-grid opacity-20" />
-      {/* Glow orbs */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl pointer-events-none"
-        style={{ background: "rgba(0,242,255,0.12)" }} />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-48 h-48 rounded-full blur-3xl pointer-events-none"
-        style={{ background: "rgba(255,153,51,0.08)" }} />
-      {/* India flag accent top */}
-      <div className="absolute top-0 left-0 right-0 h-1"
-        style={{ background: "linear-gradient(90deg,#FF9933 33.3%,#fff 33.3% 66.6%,#22c55e 66.6%)" }} />
+    <>
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+      <div className="relative overflow-hidden rounded-3xl mx-4 sm:mx-6 lg:mx-8 mb-0 -mb-1">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#071828] via-[#0a2440] to-[#071828]" />
+        <div className="absolute inset-0 svg-grid opacity-20" />
+        {/* Glow orbs */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl pointer-events-none"
+          style={{ background: "rgba(0,242,255,0.12)" }} />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-48 h-48 rounded-full blur-3xl pointer-events-none"
+          style={{ background: "rgba(255,153,51,0.08)" }} />
+        {/* India flag accent top */}
+        <div className="absolute top-0 left-0 right-0 h-1"
+          style={{ background: "linear-gradient(90deg,#FF9933 33.3%,#fff 33.3% 66.6%,#22c55e 66.6%)" }} />
 
-      <div className="relative z-10 px-6 py-12 sm:py-16 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FF9933]/40 text-[#FF9933] text-xs font-medium mb-5"
-          style={{ background: "rgba(255,153,51,0.08)" }}>
-          <IndiaFlag size={14} /> Start Your Digital Journey Today
-        </motion.div>
+        <div className="relative z-10 px-6 py-12 sm:py-16 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FF9933]/40 text-[#FF9933] text-xs font-medium mb-5"
+            style={{ background: "rgba(255,153,51,0.08)" }}>
+            <IndiaFlag size={14} /> Start Your Digital Journey Today
+          </motion.div>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ delay: 0.1 }}
-          className="text-3xl sm:text-4xl font-bold text-white mb-3"
-          style={{ fontFamily: "'Sora', sans-serif" }}>
-          Ready to Digitize Your<br />
-          <span className="text-[#00F2FF]">Business?</span>
-        </motion.h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.1 }}
+            className="text-3xl sm:text-4xl font-bold text-white mb-3"
+            style={{ fontFamily: "'Sora', sans-serif" }}>
+            Ready to Digitize Your<br />
+            <span className="text-[#00F2FF]">Business?</span>
+          </motion.h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ delay: 0.2 }}
-          className="text-white/55 text-base max-w-md mx-auto mb-8">
-          Get a free custom roadmap in 2 hours. No commitment, no agency fees — just a clear path forward.
-        </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.2 }}
+            className="text-white/55 text-base max-w-md mx-auto mb-8">
+            Get a free custom roadmap in 2 hours. No commitment, no agency fees — just a clear path forward.
+          </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-          <motion.a href="#contact" onClick={e => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
-            whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm"
-            style={{ background: "#00F2FF", color: "#0A192F", boxShadow: "0 0 24px rgba(0,242,255,0.35)" }}>
-            Get Smart Quote <ArrowRight size={14} />
-          </motion.a>
-          <motion.a
-            href={`https://wa.me/${WHATSAPP}?text=Hi%20Vextor!%20I%20want%20to%20learn%20more%20about%20your%20services.`}
-            target="_blank" rel="noopener noreferrer"
-            whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white border border-white/15 hover:border-[#25D366]/50 transition-colors"
-            style={{ background: "rgba(37,211,102,0.1)" }}>
-            <MessageCircle size={14} style={{ color: "#25D366" }} />
-            Chat on WhatsApp
-          </motion.a>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <motion.button
+              onClick={() => setQuoteOpen(true)}
+              whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm"
+              style={{ background: "#00F2FF", color: "#0A192F", boxShadow: "0 0 24px rgba(0,242,255,0.35)" }}>
+              Get Smart Quote <ArrowRight size={14} />
+            </motion.button>
+            <motion.a
+              href={`https://wa.me/${WHATSAPP}?text=Hi%20Vextor!%20I%20want%20to%20learn%20more%20about%20your%20services.`}
+              target="_blank" rel="noopener noreferrer"
+              whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white border border-white/15 hover:border-[#25D366]/50 transition-colors"
+              style={{ background: "rgba(37,211,102,0.1)" }}>
+              <MessageCircle size={14} style={{ color: "#25D366" }} />
+              Chat on WhatsApp
+            </motion.a>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -249,32 +256,101 @@ export function Footer() {
 
           {/* ── Tech stack strip ───────────────────────────── */}
           <div className="py-5 border-y border-white/5 mb-6">
-            <div className="flex flex-wrap items-center gap-2 justify-center">
-              <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest mr-2">Built with</span>
-              {[
-                { label: "n8n",         clr: "#FF6600" },
-                { label: "Flutter",     clr: "#54C5F8" },
-                { label: "Next.js 15",  clr: "#ffffff" },
-                { label: "React 18",    clr: "#61DAFB" },
-                { label: "Docker",      clr: "#2496ED" },
-                { label: "PostgreSQL",  clr: "#336791" },
-                { label: "Framer",      clr: "#0055FF" },
-                { label: "AI",          clr: "#00F2FF" },
-              ].map(t => (
-                <motion.span key={t.label}
-                  whileHover={{ scale: 1.08 }}
-                  className="px-2.5 py-1 rounded-lg text-[10px] font-semibold cursor-default select-none"
-                  style={{ background: `${t.clr}12`, color: t.clr, border: `1px solid ${t.clr}25` }}>
-                  {t.label}
-                </motion.span>
-              ))}
+            <div className="flex flex-wrap items-center gap-4 justify-center">
+              {/* n8n */}
+              <motion.div whileHover={{ scale: 1.1 }} title="n8n" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#FF6600" opacity="0.15"/>
+                  <circle cx="10" cy="20" r="4" fill="#FF6600"/>
+                  <circle cx="30" cy="20" r="4" fill="#FF6600"/>
+                  <circle cx="20" cy="12" r="3.5" fill="#FF6600"/>
+                  <circle cx="20" cy="28" r="3.5" fill="#FF6600"/>
+                  <line x1="14" y1="20" x2="26" y2="20" stroke="#FF6600" strokeWidth="2"/>
+                  <line x1="20" y1="15.5" x2="20" y2="24.5" stroke="#FF6600" strokeWidth="2"/>
+                </svg>
+                <span className="text-[9px] font-semibold" style={{ color: "#FF6600" }}>n8n</span>
+              </motion.div>
+              {/* Flutter */}
+              <motion.div whileHover={{ scale: 1.1 }} title="Flutter" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#54C5F8" opacity="0.12"/>
+                  <polygon points="8,20 18,8 28,8 18,20" fill="#54C5F8"/>
+                  <polygon points="18,20 28,8 38,20 28,32" fill="#01579B" opacity="0.7"/>
+                  <polygon points="18,20 28,32 18,32 13,26" fill="#29B6F6"/>
+                </svg>
+                <span className="text-[9px] font-semibold" style={{ color: "#54C5F8" }}>Flutter</span>
+              </motion.div>
+              {/* Next.js */}
+              <motion.div whileHover={{ scale: 1.1 }} title="Next.js 15" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#ffffff" opacity="0.08"/>
+                  <circle cx="20" cy="20" r="14" fill="none" stroke="#ffffff" strokeWidth="1.5" opacity="0.4"/>
+                  <text x="20" y="26" textAnchor="middle" fontSize="18" fontWeight="bold" fill="#ffffff" fontFamily="sans-serif">N</text>
+                </svg>
+                <span className="text-[9px] font-semibold text-white/70">Next.js</span>
+              </motion.div>
+              {/* React */}
+              <motion.div whileHover={{ scale: 1.1 }} title="React 18" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#61DAFB" opacity="0.1"/>
+                  <circle cx="20" cy="20" r="3" fill="#61DAFB"/>
+                  <ellipse cx="20" cy="20" rx="14" ry="5.5" stroke="#61DAFB" strokeWidth="1.5" fill="none"/>
+                  <ellipse cx="20" cy="20" rx="14" ry="5.5" stroke="#61DAFB" strokeWidth="1.5" fill="none" transform="rotate(60 20 20)"/>
+                  <ellipse cx="20" cy="20" rx="14" ry="5.5" stroke="#61DAFB" strokeWidth="1.5" fill="none" transform="rotate(120 20 20)"/>
+                </svg>
+                <span className="text-[9px] font-semibold" style={{ color: "#61DAFB" }}>React</span>
+              </motion.div>
+              {/* Docker */}
+              <motion.div whileHover={{ scale: 1.1 }} title="Docker" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#2496ED" opacity="0.12"/>
+                  <rect x="7" y="18" width="5" height="4" rx="0.5" fill="#2496ED"/>
+                  <rect x="13" y="18" width="5" height="4" rx="0.5" fill="#2496ED"/>
+                  <rect x="19" y="18" width="5" height="4" rx="0.5" fill="#2496ED"/>
+                  <rect x="13" y="12" width="5" height="4" rx="0.5" fill="#2496ED"/>
+                  <rect x="19" y="12" width="5" height="4" rx="0.5" fill="#2496ED"/>
+                  <rect x="25" y="18" width="5" height="4" rx="0.5" fill="#2496ED"/>
+                  <path d="M6 23.5 C8 27 14 28 20 26 C26 24 32 22 34 23.5" stroke="#2496ED" strokeWidth="1.5" fill="none"/>
+                </svg>
+                <span className="text-[9px] font-semibold" style={{ color: "#2496ED" }}>Docker</span>
+              </motion.div>
+              {/* PostgreSQL */}
+              <motion.div whileHover={{ scale: 1.1 }} title="PostgreSQL" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#336791" opacity="0.15"/>
+                  <ellipse cx="20" cy="13" rx="10" ry="5" stroke="#336791" strokeWidth="1.8" fill="none"/>
+                  <path d="M10 13 L10 27 Q10 32 20 32 Q30 32 30 27 L30 13" stroke="#336791" strokeWidth="1.8" fill="none"/>
+                  <path d="M30 20 Q35 18 34 13" stroke="#336791" strokeWidth="1.5" fill="none"/>
+                  <line x1="20" y1="18" x2="20" y2="32" stroke="#336791" strokeWidth="1.2" strokeDasharray="2 2"/>
+                </svg>
+                <span className="text-[9px] font-semibold" style={{ color: "#336791" }}>Postgres</span>
+              </motion.div>
+              {/* Framer Motion */}
+              <motion.div whileHover={{ scale: 1.1 }} title="Framer Motion" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#0055FF" opacity="0.12"/>
+                  <polygon points="8,8 32,8 32,21 8,21" fill="#0055FF"/>
+                  <polygon points="8,21 20,21 8,34" fill="#0055FF" opacity="0.7"/>
+                  <polygon points="20,21 32,21 20,34" fill="#0055FF" opacity="0.4"/>
+                </svg>
+                <span className="text-[9px] font-semibold" style={{ color: "#0055FF" }}>Framer</span>
+              </motion.div>
+              {/* AI / OpenAI */}
+              <motion.div whileHover={{ scale: 1.1 }} title="AI-Powered" className="flex flex-col items-center gap-1 cursor-default">
+                <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" rx="8" fill="#00F2FF" opacity="0.1"/>
+                  <path d="M20 6 L22.5 14 L30 11 L25 18 L32 22 L24 22 L26 30 L20 25 L14 30 L16 22 L8 22 L15 18 L10 11 L17.5 14 Z" fill="none" stroke="#00F2FF" strokeWidth="1.5" strokeLinejoin="round"/>
+                  <circle cx="20" cy="20" r="3" fill="#00F2FF"/>
+                </svg>
+                <span className="text-[9px] font-semibold" style={{ color: "#00F2FF" }}>AI</span>
+              </motion.div>
             </div>
           </div>
 
           {/* ── Bottom bar ─────────────────────────────────── */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs text-muted-foreground/60 text-center sm:text-left">
-              © 2026 Vextor Technologies Pvt. Ltd. All rights reserved.
+              © 2026 Vextor Technologies. All rights reserved.
             </p>
 
             {/* Centre: India flag */}

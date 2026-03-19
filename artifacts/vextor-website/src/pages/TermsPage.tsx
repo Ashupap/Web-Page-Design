@@ -7,7 +7,7 @@ const sections = [
   {
     title: "1. Acceptance of Terms",
     content: [
-      "By accessing or using vextor.in or engaging Vextor Technologies Pvt. Ltd. for any service, you agree to be bound by these Terms of Use.",
+      "By accessing or using vextor.in or engaging Vextor Technologies for any service, you agree to be bound by these Terms of Use.",
       "If you do not agree to these terms, please do not use our website or services.",
       "These terms apply to all visitors, clients, and prospective clients of Vextor.",
     ],
@@ -23,7 +23,7 @@ const sections = [
   {
     title: "3. Intellectual Property",
     content: [
-      "All content on this website — including text, graphics, logos, icons, images, and software — is the property of Vextor Technologies Pvt. Ltd. and is protected by applicable Indian copyright and IP laws.",
+      "All content on this website — including text, graphics, logos, icons, images, and software — is the property of Vextor Technologies and is protected by applicable Indian copyright and IP laws.",
       "Custom work produced for a client becomes the client's property only upon full payment as specified in the relevant SOW.",
       "Vextor retains the right to showcase completed work in its portfolio unless a specific NDA restricts this.",
       "You may not reproduce, distribute, or exploit any content from this site without prior written consent.",
@@ -103,7 +103,7 @@ const sections = [
       "For questions regarding these Terms of Use, please contact us:",
       "Email: hello@vextor.in",
       "WhatsApp: +91 99999 99999",
-      "Vextor Technologies Pvt. Ltd., India",
+      "Vextor Technologies, India",
     ],
   },
 ];
@@ -144,7 +144,7 @@ export function TermsPage() {
             className="text-sm text-muted-foreground mt-3 max-w-xl mx-auto"
           >
             Please read these Terms of Use carefully before using our website or services.
-            These terms constitute a legally binding agreement between you and Vextor Technologies Pvt. Ltd.
+            These terms constitute a legally binding agreement between you and Vextor Technologies.
           </motion.p>
         </div>
       </section>
