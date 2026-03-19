@@ -542,8 +542,8 @@ function HeroSection() {
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 w-full"
       >
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
-          {/* ── LEFT: Text content — second on mobile, first on desktop ── */}
-          <motion.div style={{ y: textY }} className="flex flex-col justify-center text-center lg:text-left items-center lg:items-start order-2 lg:order-1">
+          {/* ── LEFT: Text content ── */}
+          <motion.div style={{ y: textY }} className="flex flex-col justify-center text-center lg:text-left items-center lg:items-start">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -648,8 +648,8 @@ function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* ── RIGHT: Characters + floating tech logos — first on mobile ── */}
-          <motion.div style={{ y: phoneY }} className="relative order-1 lg:order-2">
+          {/* ── RIGHT: Characters + floating tech logos — desktop only ── */}
+          <motion.div style={{ y: phoneY }} className="relative hidden lg:block">
             {/* Logos float inside this container, around the characters */}
             <FloatingTechLogos hoveredPerson={hoveredPerson} />
 

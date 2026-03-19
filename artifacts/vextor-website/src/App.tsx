@@ -8,14 +8,9 @@ import { ContactPage } from "@/pages/ContactPage";
 import { Footer } from "@/pages/Footer";
 
 function App() {
-  // Apply dark mode class by default
   useEffect(() => {
-    const saved = localStorage.getItem("theme") || "dark";
-    if (saved === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
   }, []);
 
   return (

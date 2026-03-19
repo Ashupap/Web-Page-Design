@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon, Zap } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 import { Logo } from "./Logo";
-import { useTheme } from "../hooks/useTheme";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -14,7 +13,6 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -78,14 +76,6 @@ export function Navbar() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={toggleTheme}
-                className="p-2 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF]"
-              >
-                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 onClick={() => handleNavClick("#contact")}
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#00F2FF] text-[#0A192F] text-sm font-semibold cyan-glow transition-all duration-300"
               >
@@ -96,13 +86,6 @@ export function Navbar() {
 
             {/* Mobile controls */}
             <div className="flex md:hidden items-center gap-3">
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={toggleTheme}
-                className="p-2 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF]"
-              >
-                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-              </motion.button>
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setMobileOpen(!mobileOpen)}
