@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Zap } from "lucide-react";
 import { Logo } from "./Logo";
+import { QuoteModal } from "./QuoteModal";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -13,6 +14,7 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [quoteOpen, setQuoteOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -22,20 +24,24 @@ export function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
+    if (window.location.pathname !== "/") {
+      window.location.href = `/${href}`;
+      return;
+    }
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <>
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+
       <motion.nav
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "glass border-b border-[#00F2FF]/10 shadow-lg"
-            : "bg-transparent"
+          scrolled ? "glass border-b border-[#00F2FF]/10 shadow-lg" : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,11 +82,11 @@ export function Navbar() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => handleNavClick("#contact")}
+                onClick={() => setQuoteOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#00F2FF] text-[#0A192F] text-sm font-semibold cyan-glow transition-all duration-300"
               >
                 <Zap size={14} />
-                Get Started
+                Get Smart Quote
               </motion.button>
             </div>
 
@@ -125,11 +131,11 @@ export function Navbar() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                onClick={() => handleNavClick("#contact")}
+                onClick={() => { setMobileOpen(false); setQuoteOpen(true); }}
                 className="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#00F2FF] text-[#0A192F] font-semibold cyan-glow mt-2"
               >
                 <Zap size={16} />
-                Get Started Free
+                Get Smart Quote
               </motion.button>
             </div>
           </motion.div>
