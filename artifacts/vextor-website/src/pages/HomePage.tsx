@@ -512,7 +512,7 @@ function HeroSection() {
     }),
   };
 
-  const words = ["The", "Tech", "Direction", "of", "a", "Developed", "India."];
+  const words = ["Stop", "Losing", "Hours", "to", "Manual", "Work.", "Start", "Growing."];
 
   return (
     <section
@@ -573,7 +573,7 @@ function HeroSection() {
                   initial="hidden"
                   animate="visible"
                   className={`inline-block mr-3 ${
-                    word === "Developed" || word === "India."
+                    word === "Start" || word === "Growing."
                       ? "text-[#00F2FF]"
                       : "text-foreground"
                   }`}
@@ -583,11 +583,38 @@ function HeroSection() {
               ))}
             </h1>
 
+            {/* Benefit pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.75, duration: 0.5 }}
+              className="flex flex-wrap gap-2 mb-5 justify-center lg:justify-start"
+            >
+              {[
+                { label: "Less Paperwork", icon: "📄" },
+                { label: "Lower Costs",    icon: "💰" },
+                { label: "More Growth",    icon: "📈" },
+              ].map((pill) => (
+                <span
+                  key={pill.label}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium"
+                  style={{
+                    background: "rgba(0,242,255,0.08)",
+                    border: "1px solid rgba(0,242,255,0.25)",
+                    color: "#00F2FF",
+                  }}
+                >
+                  <span>{pill.icon}</span>
+                  {pill.label}
+                </span>
+              ))}
+            </motion.div>
+
             {/* Subtext */}
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.6 }}
+              transition={{ delay: 0.95, duration: 0.6 }}
               className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg"
             >
               Enterprise-grade software at SME-friendly prices. Powering your growth to achieve{" "}
