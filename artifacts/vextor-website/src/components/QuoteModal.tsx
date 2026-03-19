@@ -117,16 +117,6 @@ export function QuoteModal({ open, onClose }: QuoteModalProps) {
                   ))}
                 </div>
 
-                {/* Testimonial */}
-                <div className="p-4 rounded-2xl" style={{ background: "rgba(0,242,255,0.04)", border: "1px solid rgba(0,242,255,0.1)" }}>
-                  <div className="flex gap-0.5 mb-2">
-                    {[...Array(5)].map((_, i) => <span key={i} style={{ color: "#FF9933", fontSize: 11 }}>★</span>)}
-                  </div>
-                  <p className="text-xs text-muted-foreground italic leading-relaxed">
-                    "Vextor built our inventory system in 3 weeks. What a Mumbai agency quoted ₹9L for, Vextor built under ₹2L."
-                  </p>
-                  <div className="mt-2 text-[10px] font-medium text-foreground/60">— Ravi Mehta, Surat Textile Distributor</div>
-                </div>
               </div>
 
               {/* Right: step form */}

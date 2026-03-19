@@ -12,6 +12,7 @@ import {
   PersonDistributor,
   PersonManufacturer,
 } from "../components/PersonIllustrations";
+import { QuoteModal } from "../components/QuoteModal";
 
 /* ─────────────────────────────────────────────────────────
    Tech logos — each owned by a character, float in right half
@@ -1316,28 +1317,50 @@ function Card3D({ item, delay }: { item: typeof bentoItems[0]; delay: number }) 
 }
 
 function BentoSection() {
+  const [quoteOpen, setQuoteOpen] = useState(false);
   return (
-    <section id="services-preview" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <ScrollReveal>
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF] text-xs font-medium mb-4">
-            <Zap size={12} /> The Complete Solution
+    <>
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+      <section id="services-preview" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <ScrollReveal>
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#00F2FF]/20 text-[#00F2FF] text-xs font-medium mb-4">
+              <Zap size={12} /> The Complete Solution
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
+              Everything you need to <span className="text-[#00F2FF]">scale</span>
+            </h2>
+            <p className="text-muted-foreground mt-3 max-w-md mx-auto text-sm">
+              Six pillars of growth — hover each card to explore.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
-            Everything you need to <span className="text-[#00F2FF]">scale</span>
-          </h2>
-          <p className="text-muted-foreground mt-3 max-w-md mx-auto text-sm">
-            Six pillars of growth — hover each card to explore.
-          </p>
-        </div>
-      </ScrollReveal>
+        </ScrollReveal>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {bentoItems.map((item, i) => (
-          <Card3D key={item.title} item={item} delay={i * 0.08} />
-        ))}
-      </div>
-    </section>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {bentoItems.map((item, i) => (
+            <Card3D key={item.title} item={item} delay={i * 0.08} />
+          ))}
+        </div>
+
+        {/* Get Smart Quote CTA */}
+        <ScrollReveal delay={0.2}>
+          <div className="mt-14 text-center">
+            <p className="text-sm text-muted-foreground mb-4">
+              Ready to replace manual chaos with a system that works?
+            </p>
+            <motion.button
+              onClick={() => setQuoteOpen(true)}
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#00F2FF] text-[#0A192F] font-bold text-sm cyan-glow"
+            >
+              <Zap size={16} className="fill-[#0A192F]" />
+              Get Smart Quote — It's Free
+              <ArrowRight size={15} />
+            </motion.button>
+          </div>
+        </ScrollReveal>
+      </section>
+    </>
   );
 }
 

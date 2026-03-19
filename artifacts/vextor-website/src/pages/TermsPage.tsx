@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { FileText, ChevronRight } from "lucide-react";
+import { FileText, ChevronRight, Zap, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { QuoteModal } from "../components/QuoteModal";
 
 const sections = [
   {
@@ -107,8 +109,10 @@ const sections = [
 ];
 
 export function TermsPage() {
+  const [quoteOpen, setQuoteOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background pt-16">
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
 
       {/* Hero */}
       <section className="relative py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -172,6 +176,29 @@ export function TermsPage() {
             </motion.div>
           ))}
         </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-14 px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.5 }}
+          className="max-w-2xl mx-auto text-center rounded-3xl p-8"
+          style={{ background: "rgba(10,25,47,0.6)", border: "1px solid rgba(255,153,51,0.15)" }}
+        >
+          <p className="text-muted-foreground text-sm mb-5">
+            Ready to build something great? Get a free custom roadmap from our team.
+          </p>
+          <motion.button
+            onClick={() => setQuoteOpen(true)}
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }}
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#00F2FF] text-[#0A192F] font-bold text-sm cyan-glow"
+          >
+            <Zap size={15} className="fill-[#0A192F]" />
+            Get Smart Quote — It's Free
+            <ArrowRight size={14} />
+          </motion.button>
+        </motion.div>
       </section>
     </div>
   );
