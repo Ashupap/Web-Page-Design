@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { Menu, X, Zap } from "lucide-react";
 import { Logo } from "./Logo";
 import { QuoteModal } from "./QuoteModal";
@@ -22,6 +22,13 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
     if (window.location.pathname !== "/") {
@@ -34,6 +41,16 @@ export function Navbar() {
 
   return (
     <>
+      {/* Scroll Progress Bar at very top edge */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 z-[100] origin-left"
+        style={{ 
+          scaleX, 
+          background: "linear-gradient(90deg, #00F2FF, #FF9933)", 
+          boxShadow: "0 0 10px rgba(0, 242, 255, 0.5)" 
+        }}
+      />
+
       <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
 
       <motion.nav
@@ -48,22 +65,27 @@ export function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <motion.div
-              className="flex items-center gap-3 cursor-pointer"
+              className="flex items-center gap-3 cursor-pointer group"
               whileHover={{ scale: 1.03 }}
               onClick={() => handleNavClick("#home")}
             >
-              <img src="/logo.png" alt="Vextor" className="h-9 w-9 object-contain" />
-              <span
-                className="text-xl font-bold tracking-tight"
-                style={{
-                  fontFamily: "'Sora', sans-serif",
-                  background: "linear-gradient(135deg, #00F2FF 0%, #ffffff 60%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                Vextor
-              </span>
+              <img src="/logo.png" alt="Vextor" className="h-14 w-14 object-contain neon-logo-glow" />
+              <div className="flex flex-col">
+                <span
+                  className="text-xl font-bold tracking-tight leading-none"
+                  style={{
+                    fontFamily: "'Sora', sans-serif",
+                    background: "linear-gradient(135deg, #00F2FF 0%, #ffffff 60%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Vextor
+                </span>
+                <span className="text-[10px] font-semibold text-muted-foreground/80 tracking-widest uppercase mt-0.5" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  Technologies
+                </span>
+              </div>
             </motion.div>
 
             {/* Desktop nav */}

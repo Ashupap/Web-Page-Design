@@ -14,6 +14,8 @@ import {
 } from "../components/PersonIllustrations";
 import { QuoteModal } from "../components/QuoteModal";
 
+const LazyQuoteModal = React.lazy(() => import("../components/QuoteModal").then(m => ({ default: m.QuoteModal })));
+
 /* ─────────────────────────────────────────────────────────
    Tech logos — each owned by a character, float in right half
 ───────────────────────────────────────────────────────── */
@@ -72,11 +74,10 @@ function FloatingTechLogos({ hoveredPerson }: { hoveredPerson: string | null }) 
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold"
               style={{
-                background: isHighlighted ? `${tech.color}28` : `${tech.color}0D`,
-                border: `1px solid ${isHighlighted ? tech.color + "70" : tech.color + "18"}`,
+                background: isHighlighted ? `${tech.color}15` : `transparent`,
+                border: `1px solid ${isHighlighted ? tech.color + "50" : tech.color + "20"}`,
                 color: tech.color,
-                backdropFilter: "blur(4px)",
-                boxShadow: isHighlighted ? `0 0 18px ${tech.color}50, 0 0 40px ${tech.color}20` : "none",
+                boxShadow: isHighlighted ? `0 0 15px ${tech.color}40, inset 0 0 10px ${tech.color}15` : "none",
                 transition: "all 0.4s ease",
               }}
             >
@@ -352,21 +353,23 @@ interface PersonCardProps {
   label: string;
   Illustration: React.ComponentType<{ className?: string }>;
   onHoverChange: (id: string | null) => void;
+  isActive?: boolean;
 }
 
-function PersonCard({ personId, floatDelay = 0, desktopPopupSide = "above", size = "md", label, Illustration, onHoverChange }: PersonCardProps) {
+function PersonCard({ personId, floatDelay = 0, desktopPopupSide = "above", size = "md", label, Illustration, onHoverChange, isActive = false }: PersonCardProps) {
   const [hovered, setHovered] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
   const isMobile = useIsMobile();
   const slides = PERSON_SLIDES[personId] ?? PERSON_SLIDES["priya"];
   const slide = slides[Math.min(slideIndex, slides.length - 1)];
   const Icon = slide.icon;
+  const active = hovered || isActive;
 
   useEffect(() => {
-    if (!hovered) { setSlideIndex(0); return; }
+    if (!active) { setSlideIndex(0); return; }
     const id = setInterval(() => setSlideIndex((s) => (s + 1) % slides.length), 2400);
     return () => clearInterval(id);
-  }, [hovered, slides.length]);
+  }, [active, slides.length]);
 
   /* On mobile everything pops above; on desktop respect desktopPopupSide */
   const side = isMobile ? "above" : desktopPopupSide;
@@ -396,37 +399,49 @@ function PersonCard({ personId, floatDelay = 0, desktopPopupSide = "above", size
       transition={{ duration: 3.5 + floatDelay, repeat: Infinity, ease: "easeInOut", delay: floatDelay }}
       onHoverStart={() => { setHovered(true); onHoverChange(personId); }}
       onHoverEnd={() => { setHovered(false); onHoverChange(null); }}
-      style={{ zIndex: hovered ? 100 : 1 }}
+      style={{ zIndex: active ? 100 : 1 }}
     >
       {/* Person illustration */}
-      <motion.div className={`relative ${illuSizeMap[size]}`} whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
+      <motion.div 
+        className={`relative ${illuSizeMap[size]}`} 
+        whileHover={{ scale: 1.05 }} 
+        animate={{ 
+          filter: active ? "blur(0px) grayscale(0%)" : "blur(2.5px) grayscale(40%)",
+          opacity: active ? 1 : 0.45,
+        }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
         <motion.div
           className="absolute inset-x-0 bottom-0 h-8 rounded-full blur-2xl"
           style={{ background: slide.color }}
-          animate={{ opacity: hovered ? 0.2 : 0.07 }}
-          transition={{ duration: 0.3 }}
+          animate={{ opacity: active ? 0.2 : 0.0 }}
+          transition={{ duration: 0.5 }}
         />
         <Illustration className="w-full h-auto relative z-10" />
       </motion.div>
 
       {/* Label */}
-      <div className="text-center mt-1.5">
+      <motion.div 
+        className="text-center mt-1.5"
+        animate={{ opacity: active ? 1 : 0.45 }}
+        transition={{ duration: 0.5 }}
+      >
         <span
           className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
           style={{
             background: `${slide.color}12`,
-            color: hovered ? slide.color : "var(--muted-foreground)",
-            border: `1px solid ${hovered ? slide.color + "40" : "transparent"}`,
+            color: active ? slide.color : "var(--muted-foreground)",
+            border: `1px solid ${active ? slide.color + "40" : "transparent"}`,
             transition: "all 0.3s",
           }}
         >
           {label}
         </span>
-      </div>
+      </motion.div>
 
       {/* Hover Popup — auto-cycling, vertical scroll transition */}
       <AnimatePresence>
-        {hovered && (
+        {active && (
           <motion.div
             initial={popupInitial}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
@@ -504,22 +519,43 @@ function HeroSection() {
   const phoneY = useTransform(scrollYProgress, [0, 1], [0, -60]);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
   const [hoveredPerson, setHoveredPerson] = useState<string | null>(null);
+  const [autoPerson, setAutoPerson] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (hoveredPerson) {
+      setAutoPerson(null);
+      return;
+    }
+    const cycle = ["priya", "rahul", "meera"];
+    let i = 0;
+    setAutoPerson(cycle[i]);
+    const id = setInterval(() => {
+      i = (i + 1) % cycle.length;
+      setAutoPerson(cycle[i]);
+    }, 4500); // cycle every 4.5s
+    return () => clearInterval(id);
+  }, [hoveredPerson]);
+
+  const activePerson = hoveredPerson || autoPerson;
 
   const wordVariants = {
     hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
     visible: (i: number) => ({
       opacity: 1, y: 0, filter: "blur(0px)",
-      transition: { duration: 0.55, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.55, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] as const },
     }),
   };
 
-  const words = ["Stop", "Losing", "Hours", "to", "Manual", "Work.", "Start", "Growing."];
+  const words = [
+    "Stop", "juggling", "spreadsheets.", 
+    "Run", "your", "business", "from", "one screen."
+  ];
 
   return (
     <section
       id="home"
       ref={sectionRef}
-      className="relative min-h-screen flex items-center overflow-hidden"
+      className="relative min-h-[min(100vh,900px)] flex flex-col justify-center overflow-hidden pt-16 pb-6 lg:pt-20 lg:pb-12"
     >
       {/* Animated SVG Grid */}
       <div className="svg-grid opacity-40" />
@@ -540,7 +576,7 @@ function HeroSection() {
 
       <motion.div
         style={{ opacity }}
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 w-full"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
       >
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
           {/* ── LEFT: Text content ── */}
@@ -550,7 +586,7 @@ function HeroSection() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-[#00F2FF]/30 text-[#00F2FF] text-xs font-medium mb-6 w-fit"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-[#00F2FF]/30 text-[#00F2FF] text-xs font-medium mb-4 w-fit"
             >
               <motion.span
                 animate={{ scale: [1, 1.3, 1] }}
@@ -563,7 +599,7 @@ function HeroSection() {
 
             {/* Headline — word by word */}
             <h1
-              className="text-4xl sm:text-5xl lg:text-[3.6rem] font-bold leading-[1.1] mb-5"
+              className="text-3xl sm:text-4xl lg:text-[2.8rem] font-bold leading-[1.15] mb-4 tracking-tight"
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
               {words.map((word, i) => (
@@ -573,9 +609,9 @@ function HeroSection() {
                   variants={wordVariants}
                   initial="hidden"
                   animate="visible"
-                  className={`inline-block mr-3 ${
-                    word === "Start" || word === "Growing."
-                      ? "text-[#00F2FF]"
+                  className={`inline-block mr-[0.35em] ${
+                    word === "one screen." || word === "spreadsheets."
+                      ? "text-[#00F2FF] whitespace-nowrap"
                       : "text-foreground"
                   }`}
                 >
@@ -589,7 +625,7 @@ function HeroSection() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75, duration: 0.5 }}
-              className="flex flex-wrap gap-2 mb-5 justify-center lg:justify-start"
+              className="flex flex-wrap gap-2 mb-3 justify-center lg:justify-start"
             >
               {[
                 { label: "Less Paperwork", icon: "📄" },
@@ -616,7 +652,7 @@ function HeroSection() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.95, duration: 0.6 }}
-              className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-lg"
+              className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5 max-w-lg"
             >
               Powerful tech. Honest prices. Built for{" "}
               <span className="text-[#FF9933] font-semibold">Vikshit Bharat 2047</span>.
@@ -627,7 +663,7 @@ function HeroSection() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-3 mb-10 w-full sm:w-auto justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row gap-3 mb-5 w-full sm:w-auto justify-center lg:justify-start"
             >
               <motion.button
                 whileHover={{ scale: 1.04 }}
@@ -651,12 +687,38 @@ function HeroSection() {
               </motion.button>
             </motion.div>
 
+            {/* Trust & Social Proof Banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.05, duration: 0.6 }}
+              className="flex items-center gap-3 mb-4"
+            >
+              <div className="flex -space-x-2">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full border border-background bg-slate-800 flex items-center justify-center shadow-md">
+                    <Users size={12} className="text-[#00F2FF]" />
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={12} className="fill-[#FF9933] text-[#FF9933]" />
+                  ))}
+                </div>
+                <div className="text-[11px] sm:text-xs font-medium text-muted-foreground mt-0.5">
+                  Trusted by <span className="text-foreground">500+ SMEs</span>
+                </div>
+              </div>
+            </motion.div>
+
             {/* Stats row */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1, duration: 0.6 }}
-              className="flex gap-6 sm:gap-10"
+              className="flex flex-wrap gap-4 sm:gap-8"
             >
               {[
                 { value: "5x", label: "Faster Delivery" },
@@ -679,7 +741,7 @@ function HeroSection() {
           {/* ── RIGHT: Characters + floating tech logos — desktop only ── */}
           <motion.div style={{ y: phoneY }} className="relative hidden lg:block">
             {/* Logos float inside this container, around the characters */}
-            <FloatingTechLogos hoveredPerson={hoveredPerson} />
+            <FloatingTechLogos hoveredPerson={activePerson} />
 
             {/* Characters row */}
             <div className="relative z-10 flex items-end justify-center gap-3 sm:gap-6 lg:gap-8 pt-10 pb-6">
@@ -700,6 +762,7 @@ function HeroSection() {
                   label="Priya — Retailer"
                   Illustration={PersonRetailer}
                   onHoverChange={setHoveredPerson}
+                  isActive={activePerson === "priya"}
                 />
               </motion.div>
 
@@ -718,6 +781,7 @@ function HeroSection() {
                   label="Rahul — Distributor"
                   Illustration={PersonDistributor}
                   onHoverChange={setHoveredPerson}
+                  isActive={activePerson === "rahul"}
                 />
               </motion.div>
 
@@ -736,6 +800,7 @@ function HeroSection() {
                   label="Meera — Manufacturer"
                   Illustration={PersonManufacturer}
                   onHoverChange={setHoveredPerson}
+                  isActive={activePerson === "meera"}
                 />
               </motion.div>
             </div>
@@ -750,7 +815,7 @@ function HeroSection() {
               <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }}>
                 👆
               </motion.span>
-              Tap to see live dashboards
+              Hover to pause live dashboards
             </motion.div>
           </motion.div>
         </div>
@@ -760,7 +825,7 @@ function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2 }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2"
         >
           <span className="text-xs text-muted-foreground">Scroll to explore</span>
           <motion.div
@@ -1320,7 +1385,9 @@ function BentoSection() {
   const [quoteOpen, setQuoteOpen] = useState(false);
   return (
     <>
-      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+      <React.Suspense fallback={null}>
+        {quoteOpen && <LazyQuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />}
+      </React.Suspense>
       <section id="services-preview" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <ScrollReveal>
           <div className="text-center mb-14">

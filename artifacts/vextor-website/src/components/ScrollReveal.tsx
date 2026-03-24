@@ -32,7 +32,7 @@ export function ScrollReveal({
       transition: {
         duration: 0.7,
         delay,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as const,
       },
     },
   };

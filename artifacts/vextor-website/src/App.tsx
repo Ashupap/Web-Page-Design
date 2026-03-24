@@ -1,9 +1,10 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Switch, Route } from "wouter";
 import { Navbar } from "@/components/Navbar";
-import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { HomePage } from "@/pages/HomePage";
 import { Footer } from "@/pages/Footer";
+
+const FloatingWhatsApp = lazy(() => import("@/components/FloatingWhatsApp").then(m => ({ default: m.FloatingWhatsApp })));
 
 const ServicesPage  = lazy(() => import("@/pages/ServicesPage").then(m => ({ default: m.ServicesPage })));
 const PricingPage   = lazy(() => import("@/pages/PricingPage").then(m => ({ default: m.PricingPage })));
@@ -59,7 +60,9 @@ function App() {
         </Route>
       </Switch>
       <Footer />
-      <FloatingWhatsApp />
+      <Suspense fallback={null}>
+        <FloatingWhatsApp />
+      </Suspense>
     </div>
   );
 }

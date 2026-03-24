@@ -3,7 +3,9 @@
 /* ── PRIYA — Retailer using laptop (screen faces her) ── */
 export function PersonRetailer({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 200 230" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg viewBox="0 0 200 230" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} role="img" aria-labelledby="retailerTitle retailerDesc">
+      <title id="retailerTitle">Priya - Local Retail Business Owner</title>
+      <desc id="retailerDesc">Illustration of Priya, a local retail business owner, working efficiently on her laptop to manage her store's sales and inventory using Vextor.</desc>
       <defs>
         <linearGradient id="pr-outfit" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#7C3AED" />
@@ -97,7 +99,9 @@ export function PersonRetailer({ className = "" }: { className?: string }) {
 /* ── RAHUL — Distributor, phone screen facing HIM (viewer sees back of phone) ── */
 export function PersonDistributor({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 180 250" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg viewBox="0 0 180 250" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} role="img" aria-labelledby="distTitle distDesc">
+      <title id="distTitle">Rahul - Regional Supply Chain Distributor</title>
+      <desc id="distDesc">Illustration of Rahul, a regional supply chain distributor, checking his smartphone for live warehouse deliveries and invoice tracking via Vextor.</desc>
       <defs>
         <linearGradient id="rd-suit" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#1B3A6B" />
@@ -198,7 +202,9 @@ export function PersonDistributor({ className = "" }: { className?: string }) {
 /* ── MEERA — Manufacturer, phone screen facing HER (viewer sees back of phone) ── */
 export function PersonManufacturer({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} role="img" aria-labelledby="mfgTitle mfgDesc">
+      <title id="mfgTitle">Meera - Textile Manufacturing Leader</title>
+      <desc id="mfgDesc">Illustration of Meera, a textile manufacturing leader, relaxing with a tropical drink while monitoring her automated factory production lines via Vextor.</desc>
       <defs>
         <linearGradient id="mf-outfit" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#8B5CF6" />

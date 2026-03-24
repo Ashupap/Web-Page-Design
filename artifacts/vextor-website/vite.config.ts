@@ -54,6 +54,9 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   root: path.resolve(import.meta.dirname),
+  esbuild: {
+    drop: process.env.NODE_ENV === "production" ? ["console", "debugger"] : [],
+  },
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
@@ -72,6 +75,12 @@ export default defineConfig({
           }
           if (id.includes("node_modules/wouter/")) {
             return "vendor-router";
+          }
+          if (id.includes("node_modules/recharts/") || id.includes("node_modules/d3-")) {
+            return "vendor-charts";
+          }
+          if (id.includes("node_modules/@radix-ui/")) {
+            return "vendor-radix";
           }
         },
       },
